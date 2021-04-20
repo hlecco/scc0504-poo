@@ -1,3 +1,7 @@
+#include <iostream>
+
+using namespace std 
+
 class Polinomio {
 public:
   void criaPolinomio(int);
