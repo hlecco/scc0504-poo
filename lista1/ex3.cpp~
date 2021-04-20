@@ -1,0 +1,4 @@
+class Termo {
+public:
+  void setPolinomio()
+};
