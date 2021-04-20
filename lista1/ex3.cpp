@@ -10,7 +10,7 @@ private:
   int grau;
 public:
   Termo(float, int);
-  void mostraTermo();
+  string mostraTermo();
   int mostraGrau();
   float mostraCoeficiente();
   void alteraCoeficiente(float);
@@ -21,8 +21,8 @@ Termo::Termo(float pcoef, int pgrau) {
   grau = pgrau;
 }
 
-void Termo::mostraTermo() {
-  cout << coeficiente << "x^" << grau;
+string Termo::mostraTermo() {
+  return to_string(coeficiente) + "x^" + to_string(grau);
 }
 
 int Termo::mostraGrau() {
@@ -55,7 +55,7 @@ Polinomio::Polinomio(int pgrau) {
 void Polinomio::mostraPolinomio() {
   list<Termo>::iterator it;
   for (it = termos.begin(); it != termos.end(); it++) {
-	(*it).mostraTermo();
+	cout << (*it).mostraTermo();
 	if (next(it,1) != termos.end()) {
 	  cout << " + ";
 	}
