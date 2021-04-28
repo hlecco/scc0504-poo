@@ -1,0 +1,12 @@
+#include <iostream>
+#include <jogo.hpp>
+#include <list>
+
+using namespace std;
+
+int main(int arc, char* argv[]) {
+  Vilao coringa();
+  SuperHeroi batman();
+
+  return 0;
+}
