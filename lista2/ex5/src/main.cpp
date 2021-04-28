@@ -39,10 +39,16 @@ int main(int arc, char* argv[]) {
   
   cout << coringa.getTotalPoder() << endl;
   cout << batman.getTotalPoder() << endl;
-  
-  cout << coringa.getVida() << endl;
-  batman.atacar(20.0, "batchute", &coringa);
-  cout << coringa.getVida() << endl;
+
+  while (coringa.getVida() > 0 || batman.getVida() > 0) {
+	int poderbatman = rand() % (batman.poderes.size());
+	double intensidadebatman (double) rand() % 51;
+	batman.atacar(intensidadebatman, batman.poderes[poderbatman], &coringa);
+	
+	int podercoringa = rand() % (coringa.poderes.size());
+	double intensidadecoringa (double) rand() % 51;
+	coringa.atacar(intensidadecoringa, coringa.poderes[podercoringa], &batman);
+  }
   
   return 0;
 }
