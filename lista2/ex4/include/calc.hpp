@@ -15,7 +15,7 @@ private:
   int mes;
   int ano;
 public:
-  void setData(int, int, int);
+  Data(int, int, int);
   string getData();
 };
 
