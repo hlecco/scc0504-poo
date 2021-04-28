@@ -2,6 +2,13 @@
 
 using namespace std;
 
+enum CodOperacoes {
+  Soma,
+  Subtracao,
+  Produto,
+  Quociente  
+};
+
 class Data {
 private:
   int dia;
@@ -25,12 +32,15 @@ public:
 
 class Operacao {
 private:
+  Usuario *usuario;
+  Data *data;
   double op1;
   double op2;
+  double soma();
+  double subtracao();
+  double produto();
+  double quociente();
 public:
-  // double soma(double, double);
-  // double subtracao(double, double);
-  // double produto(double, double);
-  // double quociente(double, double);
-  void realizaCalculo(Usuario, string);
+  Operacao(*Usuario, *Data, double, double, int);
+  void realizaCalculo();
 };
