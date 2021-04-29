@@ -2,7 +2,7 @@
 
 using namespace std;
 
-enum CodOperacoes {
+enum CodOperacao {
   Soma,
   Subtracao,
   Produto,
@@ -24,9 +24,9 @@ private:
   string nome;
   int idade;
   string foto;
-  Data dataFoto;
+  Data *dataFoto;
 public:
-  Usuario(string, int, string, Data);
+  Usuario(string, int, string, Data *);
   string getNome();
 };
 
@@ -34,13 +34,15 @@ class Operacao {
 private:
   Usuario *usuario;
   Data *data;
+  CodOperacao cod_operacao;
   double op1;
   double op2;
   double soma();
   double subtracao();
   double produto();
   double quociente();
+  double realizaCalculo();
 public:
-  Operacao(*Usuario, *Data, double, double, int);
-  void realizaCalculo();
+  Operacao(Usuario *, Data *, double, double, CodOperacao);
+  void mostra();
 };
