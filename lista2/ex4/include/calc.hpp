@@ -2,13 +2,20 @@
 
 using namespace std;
 
+enum CodOperacao {
+  Soma = 0,
+  Subtracao = 1,
+  Produto = 2,
+  Quociente = 3
+};
+
 class Data {
 private:
   int dia;
   int mes;
   int ano;
 public:
-  void setData(int, int, int);
+  Data(int, int, int);
   string getData();
 };
 
@@ -17,20 +24,25 @@ private:
   string nome;
   int idade;
   string foto;
-  Data dataFoto;
+  Data *dataFoto;
 public:
-  Usuario(string, int, string, Data);
+  Usuario(string, int, string, Data *);
   string getNome();
 };
 
 class Operacao {
 private:
+  Usuario *usuario;
+  Data *data;
+  CodOperacao cod_operacao;
   double op1;
   double op2;
+  double soma();
+  double subtracao();
+  double produto();
+  double quociente();
+  double realizaCalculo();
 public:
-  // double soma(double, double);
-  // double subtracao(double, double);
-  // double produto(double, double);
-  // double quociente(double, double);
-  void realizaCalculo(Usuario, string);
+  Operacao(Usuario *, Data *, double, double, CodOperacao);
+  void mostra();
 };
