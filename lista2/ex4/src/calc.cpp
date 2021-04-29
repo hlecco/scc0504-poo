@@ -5,6 +5,17 @@
 
 using namespace std;
 
+// Símbolos das operações
+struct SimbOperacao {
+  char simb[4];
+  SimbOperacao() {
+    simb[Soma] = '+';
+    simb[Produto] = 'x';
+    simb[Quociente] = '/';
+    simb[Subtracao] = '-';
+  }
+};
+
 // Data
 Data::Data(int pDia, int pMes, int pAno) {
   dia = pDia;
@@ -37,8 +48,10 @@ double Operacao::realizaCalculo() {
 }
 
 void Operacao::mostra() {
+  SimbOperacao simbolos;
   cout << "Operação realizada por: " << usuario->getNome() << endl
        << "Em: " << data->getData() << endl
+       << "Cálculo: " << op1 << simbolos.simb[cod_operacao] << op2 << endl
        << "--------------------------------\n"
        << "Valor: " << realizaCalculo() << endl;
 }

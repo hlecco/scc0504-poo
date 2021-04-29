@@ -3,10 +3,10 @@
 using namespace std;
 
 enum CodOperacao {
-  Soma,
-  Subtracao,
-  Produto,
-  Quociente  
+  Soma = 0,
+  Subtracao = 1,
+  Produto = 2,
+  Quociente = 3
 };
 
 class Data {
