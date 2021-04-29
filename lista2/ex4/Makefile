@@ -1,5 +1,5 @@
-NAME=jogo
-SRC=src/main.cpp src/classes.cpp
+NAME=calculadora
+SRC=src/main.cpp src/calc.cpp
 INCLUDE=include/
 CXX=g++
 

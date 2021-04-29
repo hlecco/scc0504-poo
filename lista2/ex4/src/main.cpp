@@ -5,14 +5,13 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  Data hoje;
-  hoje.setData(20, 11, 2010);
-  Usuario caio("caio", 24, "/home/caio/Imagens", hoje);
+  time_t now = time(0);
+  tm *ltm = localtime(&now);
+  Data hoje(ltm->tm_mday, 1 + ltm->tm_mon, 1900 + ltm->tm_year);
+  Usuario caio("caio", 24, "/home/caio/Imagens", &hoje);
+  Operacao operacao(&caio, &hoje, 1, 2, Soma);
   
-  
-  cout << hoje.getData() << endl;
-  cout << caio.getNome() << endl;
-  realizaCalculo(caio, "soma");
+  operacao.mostra();
   
   return 0;
 }
