@@ -1,53 +1,36 @@
 #include <iostream>
-#include <jogo.hpp>
+#include <herois.hpp>
 #include <list>
 
 using namespace std;
 
 int main(int arc, char* argv[]) {
-  Vilao coringa;
-  SuperHeroi batman;
-  Superpoder batsoco;
-  Superpoder batchute;
-  Superpoder gargalhada;
-  Superpoder defesa;
+  Vilao coringa("Coringa", "???", 25);
+  SuperHeroi batman("Batman", "Bruce Wayne", 30);
+  SuperPoder batsoco(0, "Batsoco");
+  SuperPoder batchute(0, "Batchute");
+  SuperPoder gargalhada(1, "Gargalhada");
+  SuperPoder defesa(2, "Defesa");
   
   coringa.setNome("coringa");
   coringa.setAnosDePrisao(15);
   batman.setNome("batman");
   batman.setNomeVidaReal("bruce wayne");
   
-  batsoco.setCategoria(3);
-  batsoco.setNome("batsoco");
-  batchute.setCategoria(5);
-  batchute.setNome("batchute");
-  
-  gargalhada.setCategoria(4);
-  gargalhada.setNome("gargalhada");
-
-  defesa.setCategoria(4);
-  defesa.setNome("defesa");
-  
-  batman.setSuperpoder(batsoco);
-  batman.setSuperpoder(batchute);
-  batman.setSuperpoder(defesa);
-  coringa.setSuperpoder(gargalhada);
-  coringa.setSuperpoder(defesa);
-
-  batman.setVida(100);
-  coringa.setVida(100);
-  
-  cout << coringa.getTotalPoder() << endl;
-  cout << batman.getTotalPoder() << endl;
+  batman.adicionaSuperPoder(&batsoco);
+  batman.adicionaSuperPoder(&batchute);
+  batman.adicionaSuperPoder(&defesa);
+  coringa.adicionaSuperPoder(&gargalhada);
+  coringa.adicionaSuperPoder(&defesa);
 
   while (coringa.getVida() > 0 || batman.getVida() > 0) {
-	int poderbatman = rand() % (batman.poderes.size());
-	double intensidadebatman (double) rand() % 51;
-	batman.atacar(intensidadebatman, batman.poderes[poderbatman], &coringa);
+	int poderbatman = rand() % batman.getTotalPoder();
+	double intensidadebatman = rand() % 10;
+	batman.atacar(intensidadebatman, batman.getSuperPoder(poderbatman)->getNome(), &coringa);
 	
-	int podercoringa = rand() % (coringa.poderes.size());
-	double intensidadecoringa (double) rand() % 51;
-	coringa.atacar(intensidadecoringa, coringa.poderes[podercoringa], &batman);
+	int podercoringa = rand() % coringa.getTotalPoder();
+	double intensidadecoringa =  rand() % 51;
+	coringa.atacar(intensidadecoringa, coringa.getSuperPoder(podercoringa)->getNome(), &batman);
   }
   
   return 0;

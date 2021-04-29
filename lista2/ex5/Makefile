@@ -1,5 +1,5 @@
 NAME=jogo
-SRC=src/main.cpp src/classes.cpp
+SRC=src/main.cpp src/personagem.cpp src/superpoder.cpp
 INCLUDE=include/
 CXX=g++
 

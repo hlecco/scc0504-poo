@@ -1,23 +1,14 @@
 #include <iostream>
 #include <list>
-#include <jogo.hpp>
+#include <herois.hpp>
 
 using namespace std;
 
-int Superpoder::getCategoria() {
-  return categoria;
-}
-
-string Superpoder::getNome() {
-  return nome;
-}
-
-void Superpoder::setCategoria(int pCategoria) {
-  categoria = pCategoria;
-}
-
-void Superpoder::setNome(string pNome) {
-  nome = pNome;
+Personagem::Personagem(string n, string real, double v) {
+    nome = n;
+    nomeVidaReal = nomeVidaReal;
+    vida = v;
+    list<SuperPoder *> poderes;
 }
 
 string Personagem::getNome() {
@@ -29,14 +20,7 @@ string Personagem::getNomeVidaReal() {
 }
 
 int Personagem::getTotalPoder() {
-  list<Superpoder>::iterator it;
-  int total = 0;
-  
-  for (it = poderes.begin(); it != poderes.end(); ++it) {
-	total += (*it).getCategoria();
-  }
-  
-  return total;
+    return poderes.size();
 }
 
 void Personagem::setNome(string pNome) {
@@ -51,22 +35,31 @@ double Personagem::getVida() {
   return vida;
 }
 
-void Personagem::setVida(double pVida) {
-  vida = pVida;
+SuperPoder * Personagem::getSuperPoder(int num_poder) {
+    return poderes[num_poder];
 }
 
-void Personagem::setSuperpoder(Superpoder pSuperpoder) {
-  poderes.push_back(pSuperpoder);
+void Personagem::setVida(double pVida) {
+  if (pVida > 0) {
+    vida = pVida;
+  }
+  else {
+    vida = 0;
+  }
+}
+
+void Personagem::adicionaSuperPoder(SuperPoder *pSuperPoder) {
+  poderes.push_back(pSuperPoder);
 }
 
 void Personagem::atacar(double intensidade, string nomeSuperPoder, Personagem *p) {
-  list<Superpoder>::iterator it;
+  list<SuperPoder *>::iterator it;
   int tmp = 0;
-  
+
   for (it = poderes.begin(); it != poderes.end(); ++it) {
-	if (nomeSuperPoder == (*it).getNome()) {
-		tmp += 1;
-	  }
+	if (nomeSuperPoder == (*it)->getNome()) {
+		tmp = 1;
+	}
   }
 
   if (tmp == 0) {
@@ -74,13 +67,19 @@ void Personagem::atacar(double intensidade, string nomeSuperPoder, Personagem *p
 	return;
   }
 
-  double pVida = (*p).getVida();
   int aleatorio = rand() % 50;
   cout << "aleatorio " << aleatorio << endl;
-  
+
   if (aleatorio < 50) {
-	(*p).setVida(pVida - intensidade);
+	p->setVida(p->getVida() - intensidade);
   }
+}
+
+SuperHeroi::SuperHeroi(string n, string real, double v) : Personagem(n, real, v) {
+}
+
+Vilao::Vilao(string n, string real, double v) : Personagem(n, real, v) {
+    anosDePrisao = 0;
 }
 
 void Vilao::setAnosDePrisao(int pAnosDePrisao) {
