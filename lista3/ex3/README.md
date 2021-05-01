@@ -8,7 +8,7 @@ com as outras classes.
 uma das suas classes implementar essa interface, para que seu método getPegadaDeCarbono 
 calcule uma pegada de carbono apropriada a cada classe de acordo com seus atributos. 
   * Escreva um aplicativo que crie 2 objetos de cada uma das três classes. Crie um objeto 
-ArrayList<PegadaDeCarbono> e insira as referências dos objetos instanciados nessa coleção. 
+ArrayList\<PegadaDeCarbono\> e insira as referências dos objetos instanciados nessa coleção. 
 Finalmente, itere pela coleção, chamando polimoficamente o método getPegadaDeCarbono de 
 cada objeto. 
 Modifique o código, tornando Prédio uma classe abstrata, e implementando duas novas subclasses 
