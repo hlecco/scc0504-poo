@@ -1,5 +1,4 @@
 #include <classes.hpp>
-#include <iostream>
 
 Predio::Predio(int pNumAndares, bool pElevador, bool pGaragem) {
   numAndares = pNumAndares;

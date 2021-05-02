@@ -1,4 +1,4 @@
-#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -14,7 +14,7 @@ private:
   bool garagem;
 public:
   Predio(int, bool, bool);
-  virtual double getPegadaDeCarbono();
+  double getPegadaDeCarbono();
 };
 
 class Carro: public PegadaDeCarbono {
@@ -25,7 +25,7 @@ private:
   bool hibrido;
 public:
   Carro(string, string, bool, bool);
-  virtual double getPegadaDeCarbono();
+  double getPegadaDeCarbono();
 };
 
 class Bicicleta: public PegadaDeCarbono {
@@ -35,5 +35,5 @@ private:
   bool eletrica;
 public:
   Bicicleta(int, double, bool);
-  virtual double getPegadaDeCarbono();
+  double getPegadaDeCarbono();
 };
