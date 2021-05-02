@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 using namespace std;
 
@@ -8,15 +9,26 @@ public:
 };
 
 class Predio: public PegadaDeCarbono {
-private:
+protected:
   int numAndares;
   bool elevador;
   bool garagem;
 public:
-  Predio(int, bool, bool);
+  virtual double getPegadaDeCarbono() = 0;
+};
+
+class Casa: public Predio {
+public:
+  Casa(int, bool, bool);
   double getPegadaDeCarbono();
 };
 
+class Escola: public Predio {
+public:
+  Escola(int, bool, bool);
+  double getPegadaDeCarbono();
+};
+  
 class Carro: public PegadaDeCarbono {
 private:
   string cor;

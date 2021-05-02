@@ -1,4 +1,8 @@
-#include <classes.hpp>
+#include <carbono.hpp>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 Predio::Predio(int pNumAndares, bool pElevador, bool pGaragem) {
   numAndares = pNumAndares;
@@ -26,15 +30,24 @@ Carro::Carro(string pCor, string pCombustivel, bool pEletrico, bool pHibrido) {
 }
 
 double Carro::getPegadaDeCarbono() {
+
   if (eletrico) {
 	return 10;
-  } else if (hibrido) {
+  }
+  
+  if (hibrido) {
 	return 15;
-  } else if (combustivel == "alcool") {
+  }
+
+  if (combustivel == "alcool") {
 	return 20;
-  } else if (combustivel == "gasolina") {
+  }
+
+  if (combustivel == "gasolina") {
 	return 25;
   }
+
+  return 30;
 }
 
 Bicicleta::Bicicleta(int pNumMarchas, double pTamanhoAro, bool pEletrica) {
@@ -45,8 +58,8 @@ Bicicleta::Bicicleta(int pNumMarchas, double pTamanhoAro, bool pEletrica) {
 
 double Bicicleta::getPegadaDeCarbono() {
   if (eletrica) {
-	return 5;
+	return 2;
   } else {
-	return 1;
+	return 0.5;
   }
 }
