@@ -1,5 +1,5 @@
-NAME=pegadadecarbono
-SRC=src/main1.cpp src/classes.cpp
+NAME=produtos
+SRC=src/main.cpp src/produtos.cpp
 INCLUDE=include/
 CXX=g++
 
