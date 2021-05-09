@@ -15,14 +15,18 @@ int main() {
     std::getline(std::cin, font);
     text->setFont(font);
 
-    std::string style;
-    std::cout << "Estilo: ";
-    std::getline(std::cin, style);
+    int style;
+    std::cout << "Estilo (3-bit, negrito, sublinhado e itálico)" << std::endl;
+    std::cout << "Digite um número entre 0 e 7: ";
+    std::cin >> style;
+    std::cin.clear();
     text->setStyle(style);
 
-    std::string color;
-    std::cout << "Cor: ";
-    std::getline(std::cin, color);
+    int color;
+    std::cout << "Cor (3-bit, RGB)" << std::endl;
+    std::cout << "Digite um número entre 0 e 7: ";
+    std::cin >> color;
+    std::cin.clear();
     text->setColor(color);
 
     std::cout << text->show() << std::endl;

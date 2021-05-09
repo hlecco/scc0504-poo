@@ -19,11 +19,13 @@ private:
 class Color : public FormattingOption {
 public:
     Color(std::string);
+    void set(int);
 };
 
 class Style : public FormattingOption {
 public:
     Style(std::string);
+    void set(int);
 };
 
 class Font : public FormattingOption {
@@ -47,8 +49,8 @@ public:
     FormattedText(std::string);
     std::string show();
     void setFont(std::string);
-    void setColor(std::string);
-    void setStyle(std::string);
+    void setColor(int);
+    void setStyle(int);
 private:
     Font *font;
     Style *style;

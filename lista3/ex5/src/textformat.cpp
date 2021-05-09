@@ -66,9 +66,9 @@ std::string FormattedText::show() {
 void FormattedText::setFont(std::string f) {
     font->set(f);
 }
-void FormattedText::setColor(std::string f) {
+void FormattedText::setColor(int f) {
     color->set(f);
 }
-void FormattedText::setStyle(std::string f) {
+void FormattedText::setStyle(int f) {
     style->set(f);
 }
