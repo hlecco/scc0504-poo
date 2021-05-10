@@ -48,7 +48,7 @@ int main() {
     for (int i=0; i<times.size(); i++) {
 	std::cout << times[i]->getNome() << " " << times[i]->getPontos()
 	          << " pontos" << std::endl;
-	// delete times[i];
+	delete times[i];
     }
 	    
 

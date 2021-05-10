@@ -117,8 +117,8 @@ bool operator < (TimeFutebol t1, TimeFutebol t2) {
 }
 
 bool operator > (TimeFutebol t1, TimeFutebol t2) {
-    // não ser menor que é, nesse caso, o mesmo que ser maior que
-    // nunca é igual, pois não há empate 
+    // não ser "menor que" é, nesse caso, o mesmo que ser "maior que"
+    // nunca é "igual", por causa do sorteio 
     return (t2 < t1);
 }
 
