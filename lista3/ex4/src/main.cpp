@@ -43,9 +43,12 @@ int main(int argc, char* argv[]) {
 
   cout << e.consultaProduto(3)->getDescricao() << endl;
   cout << "Custo total em estoque: " << e.custoTotalEstoque() << endl;
-  // e.descricaoProdutos();
+  e.descricaoProdutos();
   e.retiraProduto(1);
-  // e.descricaoProdutos();
+  e.retiraProduto(3);
+  e.retiraProduto(5);
+  e.retiraProduto(7);
+  e.descricaoProdutos();
   
   return 0;
 }

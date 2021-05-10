@@ -28,7 +28,7 @@ class ProdutoPerecivel: public Produto {
 protected:
   tm dataValidade;
 public:
-  ProdutoPerecivel(int pCodigo, double pPreco, string pDescricao, int pQtdeEmEstoque) : Produto(pCodigo, pPreco, pDescricao, pQtdeEmEstoque) {}
+  ProdutoPerecivel(int, double, string, int);
   void setDataValidade(int, int, int); // parâmetros: dia, mês e ano
   tm getDataValidade();
   bool acrescentaEstoque(int);
@@ -37,7 +37,7 @@ public:
 
 class ProdutoPerecivelEspecial: public ProdutoPerecivel {
 public:
-  ProdutoPerecivelEspecial(int pCodigo, double pPreco, string pDescricao, int pQtdeEmEstoque) : ProdutoPerecivel(pCodigo, pPreco, pDescricao, pQtdeEmEstoque) {}
+  ProdutoPerecivelEspecial(int, double, string, int);
   void imprimeNota();
 };
 

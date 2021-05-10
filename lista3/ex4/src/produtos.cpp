@@ -53,6 +53,8 @@ void Produto::imprimeProduto() {
 	   << preco << ", quantidade em estoque: " << qtdeEmEstoque << endl;
 }
 
+ProdutoPerecivel::ProdutoPerecivel(int pCodigo, double pPreco, string pDescricao, int pQtdeEmEstoque) : Produto(pCodigo, pPreco, pDescricao, pQtdeEmEstoque) {}
+
 void ProdutoPerecivel::setDataValidade(int pDia, int pMes, int pAno) {
   tm tmp = tm();
   tmp.tm_mday = pDia;
@@ -88,6 +90,8 @@ bool ProdutoPerecivel::acrescentaEstoque(int qtdeAcrescentar) {
   qtdeEmEstoque = qtdeAcrescentar;
   return true;
 }
+
+ProdutoPerecivelEspecial::ProdutoPerecivelEspecial(int pCodigo, double pPreco, string pDescricao, int pQtdeEmEstoque) : ProdutoPerecivel(pCodigo, pPreco, pDescricao, pQtdeEmEstoque) {}
 
 void ProdutoPerecivelEspecial::imprimeNota() {
   tm data = getDataValidade();
