@@ -1,0 +1,41 @@
+#ifndef MYCOMPLEX_H
+#define MYCOMPLEX_H
+
+#include <iostream>
+#include <list>
+#include <math.h>
+
+using namespace std;
+
+class MyComplex {
+private:
+	double real, imag;
+public:
+	MyComplex(double real = 0.0, double imag = 0.0);
+	MyComplex operator+(const MyComplex &) const;
+	void print();
+};
+
+class Termo {
+private:
+  float coeficiente;
+  int grau;
+public:
+  Termo(float, int);
+  string mostraTermo();
+  int mostraGrau();
+  float mostraCoeficiente();
+  void alteraCoeficiente(float);
+};
+
+class Polinomio {
+private:
+  list<Termo> termos;
+public:
+  Polinomio(int);
+  int adicionaTermo(Termo);
+  void mostraPolinomio();
+  float calculaPolinomio(float);
+};
+
+#endif
