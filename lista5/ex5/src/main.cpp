@@ -6,6 +6,7 @@
 int main() {
 	int n;
 	vector<MyComplex*> vec;
+	MyComplex *soma = new MyComplex;
 
 	cout << "Digite o tamanho do vetor: ";
 	cin >> n;
@@ -18,12 +19,12 @@ int main() {
 	}
 
 	vector<MyComplex*>::iterator it;
-	MyComplex *soma = new MyComplex;
 	for (it = vec.begin(); it != vec.end(); it++) {
 		*soma = **it + *soma;
 	}
 
 	soma->print();
+	
 	for (it = vec.begin(); it != vec.end(); it++) {
 		delete *it;
 	}
