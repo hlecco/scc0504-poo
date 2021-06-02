@@ -1,35 +1,35 @@
 #include <mycomplex.hpp>
-#include <iostream>
-#include <vector>
-#include <stdlib.h>
 
 int main() {
 	int n;
-	vector<MyComplex*> vec;
-	MyComplex *soma = new MyComplex;
+	vector<MyComplex *> vec;
+	MyComplex *sum = new MyComplex;
 
-	cout << "Digite o tamanho do vetor: ";
+	cout << "Type the size of the vector: ";
 	cin >> n;
-	srand (time(NULL));
+	srand(time(NULL));
 	
 	for (int i = 0; i < n; i++) {
-		double real = rand() % 100;
-		double imag = rand() % 100;
-		vec.push_back(new MyComplex(real, imag));
+		double real = rand() % 10;
+		double imag = rand() % 10;
+		MyComplex *element = new MyComplex(real, imag);
+		vec.push_back(element);
+		cout << "Vector " << i << ": ";
+		element->print();
 	}
 
-	vector<MyComplex*>::iterator it;
+	vector<MyComplex *>::iterator it;
 	for (it = vec.begin(); it != vec.end(); it++) {
-		*soma = **it + *soma;
+		*sum = **it + *sum;
 	}
 
-	soma->print();
+	sum->print();
 	
 	for (it = vec.begin(); it != vec.end(); it++) {
 		delete *it;
 	}
 	
-	delete soma;
+	delete sum;
 
 	return 0;
 }

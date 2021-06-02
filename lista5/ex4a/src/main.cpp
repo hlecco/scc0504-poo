@@ -1,7 +1,4 @@
-#include <iostream>
 #include <dispositivo.hpp>
-
-using namespace std;
 
 int main() {
     auto relogio = new Relogio;

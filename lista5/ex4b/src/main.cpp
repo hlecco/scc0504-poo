@@ -1,25 +1,19 @@
-#include <iostream>
 #include <dispositivo.hpp>
 
-using namespace std;
-
 int main() {
-    auto relogio = new Relogio;
-    auto radio = new Radio;
-    auto radio_relogio = new RadioRelogio;
+	Relogio relogio;
+	Radio radio;
+	Dispositivo *disp;
 
-    radio_relogio->Liga_Desliga();
-    radio_relogio->Liga_Desliga();
+	disp = &relogio;
+	disp->Liga_Desliga();
+	disp->DefineFabricante("Rolex");
+	cout << relogio.PegaFabricante() << endl; // verifica que de fato o objeto relógio foi alterado
 
-    relogio->Liga_Desliga();
-    relogio->Liga_Desliga();
-
-    radio->Liga_Desliga();
-    radio->Liga_Desliga();
-
-    delete relogio;
-    delete radio;
-    delete radio_relogio;
+	disp = &radio;
+	disp->Liga_Desliga();
+	disp->DefineFabricante("Philips");
+	cout << radio.PegaFabricante() << endl; // verifica que de fato o objeto radio foi alterado
 
     return 0;
 }

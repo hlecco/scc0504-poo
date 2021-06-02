@@ -1,4 +1,3 @@
-#include <iostream>
 #include <dispositivo.hpp>
 
 // Dispositivo
@@ -7,13 +6,15 @@ Dispositivo::Dispositivo() {
     ligado = false;
 }
 
-void Dispositivo::DefineFabricante(std::string f) {
+void Dispositivo::DefineFabricante(string f) {
     fabricante = f;
 }
 
-std::string Dispositivo::PegaFabricante() {
+string Dispositivo::PegaFabricante() {
     return fabricante;
 }
+
+
 
 // Radio
 Radio::Radio() {
@@ -50,11 +51,11 @@ void Radio::setAM() {
 void Radio::Liga_Desliga() {
     if (ligado) {
 	ligado = false;
-	std::cout << "Rádio desligado" << std::endl;
+	cout << "Rádio desligado" << endl;
     }
     else {
 	ligado = true;
-	std::cout << "Rádio ligado" << std::endl;
+	cout << "Rádio ligado" << endl;
     }
 }
 
@@ -66,26 +67,26 @@ Relogio::Relogio() {
     alarme = 0;
 }
 
-std::string Relogio::getHora() {
+string Relogio::getHora() {
     return this->hour_to_string(this->hora);
 }
 
-std::string Relogio::getAlarme() {
+string Relogio::getAlarme() {
     return this->hour_to_string(this->alarme);
 }
 
 void Relogio::setHora(int h) {
     // Input no formato HHMM
     if (h < 0) {
-	std::cout << "Horário deve ser positivo" << std::endl;
+	cout << "Horário deve ser positivo" << endl;
 	return;
     }
     if (h % 100 > 59) {
-	std::cout << "Minuto inválido" << std::endl;
+	cout << "Minuto inválido" << endl;
 	return;
     }
     if (h / 100 > 23) {
-	std::cout << "Hora inválida" << std::endl;
+	cout << "Hora inválida" << endl;
 	return;
     }
 
@@ -95,15 +96,15 @@ void Relogio::setHora(int h) {
 void Relogio::setAlarme(int h) {
     // Input no formato HHMM
     if (h < 0) {
-	std::cout << "Horário deve ser positivo" << std::endl;
+	cout << "Horário deve ser positivo" << endl;
 	return;
     }
     if (h % 100 > 59) {
-	std::cout << "Minuto inválido" << std::endl;
+	cout << "Minuto inválido" << endl;
 	return;
     }
     if (h / 100 > 23) {
-	std::cout << "Hora inválida" << std::endl;
+	cout << "Hora inválida" << endl;
 	return;
     }
 
@@ -111,12 +112,12 @@ void Relogio::setAlarme(int h) {
 }
     
 
-std::string Relogio::hour_to_string(int hora_int) {
+string Relogio::hour_to_string(int hora_int) {
     int m = hora_int % 100;
     int h = hora_int / 100;
-    std::string horastr = std::to_string(h)
+    string horastr = to_string(h)
 			  + "h"
-			  + std::to_string(m)
+			  + to_string(m)
 			  + "m";
     return horastr;
 }
@@ -124,18 +125,17 @@ std::string Relogio::hour_to_string(int hora_int) {
 void Relogio::Liga_Desliga() {
     if (ligado) {
 	ligado = false;
-	std::cout << "Relógio desligado" << std::endl;
+	cout << "Relógio desligado" << endl;
     }
     else {
 	ligado = true;
-	std::cout << "Relógio ligado" << std::endl;
+	cout << "Relógio ligado" << endl;
     }
 }
 
 
 
 // RadioRelogio
-
 RadioRelogio::RadioRelogio() {
     estacao_alarme = 0.0;
 }
@@ -145,10 +145,10 @@ void RadioRelogio::setAlarme(int h, float e) {
     if (e > 0) estacao_alarme = e;
 }
 
-std::string RadioRelogio::getAlarme() {
-    std::string estacao_str = std::to_string(estacao_alarme);
-    std::string hora_str = Relogio::getAlarme();
-    std::string alarme_str = hora_str 
+string RadioRelogio::getAlarme() {
+    string estacao_str = to_string(estacao_alarme);
+    string hora_str = Relogio::getAlarme();
+    string alarme_str = hora_str 
 	                     + " "
 		             + estacao_str
 		             + "Hz";
@@ -158,11 +158,11 @@ std::string RadioRelogio::getAlarme() {
 void RadioRelogio::Liga_Desliga() {
     if (Relogio::ligado) {
 	Relogio::ligado = false;
-	std::cout << "Rádio-Relógio desligado" << std::endl;
+	cout << "Rádio-Relógio desligado" << endl;
     }
     else {
 	Relogio::ligado = true;
-	std::cout << "Rádio-Relógio ligado" << std::endl;
+	cout << "Rádio-Relógio ligado" << endl;
     }
 }
 

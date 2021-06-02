@@ -1,16 +1,19 @@
-#ifndef DISPOSITIVO
-#define DISPOSITIVO
+#ifndef _DISPOSITIVO_H_
+#define _DISPOSITIVO_H_
 
+#include <iostream>
 #include <string>
+
+using namespace std;
 
 class Dispositivo {
 public:
    Dispositivo();
    virtual void Liga_Desliga() = 0;
-   std::string PegaFabricante();
-   void DefineFabricante(std::string);
+   string PegaFabricante();
+   void DefineFabricante(string);
 private:
-   std::string fabricante;
+   string fabricante;
 protected:
    bool ligado;
 };
@@ -33,27 +36,26 @@ private:
 class Relogio: public Dispositivo {
 public:
     Relogio();
-    std::string getHora();
+    string getHora();
     void setHora(int);
-    std::string getAlarme();
+    string getAlarme();
     void setAlarme(int);
     void Liga_Desliga();
 private:
     int hora;
     int alarme;
 protected:
-    std::string hour_to_string(int);
+    string hour_to_string(int);
 };
 
 class RadioRelogio: public Relogio, public Radio {
 public:
     RadioRelogio();
     void setAlarme(int, float);
-    std::string getAlarme();
+    string getAlarme();
     void Liga_Desliga();
 private:
     float estacao_alarme;
 };
-
 
 #endif

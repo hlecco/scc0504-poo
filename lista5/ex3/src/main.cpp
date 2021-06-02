@@ -16,7 +16,8 @@ int main() {
 
 	u = MyComplex(0,1);
 	u.print();
-	cout << u.modulo() << endl;
+	
+	cout << u.abs() << endl;
 	
 	return 0;
 }

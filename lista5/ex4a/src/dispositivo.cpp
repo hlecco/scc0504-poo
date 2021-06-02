@@ -1,4 +1,3 @@
-#include <iostream>
 #include <dispositivo.hpp>
 
 // Radio
@@ -41,26 +40,26 @@ Relogio::Relogio() {
     alarme = 0;
 }
 
-std::string Relogio::getHora() {
+string Relogio::getHora() {
     return this->hour_to_string(this->hora);
 }
 
-std::string Relogio::getAlarme() {
+string Relogio::getAlarme() {
     return this->hour_to_string(this->alarme);
 }
 
 void Relogio::setHora(int h) {
     // Input no formato HHMM
     if (h < 0) {
-	std::cout << "Horário deve ser positivo" << std::endl;
+	cout << "Horário deve ser positivo" << endl;
 	return;
     }
     if (h % 100 > 59) {
-	std::cout << "Minuto inválido" << std::endl;
+	cout << "Minuto inválido" << endl;
 	return;
     }
     if (h / 100 > 23) {
-	std::cout << "Hora inválida" << std::endl;
+	cout << "Hora inválida" << endl;
 	return;
     }
 
@@ -70,15 +69,15 @@ void Relogio::setHora(int h) {
 void Relogio::setAlarme(int h) {
     // Input no formato HHMM
     if (h < 0) {
-	std::cout << "Horário deve ser positivo" << std::endl;
+	cout << "Horário deve ser positivo" << endl;
 	return;
     }
     if (h % 100 > 59) {
-	std::cout << "Minuto inválido" << std::endl;
+	cout << "Minuto inválido" << endl;
 	return;
     }
     if (h / 100 > 23) {
-	std::cout << "Hora inválida" << std::endl;
+	cout << "Hora inválida" << endl;
 	return;
     }
 
@@ -86,12 +85,12 @@ void Relogio::setAlarme(int h) {
 }
     
 
-std::string Relogio::hour_to_string(int hora_int) {
+string Relogio::hour_to_string(int hora_int) {
     int m = hora_int % 100;
     int h = hora_int / 100;
-    std::string horastr = std::to_string(h)
+    string horastr = to_string(h)
 			  + "h"
-			  + std::to_string(m)
+			  + to_string(m)
 			  + "m";
     return horastr;
 }
@@ -99,7 +98,6 @@ std::string Relogio::hour_to_string(int hora_int) {
 
 
 // RadioRelogio
-
 RadioRelogio::RadioRelogio() {
     estacao_alarme = 0.0;
 }
@@ -109,10 +107,10 @@ void RadioRelogio::setAlarme(int h, float e) {
     if (e > 0) estacao_alarme = e;
 }
 
-std::string RadioRelogio::getAlarme() {
-    std::string estacao_str = std::to_string(estacao_alarme);
-    std::string hora_str = Relogio::getAlarme();
-    std::string alarme_str = hora_str 
+string RadioRelogio::getAlarme() {
+    string estacao_str = to_string(estacao_alarme);
+    string hora_str = Relogio::getAlarme();
+    string alarme_str = hora_str 
 	                     + " "
 		             + estacao_str
 		             + "Hz";
