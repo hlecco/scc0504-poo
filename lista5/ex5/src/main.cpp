@@ -28,5 +28,7 @@ int main() {
 		delete *it;
 	}
 	
+	delete soma;
+
 	return 0;
 }
