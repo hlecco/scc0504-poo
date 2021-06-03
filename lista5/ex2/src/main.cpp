@@ -1,5 +1,7 @@
 #include <mycomplex.hpp>
 
+using namespace std;
+
 int main() {
 	MyComplex z(-1, 1);
 	MyComplex w(-42, 80);

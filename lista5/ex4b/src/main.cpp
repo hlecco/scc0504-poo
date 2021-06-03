@@ -1,5 +1,7 @@
 #include <dispositivo.hpp>
 
+using namespace std;
+
 int main() {
 	Relogio relogio;
 	Radio radio;

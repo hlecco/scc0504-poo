@@ -1,5 +1,7 @@
 #include <mycomplex.hpp>
 
+using namespace std;
+
 int main() {
 	int n;
 	vector<MyComplex *> vec;

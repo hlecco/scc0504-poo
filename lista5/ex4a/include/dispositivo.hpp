@@ -1,10 +1,8 @@
-#ifndef _DISPOSITIVO_
-#define _DISPOSITIVO_
+#ifndef _DISPOSITIVO_H_
+#define _DISPOSITIVO_H_
 
 #include <iostream>
 #include <string>
-
-using namespace std;
 
 class Radio {
 public:
@@ -23,22 +21,22 @@ private:
 class Relogio {
 public:
     Relogio();
-    string getHora();
+	std::string getHora();
     void setHora(int);
-    string getAlarme();
+	std::string getAlarme();
     void setAlarme(int);
 private:
     int hora;
     int alarme;
 protected:
-    string hour_to_string(int);
+	std::string hour_to_string(int);
 };
 
 class RadioRelogio: public Relogio, public Radio {
 public:
     RadioRelogio();
     void setAlarme(int, float);
-    string getAlarme();
+	std::string getAlarme();
 private:
     float estacao_alarme;
 };

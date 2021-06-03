@@ -4,18 +4,16 @@
 #include <iostream>
 #include <string>
 
-using namespace std;
-
 class Dispositivo {
 public:
-   Dispositivo();
-   virtual void Liga_Desliga() = 0;
-   string PegaFabricante();
-   void DefineFabricante(string);
+	Dispositivo();
+	virtual void Liga_Desliga() = 0;
+	std::string PegaFabricante();
+	void DefineFabricante(std::string);
 private:
-   string fabricante;
+	std::string fabricante;
 protected:
-   bool ligado;
+	bool ligado;
 };
 
 class Radio: public Dispositivo {
@@ -36,23 +34,23 @@ private:
 class Relogio: public Dispositivo {
 public:
     Relogio();
-    string getHora();
+	std::string getHora();
     void setHora(int);
-    string getAlarme();
+	std::string getAlarme();
     void setAlarme(int);
     void Liga_Desliga();
 private:
     int hora;
     int alarme;
 protected:
-    string hour_to_string(int);
+	std::string hour_to_string(int);
 };
 
 class RadioRelogio: public Relogio, public Radio {
 public:
     RadioRelogio();
     void setAlarme(int, float);
-    string getAlarme();
+	std::string getAlarme();
     void Liga_Desliga();
 private:
     float estacao_alarme;

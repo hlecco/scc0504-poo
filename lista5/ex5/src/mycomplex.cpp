@@ -1,5 +1,7 @@
 #include <mycomplex.hpp>
 
+using namespace std;
+
 MyComplex::MyComplex(double real, double imag) {
 	this->real = real;
 	this->imag = imag;

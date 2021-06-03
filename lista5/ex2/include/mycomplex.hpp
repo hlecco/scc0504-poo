@@ -4,8 +4,6 @@
 #include <iostream>
 #include <math.h>
 
-using namespace std;
-
 class MyComplex {
 private:
 	double real, imag;

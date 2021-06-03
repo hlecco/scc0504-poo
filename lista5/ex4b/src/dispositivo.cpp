@@ -1,5 +1,7 @@
 #include <dispositivo.hpp>
 
+using namespace std;
+
 // Dispositivo
 Dispositivo::Dispositivo() {
     fabricante = "null";

@@ -1,5 +1,7 @@
 #include <dispositivo.hpp>
 
+using namespace std;
+
 // Radio
 Radio::Radio() {
     volume = 0;
