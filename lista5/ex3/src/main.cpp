@@ -1,5 +1,7 @@
 #include <mycomplex.hpp>
 
+using namespace std;
+
 int main() {
 	MyComplex z(-1231, 139);
 	MyComplex w(-42, 80);
@@ -16,7 +18,8 @@ int main() {
 
 	u = MyComplex(0,1);
 	u.print();
-	cout << u.modulo() << endl;
+	
+	cout << u.abs() << endl;
 	
 	return 0;
 }

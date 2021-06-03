@@ -1,5 +1,3 @@
-#include <iostream>
-#include <math.h>
 #include <mycomplex.hpp>
 
 using namespace std;
@@ -30,14 +28,14 @@ MyComplex MyComplex::operator*(const MyComplex &c) const {
 	return result;
 }
 
-double MyComplex::modulo() const {
+double MyComplex::abs() const {
 	double result;
 	result = this->real * this->real;
 	result += this->imag * this->imag;
 	return sqrt(result);
 }
 
-void MyComplex::print() {
+void MyComplex::print() const {
 	if (imag >= 0) {
 		cout << real << " + " << imag << "i" << endl;
 	} else {

@@ -1,4 +1,3 @@
-#include <iostream>
 #include <dispositivo.hpp>
 
 using namespace std;

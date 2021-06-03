@@ -67,6 +67,10 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     public void removeElemento(Elemento umElemento) {
         eElementos.remove(umElemento);
     }
+    
+    public ArrayList<Elemento> getElementos() {
+        return eElementos;
+    }
 
     public Graphics getGraphicsBuffer(){
         return g2;
@@ -118,16 +122,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void keyPressed(KeyEvent e) {
-        /*Movimento do heroi via teclado*/
-        if (e.getKeyCode() == KeyEvent.VK_UP) {
-            hHero.moveUp();
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-            hHero.moveDown();
-        } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-            hHero.moveLeft();
-        } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-            hHero.moveRight();
-        } else if (e.getKeyCode() == KeyEvent.VK_R) {
+        hHero.Event(e, cControle, this);
+        if (e.getKeyCode() == KeyEvent.VK_R) {
             this.eElementos.clear();
             hHero = new Hero("vacina.png");
             hHero.setPosicao(0, 7);
@@ -136,11 +132,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
             CoronaVirus cTeste = new CoronaVirus("carro_azul.png");
             cTeste.setPosicao(5, 5);
             this.addElemento(cTeste);
-        }
-        
-        /*Se o heroi for para uma posicao invalida, sobre um elemento intransponivel, volta para onde estava*/
-        if (!cControle.ehPosicaoValida(this.eElementos,hHero.getPosicao())) {
-            hHero.voltaAUltimaPosicao();
         }
 
         this.setTitle("-> Cell: " + (hHero.getPosicao().getColuna()) + ", " + (hHero.getPosicao().getLinha()));
