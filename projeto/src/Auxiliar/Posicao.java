@@ -2,7 +2,7 @@ package Auxiliar;
 
 import java.io.Serializable;
 
-public class Posicao implements Serializable{
+public class Posicao implements Serializable {
     private int	linha;
     private int coluna;
     
@@ -58,5 +58,13 @@ public class Posicao implements Serializable{
     }
     public boolean moveLeft(){
         return this.setPosicao(this.getLinha(), this.getColuna()-1);        
+    }
+    
+    public Posicao offset(int x, int y) {
+        Posicao novaPosicao = new Posicao(
+                this.getLinha() + x,
+                this.getColuna() + y
+        );
+        return novaPosicao;
     }
 }
