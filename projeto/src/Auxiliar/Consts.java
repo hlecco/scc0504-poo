@@ -8,6 +8,7 @@ public class Consts {
     public static final int DOWN = KeyEvent.VK_DOWN;
     public static final int LEFT = KeyEvent.VK_LEFT;
     public static final int RIGHT = KeyEvent.VK_RIGHT;
+    public static final int BOMB = KeyEvent.VK_X;
     public static final int CELL_SIDE = 40;
     public static final int RES = 16;
     public static final int FRAME_INTERVAL = 100;   

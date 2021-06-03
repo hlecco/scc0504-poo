@@ -7,7 +7,6 @@ import Controler.ControleDeJogo;
 import Controler.Tela;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
@@ -27,10 +26,18 @@ public class Hero extends Elemento implements Serializable{
         this.pPosicao.volta();
     }
     
-    public void Event(KeyEvent e, ControleDeJogo c, Tela t) {
+    public void createBomb() {
+        Bomba bomb = new Bomba("bomb.png");
+        bomb.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna());
+        bomb.setPotencia(5);
+        Desenhador.getTelaDoJogo().addElemento(bomb);
+        bomb.explode();
+    }
+    
+    public void Event(int key, ControleDeJogo c, Tela t) {
         /*Movimento do heroi via teclado*/
         Posicao offset = pPosicao.offset(0,0);
-        switch (e.getKeyCode()) {
+        switch (key) {
             case Consts.UP:
                 offset.moveUp();
                 if (c.ehPosicaoValida(t.getElementos(), offset)) {
@@ -54,6 +61,9 @@ public class Hero extends Elemento implements Serializable{
                 if (c.ehPosicaoValida(t.getElementos(), offset)) {
                     this.moveRight();
                 }
+                break;
+            case Consts.BOMB:
+                this.createBomb();
                 break;
         }
     }

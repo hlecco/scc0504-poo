@@ -4,8 +4,10 @@ import Auxiliar.Consts;
 import Auxiliar.Desenhador;
 import Controler.Tela;
 import Auxiliar.Posicao;
+import Controler.ControleDeJogo;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
@@ -17,6 +19,7 @@ import javax.swing.ImageIcon;
  */
 public abstract class Elemento implements Serializable {
 
+    protected Tela pTela;
     protected ImageIcon iImage;
     protected Posicao pPosicao;
     protected boolean bTransponivel; /*Pode passar por cima?*/
@@ -37,6 +40,8 @@ public abstract class Elemento implements Serializable {
             System.out.println(ex.getMessage());
         }
     }
+    
+    public void Event(int key, ControleDeJogo c, Tela t) {}
 
     public Posicao getPosicao() {
         return pPosicao;

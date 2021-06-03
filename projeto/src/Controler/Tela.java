@@ -44,7 +44,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         
         CoronaVirus cTeste = new CoronaVirus("robo_azul.png");
         cTeste.setPosicao(5, 5);
-        this.addElemento(cTeste);     
+        this.addElemento(cTeste);
 
         CoronaVirus cCorona = new CoronaVirus("robo.png");
         cCorona.setPosicao(3, 3);
@@ -122,7 +122,7 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void keyPressed(KeyEvent e) {
-        hHero.Event(e, cControle, this);
+        hHero.Event(e.getKeyCode(), cControle, this);
         if (e.getKeyCode() == KeyEvent.VK_R) {
             this.eElementos.clear();
             hHero = new Hero("vacina.png");
