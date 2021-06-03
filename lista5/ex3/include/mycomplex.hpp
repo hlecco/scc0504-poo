@@ -1,11 +1,8 @@
-#ifndef MYCOMPLEX_H
-#define MYCOMPLEX_H
+#ifndef _MYCOMPLEX_H_
+#define _MYCOMPLEX_H_
 
 #include <iostream>
-#include <list>
 #include <math.h>
-
-using namespace std;
 
 class MyComplex {
 private:
@@ -15,8 +12,8 @@ public:
 	MyComplex operator+(const MyComplex &) const;
 	MyComplex operator-(const MyComplex &) const;
 	MyComplex operator*(const MyComplex &) const;
-	double modulo() const;
-	void print();
+	double abs() const;
+	void print() const;
 };
 
 #endif
