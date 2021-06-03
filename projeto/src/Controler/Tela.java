@@ -8,19 +8,14 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import java.util.zip.*;
-/**
- *
- * @author junio
- */
+
 public class Tela extends javax.swing.JFrame implements MouseListener, KeyListener {
 
     private Hero hHero;
     private ArrayList<Elemento> eElementos;
     private ControleDeJogo cControle = new ControleDeJogo();
     private Graphics g2;
-    /**
-     * Creates new form
-     */
+
     public Tela() {
         Desenhador.setCenario(this); /*Desenhador funciona no modo estatico*/
         initComponents();

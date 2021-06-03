@@ -9,14 +9,12 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Junio
- */
 public class Hero extends Elemento implements Serializable{
     public Hero(String sNomeImagePNG) {
         super(sNomeImagePNG);
@@ -26,12 +24,19 @@ public class Hero extends Elemento implements Serializable{
         this.pPosicao.volta();
     }
     
-    public void createBomb() {
-        Bomba bomb = new Bomba("bomb.png");
+    public void createBomb(final ControleDeJogo c, final Tela t) {
+        final Bomba bomb = new Bomba("bomb.png");
         bomb.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna());
-        bomb.setPotencia(5);
+        bomb.setPotencia(3);
         Desenhador.getTelaDoJogo().addElemento(bomb);
-        bomb.explode();
+        TimerTask explode = new TimerTask() {
+            public void run() {
+                bomb.explode(c, t);
+                return;
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(explode, 30 * Consts.FRAME_INTERVAL);
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {
@@ -63,7 +68,7 @@ public class Hero extends Elemento implements Serializable{
                 }
                 break;
             case Consts.BOMB:
-                this.createBomb();
+                this.createBomb(c, t);
                 break;
         }
     }

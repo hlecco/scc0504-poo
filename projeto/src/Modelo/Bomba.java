@@ -30,36 +30,47 @@ public class Bomba extends Elemento {
         }
     }
     
-    public void explode() {
-        Fogo fogo_up = new Fogo("fogo.png");
-        Fogo fogo_down = new Fogo("fogo.png");
-        Fogo fogo_left = new Fogo("fogo.png");
-        Fogo fogo_right = new Fogo("fogo.png");
+    public void explode(ControleDeJogo c, Tela t) {
+        Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
         
-        fogo_up.setPotencia(this.potencia-1);
-        fogo_down.setPotencia(this.potencia-1);
-        fogo_left.setPotencia(this.potencia-1);
-        fogo_right.setPotencia(this.potencia-1);
+        offset.moveUp();
+        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+            Fogo fogo_up = new Fogo("fogo.png"); 
+            fogo_up.setPotencia(this.potencia);
+            fogo_up.setDirecao(Consts.UP);
+            fogo_up.setPosicao(offset.getLinha(), offset.getColuna());
+            fogo_up.propaga(c, t);
+        }
         
-        fogo_up.setDirecao(Consts.UP);
-        fogo_down.setDirecao(Consts.DOWN);
-        fogo_left.setDirecao(Consts.LEFT);
-        fogo_right.setDirecao(Consts.RIGHT);
+        offset.volta();
+        offset.moveDown();
+        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+            Fogo fogo_down = new Fogo("fogo.png");
+            fogo_down.setPotencia(this.potencia);
+            fogo_down.setDirecao(Consts.DOWN);
+            fogo_down.setPosicao(offset.getLinha(), offset.getColuna());
+            fogo_down.propaga(c, t);
+        }
         
-        fogo_up.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna()-1);
-        fogo_down.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna()+1);
-        fogo_left.setPosicao(this.pPosicao.getLinha()-1, this.pPosicao.getColuna());
-        fogo_right.setPosicao(this.pPosicao.getLinha()+1, this.pPosicao.getColuna());
+        offset.volta();
+        offset.moveLeft();
+        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+            Fogo fogo_left = new Fogo("fogo.png");
+            fogo_left.setPotencia(this.potencia);
+            fogo_left.setDirecao(Consts.LEFT);
+            fogo_left.setPosicao(offset.getLinha(), offset.getColuna());
+            fogo_left.propaga(c, t);
+        }
         
-        Desenhador.getTelaDoJogo().addElemento(fogo_up);
-        Desenhador.getTelaDoJogo().addElemento(fogo_left);
-        Desenhador.getTelaDoJogo().addElemento(fogo_right);
-        Desenhador.getTelaDoJogo().addElemento(fogo_down);
-        
-        fogo_up.propaga();
-        fogo_left.propaga();
-        fogo_right.propaga();
-        fogo_down.propaga();
+        offset.volta();
+        offset.moveRight();
+        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+            Fogo fogo_right = new Fogo("fogo.png");
+            fogo_right.setPotencia(this.potencia);
+            fogo_right.setDirecao(Consts.RIGHT);
+            fogo_right.setPosicao(offset.getLinha(), offset.getColuna());
+            fogo_right.propaga(c, t);
+        }
         
         Desenhador.getTelaDoJogo().removeElemento(this);
     }

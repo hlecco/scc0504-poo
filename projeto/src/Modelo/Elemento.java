@@ -13,10 +13,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author Junio
- */
 public abstract class Elemento implements Serializable {
 
     protected Tela pTela;
@@ -77,5 +73,5 @@ public abstract class Elemento implements Serializable {
     
    public void autoDesenho(){
         Desenhador.desenhar(this.iImage, pPosicao.getColuna(), pPosicao.getLinha());        
-    }    
+    }
 }

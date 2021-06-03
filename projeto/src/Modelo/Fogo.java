@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -35,32 +37,70 @@ public class Fogo extends Elemento {
         this.direcao = d;
     }
     
-    public void propaga() {
-        int offset_linha = 0;
-        int offset_coluna = 0;
-        switch (this.direcao) {
-            case Consts.UP:
-                offset_coluna = -1;
-                break;
-            case Consts.DOWN:
-                offset_coluna = 1;
-                break;
-            case Consts.LEFT:
-                offset_linha = -1;
-                break;
-            case Consts.RIGHT:
-                offset_linha = 1;
-                break;
+    public void propaga(ControleDeJogo c, Tela t) {
+        Desenhador.getTelaDoJogo().addElemento(this);
+        
+        if (potencia > 1) {
+            Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
+
+            switch (this.direcao) {
+                case Consts.UP:
+                    offset.moveUp();
+                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                        Fogo fogo_filho = new Fogo("fogo.png");
+                        fogo_filho.setPotencia(this.potencia - 1);
+                        fogo_filho.setDirecao(this.direcao);
+                        fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
+                        fogo_filho.propaga(c, t);
+                    }
+                    break;
+                case Consts.DOWN:
+                    offset.moveDown();
+                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                        Fogo fogo_filho = new Fogo("fogo.png");
+                        fogo_filho.setPotencia(this.potencia - 1);
+                        fogo_filho.setDirecao(this.direcao);
+                        fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
+                        fogo_filho.propaga(c, t);
+                    }
+                    break;
+                case Consts.LEFT:
+                    offset.moveLeft();
+                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                        Fogo fogo_filho = new Fogo("fogo.png");
+                        fogo_filho.setPotencia(this.potencia - 1);
+                        fogo_filho.setDirecao(this.direcao);
+                        fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
+                        fogo_filho.propaga(c, t);
+                    }
+                    break;
+                case Consts.RIGHT:
+                    offset.moveRight();
+                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                        Fogo fogo_filho = new Fogo("fogo.png");
+                        fogo_filho.setPotencia(this.potencia - 1);
+                        fogo_filho.setDirecao(this.direcao);
+                        fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
+                        fogo_filho.propaga(c, t);
+                    }
+                    break;
+            }
         }
-        
-        if (potencia > 0) {
-            Fogo fogo_filho = new Fogo("fogo.png");
-            fogo_filho.setPotencia(this.potencia - 1);
-            fogo_filho.setDirecao(this.direcao);
-            fogo_filho.setPosicao(this.pPosicao.getLinha() + offset_linha, this.pPosicao.getColuna() + offset_coluna);
-            Desenhador.getTelaDoJogo().addElemento(fogo_filho);
-            fogo_filho.propaga();
-        }     
-        
+        vanish();
+    }
+    
+    public void teste() {
+        Desenhador.getTelaDoJogo().removeElemento(this);
+    }
+    
+    public void vanish() {
+        TimerTask undraw;
+        undraw = new TimerTask() {
+            public void run() {
+                teste();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(undraw, 20 * Consts.FRAME_INTERVAL);
     }
 }
