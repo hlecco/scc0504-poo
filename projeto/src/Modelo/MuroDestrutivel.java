@@ -1,14 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Modelo;
 
-/**
- *
- * @author caio
- */
-public class MuroDestrutivel {
-    
+import Auxiliar.Consts;
+import Auxiliar.Desenhador;
+import Controler.Tela;
+import java.awt.Graphics;
+import java.io.Serializable;
+
+public class MuroDestrutivel extends Elemento implements Serializable {    
+    public MuroDestrutivel(String sNomeImagePNG) {
+        super(sNomeImagePNG);
+        this.bTransponivel = false;
+    }
+
+    public void autoDesenho() {
+        super.autoDesenho();
+    }    
 }

@@ -101,6 +101,6 @@ public class Fogo extends Elemento {
             }
         };
         Timer timer = new Timer();
-        timer.schedule(undraw, 20 * Consts.FRAME_INTERVAL);
+        timer.schedule(undraw, Consts.TIMER_DISPARO);
     }
 }

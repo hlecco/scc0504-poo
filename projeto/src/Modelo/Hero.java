@@ -36,7 +36,7 @@ public class Hero extends Elemento implements Serializable{
             }
         };
         Timer timer = new Timer();
-        timer.schedule(explode, 30 * Consts.FRAME_INTERVAL);
+        timer.schedule(explode, Consts.TIMER_DISPARO * 5);
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {

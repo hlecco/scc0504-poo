@@ -32,7 +32,12 @@ public class Bomba extends Elemento {
     
     public void explode(ControleDeJogo c, Tela t) {
         Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
-        
+        Fogo fogo = new Fogo("fogo.png"); 
+        fogo.setPotencia(this.potencia);
+        fogo.setPosicao(offset.getLinha(), offset.getColuna());      
+        Desenhador.getTelaDoJogo().addElemento(fogo);
+        fogo.vanish();
+            
         offset.moveUp();
         if (c.ehPosicaoValida(t.getElementos(), offset)) {
             Fogo fogo_up = new Fogo("fogo.png"); 

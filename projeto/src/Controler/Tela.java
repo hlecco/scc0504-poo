@@ -17,32 +17,32 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     private Graphics g2;
 
     public Tela() {
-        Desenhador.setCenario(this); /*Desenhador funciona no modo estatico*/
+        Desenhador.setCenario(this); /* Desenhador funciona no modo estatico */
         initComponents();
  
         this.addMouseListener(this); /*mouse*/
-        this.addKeyListener(this);   /*teclado*/
+        this.addKeyListener(this); /*teclado*/
         
         /*Cria a janela do tamanho do cenario + insets (bordas) da janela*/
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
                 Consts.RES * Consts.CELL_SIDE + getInsets().top + getInsets().bottom);
 
         /*Este array vai guardar os elementos graficos*/
-        eElementos = new ArrayList<Elemento>(100);
+        eElementos = new ArrayList<Elemento>(200);
 
     
         /*Cria eElementos adiciona elementos*/
         /*O protagonista (heroi) necessariamente precisa estar na posicao 0 do array*/
-        hHero = new Hero("skooter_hero.png"); /* https://www.online-image-editor.com/ */
-        hHero.setPosicao(0, 7);
+        hHero = new Hero("bomberman.png"); /* https://www.online-image-editor.com/ */
+        hHero.setPosicao(1, 1);
         this.addElemento(hHero);
         
         CoronaVirus cTeste = new CoronaVirus("robo_azul.png");
-        cTeste.setPosicao(5, 5);
+        cTeste.setPosicao(10, 9);
         this.addElemento(cTeste);
 
         CoronaVirus cCorona = new CoronaVirus("robo.png");
-        cCorona.setPosicao(3, 3);
+        cCorona.setPosicao(5, 13);
         this.addElemento(cCorona);
 
         CoronaVirus cRobo = new CoronaVirus("robo_azul.png");
@@ -51,10 +51,39 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         
         Caveira cCaveira = new Caveira("caveira.png");
         cCaveira.setPosicao(10, 9);
-        this.addElemento(cCaveira);        
+        this.addElemento(cCaveira);
+
+        this.addMuroInd();
+        this.addFrame();
     }
 
 /*--------------------------------------------------*/
+    
+    public void addMuroInd() {
+        for (int i = 0; i < Consts.RES; i++) {
+            for (int j = 0; j < Consts.RES; j++) {
+                if (i % 2 == 0 && i > 0 && j % 2 == 0 && j > 0
+                        && (i + 2) < Consts.RES && (j + 2) < Consts.RES) {
+                    MuroIndestrutivel cMuro = new MuroIndestrutivel("wall.png");
+                    cMuro.setPosicao(i, j);
+                    this.addElemento(cMuro);
+                }
+            }
+        }
+    }
+    
+    public void addFrame() {
+        for (int i = 0; i < Consts.RES; i++) {
+            for (int j = 0; j < Consts.RES; j++) {
+                if (i == 0 || j == 0 || i == (Consts.RES-1) || j == (Consts.RES-1)) {
+                    MuroIndestrutivel cMuro = new MuroIndestrutivel("wallframe.png");
+                    cMuro.setPosicao(i, j);
+                    this.addElemento(cMuro);
+                }
+            }
+        }
+    }
+    
     public void addElemento(Elemento umElemento) {
         eElementos.add(umElemento);
     }
