@@ -11,10 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Junio
- */
 public class CoronaVirus extends Elemento implements Serializable{
     private boolean bRight;
 
