@@ -16,8 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Hero extends Elemento implements Serializable{
-    public Hero(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Hero() {
+        super("bomberman.png");
     }
 
     public void voltaAUltimaPosicao(){
@@ -36,7 +36,7 @@ public class Hero extends Elemento implements Serializable{
             }
         };
         Timer timer = new Timer();
-        timer.schedule(explode, Consts.TIMER_DISPARO * 5);
+        timer.schedule(explode, 30 * Consts.FRAME_INTERVAL);
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {

@@ -21,8 +21,8 @@ public class Fogo extends Elemento {
     private int potencia;
     private int direcao;
 
-    public Fogo(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Fogo() {
+        super("explosao.png");
         this.potencia = 1;
         this.direcao = Consts.DOWN;
     }
@@ -47,7 +47,7 @@ public class Fogo extends Elemento {
                 case Consts.UP:
                     offset.moveUp();
                     if (c.ehPosicaoValida(t.getElementos(), offset)) {
-                        Fogo fogo_filho = new Fogo("fogo.png");
+                        Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
@@ -57,7 +57,7 @@ public class Fogo extends Elemento {
                 case Consts.DOWN:
                     offset.moveDown();
                     if (c.ehPosicaoValida(t.getElementos(), offset)) {
-                        Fogo fogo_filho = new Fogo("fogo.png");
+                        Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
@@ -67,7 +67,7 @@ public class Fogo extends Elemento {
                 case Consts.LEFT:
                     offset.moveLeft();
                     if (c.ehPosicaoValida(t.getElementos(), offset)) {
-                        Fogo fogo_filho = new Fogo("fogo.png");
+                        Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
@@ -77,7 +77,7 @@ public class Fogo extends Elemento {
                 case Consts.RIGHT:
                     offset.moveRight();
                     if (c.ehPosicaoValida(t.getElementos(), offset)) {
-                        Fogo fogo_filho = new Fogo("fogo.png");
+                        Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
@@ -101,6 +101,6 @@ public class Fogo extends Elemento {
             }
         };
         Timer timer = new Timer();
-        timer.schedule(undraw, Consts.TIMER_DISPARO);
+        timer.schedule(undraw, 20 * Consts.FRAME_INTERVAL);
     }
 }

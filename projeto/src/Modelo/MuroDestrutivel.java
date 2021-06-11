@@ -7,8 +7,8 @@ import java.awt.Graphics;
 import java.io.Serializable;
 
 public class MuroDestrutivel extends Elemento implements Serializable {    
-    public MuroDestrutivel(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public MuroDestrutivel() {
+        super("splitwall.png");
         this.bTransponivel = false;
     }
 

@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class Caveira extends Elemento implements Serializable{
     private int iContaFrames;
     
-    public Caveira(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Caveira() {
+        super("caveira.png");
         this.bTransponivel = true;
         this.iContaFrames = 0;
     }

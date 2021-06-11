@@ -16,17 +16,7 @@ public class ControleDeJogo {
         }
     }
     public void processaTudo(ArrayList<Elemento> e){
-        Hero hHero = (Hero)e.get(0); /*O heroi (protagonista) eh sempre o primeiro do array*/
-        Elemento eTemp;
-        /*Processa todos os demais em relacao ao heroi*/
-        for(int i = 1; i < e.size(); i++){
-            eTemp = e.get(i); /*Pega o i-esimo elemento do jogo*/
-            /*Verifica se o heroi se sobrepoe ao i-ésimo elemento*/
-            if(hHero.getPosicao().estaNaMesmaPosicao(eTemp.getPosicao()))
-                /*Nem todos os elementos podem ser transpostos pelo heroi*/
-                if(eTemp.isbTransponivel())
-                    e.remove(eTemp);
-        }
+        
     }
     public boolean ehPosicaoValida(ArrayList<Elemento> e, Posicao p){
         Elemento eTemp;

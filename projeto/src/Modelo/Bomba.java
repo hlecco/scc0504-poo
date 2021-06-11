@@ -32,15 +32,15 @@ public class Bomba extends Elemento {
     
     public void explode(ControleDeJogo c, Tela t) {
         Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
-        Fogo fogo = new Fogo("fogo.png"); 
-        fogo.setPotencia(this.potencia);
-        fogo.setPosicao(offset.getLinha(), offset.getColuna());      
+        
+        Fogo fogo = new Fogo();
+        fogo.setPosicao(offset.getLinha(), offset.getColuna());
         Desenhador.getTelaDoJogo().addElemento(fogo);
         fogo.vanish();
-            
+        
         offset.moveUp();
         if (c.ehPosicaoValida(t.getElementos(), offset)) {
-            Fogo fogo_up = new Fogo("fogo.png"); 
+            Fogo fogo_up = new Fogo(); 
             fogo_up.setPotencia(this.potencia);
             fogo_up.setDirecao(Consts.UP);
             fogo_up.setPosicao(offset.getLinha(), offset.getColuna());
@@ -50,7 +50,7 @@ public class Bomba extends Elemento {
         offset.volta();
         offset.moveDown();
         if (c.ehPosicaoValida(t.getElementos(), offset)) {
-            Fogo fogo_down = new Fogo("fogo.png");
+            Fogo fogo_down = new Fogo();
             fogo_down.setPotencia(this.potencia);
             fogo_down.setDirecao(Consts.DOWN);
             fogo_down.setPosicao(offset.getLinha(), offset.getColuna());
@@ -60,7 +60,7 @@ public class Bomba extends Elemento {
         offset.volta();
         offset.moveLeft();
         if (c.ehPosicaoValida(t.getElementos(), offset)) {
-            Fogo fogo_left = new Fogo("fogo.png");
+            Fogo fogo_left = new Fogo();
             fogo_left.setPotencia(this.potencia);
             fogo_left.setDirecao(Consts.LEFT);
             fogo_left.setPosicao(offset.getLinha(), offset.getColuna());
@@ -70,7 +70,7 @@ public class Bomba extends Elemento {
         offset.volta();
         offset.moveRight();
         if (c.ehPosicaoValida(t.getElementos(), offset)) {
-            Fogo fogo_right = new Fogo("fogo.png");
+            Fogo fogo_right = new Fogo();
             fogo_right.setPotencia(this.potencia);
             fogo_right.setDirecao(Consts.RIGHT);
             fogo_right.setPosicao(offset.getLinha(), offset.getColuna());
