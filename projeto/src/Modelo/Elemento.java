@@ -1,25 +1,27 @@
 package Modelo;
 
-import Auxiliar.Consts;
-import Auxiliar.Desenhador;
-import Controler.Tela;
-import Auxiliar.Posicao;
-import Controler.ControleDeJogo;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.swing.ImageIcon;
 
-public abstract class Elemento implements Serializable {
+import Auxiliar.Consts;
+import Auxiliar.Desenhador;
+import Controler.Tela;
+import Auxiliar.Posicao;
+import Controler.ControleDeJogo;
 
+
+public abstract class Elemento implements Serializable {
     protected Tela pTela;
     protected ImageIcon iImage;
     protected Posicao pPosicao;
-    protected boolean bTransponivel; /*Pode passar por cima?*/
-    protected boolean bMortal;       /*Se encostar, morre?*/
+    protected boolean bTransponivel; // Pode passar por cima?
+    protected boolean bMortal; // Se encostar, morre?
+    protected boolean bDestrutivel; // Destrutível com fogo
+    protected int powerUp; // 0: sem powerup, 1: bomberup, 2: fireup
        
     protected Elemento(String sNomeImagePNG) {
         this.pPosicao = new Posicao(1, 1);
@@ -37,6 +39,10 @@ public abstract class Elemento implements Serializable {
         }
     }
     
+    protected void destroiElemento() {
+        Desenhador.getTelaDoJogo().removeElemento(this);
+    }
+    
     public void Event(int key, ControleDeJogo c, Tela t) {}
 
     public Posicao getPosicao() {
@@ -49,6 +55,14 @@ public abstract class Elemento implements Serializable {
 
     public void setbTransponivel(boolean bTransponivel) {
         this.bTransponivel = bTransponivel;
+    }
+    
+    public boolean isbDestrutivel() {
+        return bDestrutivel;
+    }
+    
+    public void setbDestrutivel(boolean pDest) {
+        this.bDestrutivel = pDest;
     }
 
     public boolean setPosicao(int linha, int coluna) {
@@ -71,7 +85,7 @@ public abstract class Elemento implements Serializable {
         return this.pPosicao.moveLeft();
     }
     
-   public void autoDesenho(){
+   public void autoDesenho() {
         Desenhador.desenhar(this.iImage, pPosicao.getColuna(), pPosicao.getLinha());        
     }
    

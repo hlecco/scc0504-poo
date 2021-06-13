@@ -67,4 +67,20 @@ public class Posicao implements Serializable {
         );
         return novaPosicao;
     }
+    
+    public boolean equals(Posicao p) {
+        if (this == p) {
+            return true;
+        }
+        
+        if (p == null || getClass() != p.getClass()) {
+            return false;
+        }
+        
+        if (p.getLinha() == this.getLinha() && p.getColuna() == this.getColuna()) {
+            return true;
+        }
+        
+        return false;
+    }
 }

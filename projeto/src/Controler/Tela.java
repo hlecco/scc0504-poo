@@ -1,13 +1,15 @@
 package Controler;
 
-import Modelo.*;
-import Auxiliar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import java.util.zip.*;
+
+import Modelo.*;
+import Auxiliar.*;
+
 
 public class Tela extends javax.swing.JFrame implements KeyListener {
 
@@ -45,8 +47,17 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
     public ArrayList<Elemento> getElementos() {
         return eElementos;
     }
+    
+    public Elemento buscaElemento(Posicao p) {
+        for (Elemento e : eElementos) {
+            if (e.getPosicao().equals(p)) {
+                return e;
+            }
+        }
+        return null;
+    }
 
-    public Graphics getGraphicsBuffer(){
+    public Graphics getGraphicsBuffer() {
         return g2;
     }
     

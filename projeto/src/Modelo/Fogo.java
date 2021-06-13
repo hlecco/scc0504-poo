@@ -1,10 +1,5 @@
 package Modelo;
 
-import Auxiliar.Consts;
-import Auxiliar.Desenhador;
-import Auxiliar.Posicao;
-import Controler.ControleDeJogo;
-import Controler.Tela;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -15,6 +10,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Auxiliar.Consts;
+import Auxiliar.Desenhador;
+import Auxiliar.Posicao;
+import Controler.ControleDeJogo;
+import Controler.Tela;
+
 
 public class Fogo extends Elemento {
 
@@ -24,7 +25,7 @@ public class Fogo extends Elemento {
     public Fogo() {
         super("explosao.png");
         this.potencia = 1;
-        this.direcao = Consts.DOWN;
+        this.direcao = 0;
     }
     
     public void setPotencia(int p) {
@@ -39,6 +40,7 @@ public class Fogo extends Elemento {
     
     public void propaga(ControleDeJogo c, Tela t) {
         Desenhador.getTelaDoJogo().addElemento(this);
+        int valido;
         
         if (potencia > 1) {
             Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
@@ -46,42 +48,106 @@ public class Fogo extends Elemento {
             switch (this.direcao) {
                 case Consts.UP:
                     offset.moveUp();
-                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                    valido = c.ehPosicaoValida(t.getElementos(), offset);
+                    
+                    if (valido == 1) {
                         Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
                         fogo_filho.propaga(c, t);
+                    }
+                    
+                    if (valido == 2) {
+                        Elemento e = t.buscaElemento(offset);
+                        if (e != null) {
+                            if (e.powerUp == 1) {
+                                BomberUp bUp = new BomberUp();
+                                Desenhador.getTelaDoJogo().addElemento(bUp);
+                            } else if (e.powerUp == 2) {
+                                FireUp fUp = new FireUp();
+                                Desenhador.getTelaDoJogo().addElemento(fUp);
+                            }
+                            e.destroiElemento();
+                        }
                     }
                     break;
                 case Consts.DOWN:
                     offset.moveDown();
-                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                    valido = c.ehPosicaoValida(t.getElementos(), offset);
+                    
+                    if (valido == 1) {
                         Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
                         fogo_filho.propaga(c, t);
+                    }
+                    
+                    if (valido == 2) {
+                        Elemento e = t.buscaElemento(offset);
+                        if (e != null) {
+                            if (e.powerUp == 1) {
+                                BomberUp bUp = new BomberUp();
+                                Desenhador.getTelaDoJogo().addElemento(bUp);
+                            } else if (e.powerUp == 2) {
+                                FireUp fUp = new FireUp();
+                                Desenhador.getTelaDoJogo().addElemento(fUp);
+                            }
+                            e.destroiElemento();
+                        }
                     }
                     break;
                 case Consts.LEFT:
                     offset.moveLeft();
-                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                    valido = c.ehPosicaoValida(t.getElementos(), offset);
+                    
+                    if (valido == 1) {
                         Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
                         fogo_filho.propaga(c, t);
                     }
+                    
+                    if (valido == 2) {
+                        Elemento e = t.buscaElemento(offset);
+                        if (e != null) {
+                            if (e.powerUp == 1) {
+                                BomberUp bUp = new BomberUp();
+                                Desenhador.getTelaDoJogo().addElemento(bUp);
+                            } else if (e.powerUp == 2) {
+                                FireUp fUp = new FireUp();
+                                Desenhador.getTelaDoJogo().addElemento(fUp);
+                            }
+                            e.destroiElemento();
+                        }
+                    }
                     break;
                 case Consts.RIGHT:
                     offset.moveRight();
-                    if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                    valido = c.ehPosicaoValida(t.getElementos(), offset);
+                    
+                    if (valido == 1) {
                         Fogo fogo_filho = new Fogo();
                         fogo_filho.setPotencia(this.potencia - 1);
                         fogo_filho.setDirecao(this.direcao);
                         fogo_filho.setPosicao(offset.getLinha(), offset.getColuna());
                         fogo_filho.propaga(c, t);
+                    }
+                    
+                    if (valido == 2) {
+                        Elemento e = t.buscaElemento(offset);
+                        if (e != null) {
+                            if (e.powerUp == 1) {
+                                BomberUp bUp = new BomberUp();
+                                Desenhador.getTelaDoJogo().addElemento(bUp);
+                            } else if (e.powerUp == 2) {
+                                FireUp fUp = new FireUp();
+                                Desenhador.getTelaDoJogo().addElemento(fUp);
+                            }
+                            e.destroiElemento();
+                        }
                     }
                     break;
             }

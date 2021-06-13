@@ -1,10 +1,5 @@
 package Modelo;
 
-import Auxiliar.Consts;
-import Auxiliar.Desenhador;
-import Auxiliar.Posicao;
-import Controler.ControleDeJogo;
-import Controler.Tela;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
@@ -15,17 +10,25 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Hero extends Elemento implements Serializable{
+import Auxiliar.Consts;
+import Auxiliar.Desenhador;
+import Auxiliar.Posicao;
+import Controler.ControleDeJogo;
+import Controler.Tela;
+
+
+public class Hero extends Elemento implements Serializable {
+    
     public Hero() {
         super("bomberman.png");
     }
 
-    public void voltaAUltimaPosicao(){
+    public void voltaAUltimaPosicao() {
         this.pPosicao.volta();
     }
     
     public void createBomb(final ControleDeJogo c, final Tela t) {
-        final Bomba bomb = new Bomba("bomb.png");
+        final Bomba bomb = new Bomba();
         bomb.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna());
         bomb.setPotencia(3);
         Desenhador.getTelaDoJogo().addElemento(bomb);
@@ -45,25 +48,25 @@ public class Hero extends Elemento implements Serializable{
         switch (key) {
             case Consts.UP:
                 offset.moveUp();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
                     this.moveUp();
                 }
                 break;
             case Consts.DOWN:
                 offset.moveDown();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
                     this.moveDown();
                 }
                 break;
             case Consts.LEFT:
                 offset.moveLeft();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
                     this.moveLeft();
                 }
                 break;
             case Consts.RIGHT:
                 offset.moveRight();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
                     this.moveRight();
                 }
                 break;

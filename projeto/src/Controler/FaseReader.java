@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controler;
 
+import Modelo.BomberUp;
 import Modelo.Caveira;
 import Modelo.Elemento;
 import Modelo.Hero;
@@ -19,21 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-/**
- *
- * @author lecco
- */
+
 public class FaseReader {
     private Map<Character, Class> objDict;
-    
-    public FaseReader() {
-        //objDict = Map<Character, Class>;
-        //objDict.put('h', Hero.class);
-        //objDict.put('c', Caveira.class);
-        //objDict.put('w', MuroDestrutivel.class);
-        //objDict.put('W', MuroIndestrutivel.class);
-        //objDict.put(' ', null);
-    }
     
     public void read(String filename, Tela t) throws FileNotFoundException, IOException {
         File file = new File(filename);
@@ -45,8 +29,8 @@ public class FaseReader {
         String line = null;
         Elemento obj = null;
         while ((line = buffer.readLine()) != null) {
-            for (x = 0; x < line.length(); x++) {
-                switch (line.charAt(x)) {
+            for (y = 0; y < line.length(); y++) {
+                switch (line.charAt(y)) {
                     case 'h':
                         obj = new Hero();
                         obj.setPosicao(x, y);
@@ -58,7 +42,7 @@ public class FaseReader {
                         t.addElemento(obj);
                         break;
                     case 'w':
-                        obj = new MuroDestrutivel();
+                        obj = new MuroDestrutivel(0);
                         obj.setPosicao(x, y);
                         t.addElemento(obj);
                         break;
@@ -67,9 +51,17 @@ public class FaseReader {
                         obj.setPosicao(x, y);
                         t.addElemento(obj);
                         break;
+                    case 'b':
+                        obj = new MuroDestrutivel(1);
+                        obj.setPosicao(x, y);
+                        t.addElemento(obj);
+                    case 'f':
+                        obj = new MuroDestrutivel(2);
+                        obj.setPosicao(x, y);
+                        t.addElemento(obj);
                 }
             }
-            y++;
+            x++;
         }
     }
 }

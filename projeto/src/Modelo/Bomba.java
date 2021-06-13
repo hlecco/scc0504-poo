@@ -5,21 +5,14 @@ import Auxiliar.Desenhador;
 import Auxiliar.Posicao;
 import Controler.ControleDeJogo;
 import Controler.Tela;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.io.IOException;
-import java.io.Serializable;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 
 public class Bomba extends Elemento {
 
     private int potencia;
 
-    public Bomba(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Bomba() {
+        super("bomb.png");
         this.potencia = 1;
         this.bTransponivel = false;
     }
@@ -31,25 +24,34 @@ public class Bomba extends Elemento {
     }
     
     public void explode(ControleDeJogo c, Tela t) {
+        int valido;
         Posicao offset = new Posicao(pPosicao.getLinha(), pPosicao.getColuna());
-        
         Fogo fogo = new Fogo();
         fogo.setPosicao(offset.getLinha(), offset.getColuna());
         Desenhador.getTelaDoJogo().addElemento(fogo);
         fogo.vanish();
         
         offset.moveUp();
-        if (c.ehPosicaoValida(t.getElementos(), offset)) {
-            Fogo fogo_up = new Fogo(); 
+        valido = c.ehPosicaoValida(t.getElementos(), offset);
+        if (valido == 1) {
+            Fogo fogo_up = new Fogo();
             fogo_up.setPotencia(this.potencia);
             fogo_up.setDirecao(Consts.UP);
             fogo_up.setPosicao(offset.getLinha(), offset.getColuna());
             fogo_up.propaga(c, t);
         }
         
+        if (valido == 2) {
+            Elemento e = t.buscaElemento(offset);
+            if (e != null) {
+                e.destroiElemento();
+            }
+        }
+        
         offset.volta();
         offset.moveDown();
-        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+        valido = c.ehPosicaoValida(t.getElementos(), offset);
+        if (valido == 1) {
             Fogo fogo_down = new Fogo();
             fogo_down.setPotencia(this.potencia);
             fogo_down.setDirecao(Consts.DOWN);
@@ -57,9 +59,17 @@ public class Bomba extends Elemento {
             fogo_down.propaga(c, t);
         }
         
+        if (valido == 2) {
+            Elemento e = t.buscaElemento(offset);
+            if (e != null) {
+                e.destroiElemento();
+            }
+        }
+        
         offset.volta();
         offset.moveLeft();
-        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+        valido = c.ehPosicaoValida(t.getElementos(), offset);
+        if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
             Fogo fogo_left = new Fogo();
             fogo_left.setPotencia(this.potencia);
             fogo_left.setDirecao(Consts.LEFT);
@@ -67,14 +77,29 @@ public class Bomba extends Elemento {
             fogo_left.propaga(c, t);
         }
         
+        if (valido == 2) {
+            Elemento e = t.buscaElemento(offset);
+            if (e != null) {
+                e.destroiElemento();
+            }
+        }
+        
         offset.volta();
         offset.moveRight();
-        if (c.ehPosicaoValida(t.getElementos(), offset)) {
+        valido = c.ehPosicaoValida(t.getElementos(), offset);
+        if (c.ehPosicaoValida(t.getElementos(), offset) == 1) {
             Fogo fogo_right = new Fogo();
             fogo_right.setPotencia(this.potencia);
             fogo_right.setDirecao(Consts.RIGHT);
             fogo_right.setPosicao(offset.getLinha(), offset.getColuna());
             fogo_right.propaga(c, t);
+        }
+        
+        if (valido == 2) {
+            Elemento e = t.buscaElemento(offset);
+            if (e != null) {
+                e.destroiElemento();
+            }
         }
         
         Desenhador.getTelaDoJogo().removeElemento(this);
