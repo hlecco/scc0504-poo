@@ -14,6 +14,7 @@ import Auxiliar.*;
 public class Tela extends javax.swing.JFrame implements KeyListener {
 
     private ArrayList<Elemento> eElementos;
+    private ArrayList<ArrayList<ArrayList<Elemento>>> elementoMatrix;
     private ControleDeJogo cControle = new ControleDeJogo();
     private Graphics g2;
 
@@ -31,6 +32,13 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         /*Cria eElementos adiciona elementos*/
         /*O protagonista (heroi) necessariamente precisa estar na posicao 0 do array*/
         eElementos = new ArrayList<Elemento>(1089);
+        elementoMatrix = new ArrayList<ArrayList<ArrayList<Elemento>>>(Consts.RES);
+        for (int i=0; i<Consts.RES; i++) {
+            elementoMatrix.add(new ArrayList<ArrayList<Elemento>>(Consts.RES));            
+            for (int j=0; j<Consts.RES; j++) {
+                elementoMatrix.get(i).add(new ArrayList<Elemento>());
+            }
+        }
         FaseReader reader = new FaseReader();
         reader.read("fase1.txt", this);
     }
@@ -38,23 +46,47 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
 /*--------------------------------------------------*/
     public void addElemento(Elemento umElemento) {
         eElementos.add(umElemento);
+        elementoMatrix.get(umElemento.getPosicao().getColuna())
+                      .get(umElemento.getPosicao().getLinha())
+                      .add(umElemento);
     }
 
     public void removeElemento(Elemento umElemento) {
         eElementos.remove(umElemento);
+        elementoMatrix.get(umElemento.getPosicao().getColuna())
+                      .get(umElemento.getPosicao().getLinha())
+                      .remove(umElemento);
+    }
+    
+    public void moveElemento(Elemento umElemento) {
+        if (elementoMatrix.get(umElemento.getPosicao().getPosicaoAnterior().getColuna())
+                          .get(umElemento.getPosicao().getPosicaoAnterior().getLinha())
+                          .remove(umElemento)) {
+            elementoMatrix.get(umElemento.getPosicao().getColuna())
+                          .get(umElemento.getPosicao().getLinha())
+                          .add(umElemento);
+        }
     }
     
     public ArrayList<Elemento> getElementos() {
         return eElementos;
     }
     
-    public Elemento buscaElemento(Posicao p) {
-        for (Elemento e : eElementos) {
-            if (e.getPosicao().equals(p)) {
-                return e;
+    public ArrayList<Elemento> buscaElemento(Posicao p) {
+        return elementoMatrix.get(p.getColuna()).get(p.getLinha());
+    }
+    
+    public boolean ehPosicaoValida(Posicao p) {
+        for (Elemento e : this.buscaElemento(p)) {
+            if (!e.isbTransponivel()) {
+                return false;
             }
         }
-        return null;
+        return true;
+    }
+    
+    public boolean temElemento(Posicao p) {
+        return (!this.buscaElemento(p).isEmpty());
     }
 
     public Graphics getGraphicsBuffer() {

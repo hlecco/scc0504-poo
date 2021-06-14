@@ -67,8 +67,13 @@ public abstract class Elemento implements Serializable {
         this.bDestrutivel = pDest;
     }
 
-    public boolean setPosicao(int linha, int coluna) {
-        return pPosicao.setPosicao(linha, coluna);
+    public boolean setPosicao(int coluna, int linha) {
+        boolean test = pPosicao.setPosicao(coluna, linha);
+        Desenhador.getTelaDoJogo().moveElemento(this);
+        for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
+            this.touchAnother(e);
+        }
+        return test;
     }
     
     public int getHiddenItem() {
@@ -80,23 +85,46 @@ public abstract class Elemento implements Serializable {
     }
 
     public boolean moveUp() {
-        return this.pPosicao.moveUp();
+        boolean test = this.pPosicao.moveUp();
+        Desenhador.getTelaDoJogo().moveElemento(this);
+        for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
+            this.touchAnother(e);
+        }
+        return test;
     }
 
     public boolean moveDown() {
-        return this.pPosicao.moveDown();
+        boolean test = this.pPosicao.moveDown();
+        Desenhador.getTelaDoJogo().moveElemento(this);
+        for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
+            this.touchAnother(e);
+        }
+        return test;
     }
 
     public boolean moveRight() {
-        return this.pPosicao.moveRight();
+        boolean test = this.pPosicao.moveRight();
+        Desenhador.getTelaDoJogo().moveElemento(this);
+        for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
+            this.touchAnother(e);
+        }
+        return test;
     }
 
     public boolean moveLeft() {
-        return this.pPosicao.moveLeft();
+        boolean test = this.pPosicao.moveLeft();
+        Desenhador.getTelaDoJogo().moveElemento(this);
+        for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
+            this.touchAnother(e);
+        }
+        return test;
     }
     
    public void autoDesenho() {
         Desenhador.desenhar(this.iImage, pPosicao.getColuna(), pPosicao.getLinha());        
     }
    
+   protected void touchFire() {} // o que acontece quando o elemento toca o fogo
+   protected void touchHero(Hero h) {} // o que acontece quando o elemento toca o heroi
+   protected void touchAnother(Elemento e) {} // o que acontece com o elemento que esse objeto toca
 }

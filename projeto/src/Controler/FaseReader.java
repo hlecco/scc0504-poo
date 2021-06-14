@@ -29,8 +29,8 @@ public class FaseReader {
         String line = null;
         Elemento obj = null;
         while ((line = buffer.readLine()) != null) {
-            for (y = 0; y < line.length(); y++) {
-                switch (line.charAt(y)) {
+            for (x = 0; x < line.length(); x++) {
+                switch (line.charAt(x)) {
                     case 'h':
                         obj = new Hero();
                         obj.setPosicao(x, y);
@@ -68,7 +68,7 @@ public class FaseReader {
                         break;
                 }
             }
-            x++;
+            y++;
         }
     }
 }

@@ -21,7 +21,7 @@ public class Hero extends Elemento implements Serializable {
     
     int nBombasPermitida = 1;
     int nBombasColocada = 0;
-    int bombermanPotencia = 1;
+    int bombermanPotencia = 2;
     
     public Hero() {
         super("bomberman.png");
@@ -32,23 +32,24 @@ public class Hero extends Elemento implements Serializable {
     }
     
     public void createBomb(final ControleDeJogo c, final Tela t) {
+        if (!Desenhador.getTelaDoJogo().ehPosicaoValida(pPosicao)) return;
+        
         final Bomba bomb = new Bomba();
         nBombasColocada++;
         
-        bomb.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna());
+        bomb.setPosicao(this.pPosicao.getColuna(), this.pPosicao.getLinha());
         bomb.setPotencia(this.bombermanPotencia);
+        bomb.setUp();
         Desenhador.getTelaDoJogo().addElemento(bomb);
         
-        TimerTask explode = new TimerTask() {
+        TimerTask recharge = new TimerTask() {
             public void run() {
-                bomb.explode(c, t);
                 nBombasColocada--;
-                return;
             }
         };
         
         Timer timer = new Timer();
-        timer.schedule(explode, 30 * Consts.FRAME_INTERVAL);
+        timer.schedule(recharge, 30 * Consts.FRAME_INTERVAL);
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {
@@ -58,98 +59,22 @@ public class Hero extends Elemento implements Serializable {
         
         switch (key) {
             case Consts.UP:
-                offset.moveUp();
-                valido = c.ehPosicaoValida(t.getElementos(), offset);
-                if (valido != 0 && valido != 2) {
-                    if (valido == 3) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.nBombasPermitida += 2;
-                    }
-                    if (valido == 4) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.bombermanPotencia += 2;
-                    }
-                    if (valido == 5) {
-                        // morre
-                    }
+                if (t.ehPosicaoValida(this.getPosicao().offset(0, -1))) {
                     this.moveUp();
                 }
                 break;
             case Consts.DOWN:
-                offset.moveDown();
-                valido = c.ehPosicaoValida(t.getElementos(), offset);
-                if (valido != 0 && valido != 2) {
-                    if (valido == 3) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.nBombasPermitida += 2;
-                    }
-                    if (valido == 4) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.bombermanPotencia += 2;
-                    }
-                    if (valido == 5) {
-                        // morre
-                    }
+                if (t.ehPosicaoValida(this.getPosicao().offset(0, 1))) {
                     this.moveDown();
                 }
                 break;
             case Consts.LEFT:
-                offset.moveLeft();
-                valido = c.ehPosicaoValida(t.getElementos(), offset);
-                if (valido != 0 && valido != 2) {
-                    if (valido == 3) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.nBombasPermitida += 2;
-                    }
-                    if (valido == 4) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.bombermanPotencia += 2;
-                    }
-                    if (valido == 5) {
-                        // morre
-                    }                    
+                if (t.ehPosicaoValida(this.getPosicao().offset(-1, 0))) {
                     this.moveLeft();
                 }
                 break;
             case Consts.RIGHT:
-                offset.moveRight();
-                valido = c.ehPosicaoValida(t.getElementos(), offset);
-                if (valido != 0 && valido != 2) {
-                    if (valido == 3) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.nBombasPermitida += 2;
-                    }
-                    if (valido == 4) {
-                        Elemento e = t.buscaElemento(offset);
-                        if (e != null) {
-                            e.destroiElemento();
-                        }
-                        this.bombermanPotencia += 2;
-                    }
-                    if (valido == 5) {
-                        // morre
-                    }
+                if (t.ehPosicaoValida(this.getPosicao().offset(1, 0))) {
                     this.moveRight();
                 }
                 break;
@@ -161,13 +86,21 @@ public class Hero extends Elemento implements Serializable {
                     break;
                 }
             case Consts.DOOR:
-                valido = c.ehPosicaoValida(t.getElementos(), offset);
-                System.out.println(valido);
-                if (valido == 5) {
-                    System.out.println("porta.");
-                } else {
-                    break;
-                }                
+                break;             
         }
+    }
+    
+    public void powerUpBomba() {
+        if (nBombasPermitida < Consts.MAX_BOMBS) {
+            nBombasPermitida++;
+        }
+    }
+    public void powerUpPotencia() {
+        if (bombermanPotencia < Consts.MAX_POWER) {
+            bombermanPotencia++;
+        }
+    }
+    public void touchAnother(Elemento e) {
+        e.touchHero(this);
     }
 }
