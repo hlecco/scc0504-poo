@@ -5,13 +5,16 @@ import java.util.ArrayList;
 import Modelo.Elemento;
 import Modelo.Hero;
 import Auxiliar.Posicao;
+import Modelo.BomberUp;
+import Modelo.FireUp;
+import Modelo.Fogo;
 
 
 public class ControleDeJogo {
     
     public void desenhaTudo(ArrayList<Elemento> e) {
-        for (int i = 0; i < e.size(); i++) {
-            e.get(i).autoDesenho();
+        for (Elemento elem : e) {
+            elem.autoDesenho();
         }
     }
     
@@ -20,14 +23,28 @@ public class ControleDeJogo {
     }
     
     public int ehPosicaoValida(ArrayList<Elemento> e, Posicao p) {
-        Elemento eTemp;
         // Validacao da posicao de todos os elementos com relacao a Posicao p
-        for (int i = 1; i < e.size(); i++) { // Olha todos os elementos
-            eTemp = e.get(i); // Pega o i-esimo elemento do jogo
-            if (eTemp.isbDestrutivel() && eTemp.getPosicao().estaNaMesmaPosicao(p))
-                return 2; // Tem um elemento destrutível na posição
-            if (!eTemp.isbTransponivel() && eTemp.getPosicao().estaNaMesmaPosicao(p))
-                return 0; // A posicao p é invalida, pois ha um elemento (i-esimo eTemp) intransponivel lá
+        for (Elemento eTemp : e) { // Olha todos os elementos
+            if (eTemp.getPosicao().estaNaMesmaPosicao(p)) {
+                if (eTemp.isbDestrutivel())
+                    return 2; // Tem um elemento destrutível na posição
+                if (!eTemp.isbTransponivel())
+                    return 0; // A posicao p é invalida, pois ha um elemento (i-esimo eTemp) intransponivel lá
+                if (eTemp.isbTransponivel()) {
+                    if (eTemp.getHiddenItem() == 1) {
+                        return 3; // Tem um bomberup na posição
+                    }
+                    if (eTemp.getHiddenItem() == 2) {
+                        return 4; // Tem um fireup na posição
+                    }
+                    if (eTemp.getHiddenItem() == 3) {
+                        return 5; // Tem porta na posição
+                    }
+                    if (eTemp.getHiddenItem() == 4) {
+                        return 6; // Tem fogo na posição
+                    }
+                }
+            }
         }
         return 1;
     }

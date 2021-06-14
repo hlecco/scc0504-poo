@@ -4,6 +4,9 @@ public class FireUp extends Elemento {
     
     FireUp() {
         super("fireup.png");
+        this.bTransponivel = true;
+        this.bDestrutivel = false;
+        this.hidden = 2;
     }
     
 }

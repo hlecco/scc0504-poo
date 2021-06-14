@@ -1,24 +1,24 @@
 package Modelo;
 
-import Auxiliar.Consts;
-import Auxiliar.Desenhador;
-import Controler.Tela;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-public class MuroDestrutivel extends Elemento implements Serializable {    
-    public MuroDestrutivel(int powerUp) {
+import Auxiliar.Consts;
+import Auxiliar.Desenhador;
+import Controler.Tela;
+
+
+public class MuroDestrutivel extends Elemento implements Serializable {
+    
+    public MuroDestrutivel(int pHidden) {
         super("splitwall.png");
         this.bTransponivel = false;
         this.bDestrutivel = true;
-        this.powerUp = powerUp;
+        this.hidden = pHidden;
     }
 
     public void autoDesenho() {
         super.autoDesenho();
     }
     
-    public void destroi(Elemento m) {
-        Desenhador.getTelaDoJogo().removeElemento(m);
-    }
 }

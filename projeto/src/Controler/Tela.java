@@ -30,7 +30,7 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         
         /*Cria eElementos adiciona elementos*/
         /*O protagonista (heroi) necessariamente precisa estar na posicao 0 do array*/
-        eElementos = new ArrayList<Elemento>(200);
+        eElementos = new ArrayList<Elemento>(1089);
         FaseReader reader = new FaseReader();
         reader.read("fase1.txt", this);
     }
@@ -73,7 +73,8 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
                 try {
                     /*Linha para alterar o background*/
                     Image newImage = Toolkit.getDefaultToolkit().getImage(new java.io.File(".").getCanonicalPath() + Consts.PATH + "background.png");
-                    g2.drawImage(newImage,j*Consts.CELL_SIDE, i*Consts.CELL_SIDE, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
+                    g2.drawImage(newImage, j * Consts.CELL_SIDE,
+                            i * Consts.CELL_SIDE, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
 
                 } catch (IOException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);

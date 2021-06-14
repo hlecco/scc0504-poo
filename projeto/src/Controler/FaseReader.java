@@ -55,10 +55,17 @@ public class FaseReader {
                         obj = new MuroDestrutivel(1);
                         obj.setPosicao(x, y);
                         t.addElemento(obj);
+                        break;
                     case 'f':
                         obj = new MuroDestrutivel(2);
                         obj.setPosicao(x, y);
                         t.addElemento(obj);
+                        break;
+                    case 'd':
+                        obj = new MuroDestrutivel(3);
+                        obj.setPosicao(x, y);
+                        t.addElemento(obj);
+                        break;
                 }
             }
             x++;
