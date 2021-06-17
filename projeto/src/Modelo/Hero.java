@@ -19,13 +19,14 @@ import Controler.Tela;
 
 public class Hero extends Elemento implements Serializable {
     
-    int nBombasPermitida = 1;
-    int nBombasColocada = 0;
-    int bombermanPotencia = 2;
+    private int nBombasPermitida = 1;
+    private int nBombasColocada = 0;
+    private int bombermanPotencia = 2;
+    private boolean isDead;
     
     public Hero() {
         super("bomberman_down.png", 1, 2, 8, 0, -1);
-        this.priority = 1;
+        this.priority = 2;
     }
 
     public void voltaAUltimaPosicao() {
@@ -58,6 +59,9 @@ public class Hero extends Elemento implements Serializable {
         Posicao offset = pPosicao.offset(0, 0);
         int valido;
         
+        if (isDead) {
+            return;
+        }
         switch (key) {
             case Consts.UP:
                 this.sprite.changeSheet("bomberman_up.png");
@@ -97,6 +101,22 @@ public class Hero extends Elemento implements Serializable {
             case Consts.DOOR:
                 break;             
         }
+    }
+    
+    public void die() {
+        if (!isDead) {
+            isDead = true;
+        }
+        this.sprite.changeSheet("bomberman_dead.png");
+        this.addClock(10, 2, this.sprite::cycle, null, true);
+    }
+    
+    public void touchFire() {
+        this.die();
+    }
+    
+    public void touchEnemy() {
+        this.die();
     }
     
     public void powerUpBomba() {

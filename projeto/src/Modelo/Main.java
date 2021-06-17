@@ -14,7 +14,7 @@ public class Main {
             public void run() {
                 Tela tTela = null;
                 try {
-                    tTela = new Tela();
+                    tTela = new Tela("fase1");
                 } catch (IOException ex) {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }

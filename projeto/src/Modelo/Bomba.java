@@ -54,7 +54,6 @@ public class Bomba extends Elemento {
         fogo.setPosicao(offset.getColuna(), offset.getLinha());
         Tela t = Desenhador.getTelaDoJogo();
         t.addElemento(fogo);
-        fogo.vanish();
         
         offset.moveUp();
         valido = t.ehPosicaoValida(offset);
@@ -63,7 +62,8 @@ public class Bomba extends Elemento {
             fogo_up.setPotencia(this.potencia);
             fogo_up.setDirecao(Consts.UP);
             fogo_up.setPosicao(offset.getColuna(), offset.getLinha());
-            fogo_up.propaga(t);
+            fogo_up.addClock(1, 1, null, fogo_up::propaga, false);
+            t.addElemento(fogo_up);
         }
         elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
         for (Elemento e: elementos) {
@@ -78,7 +78,8 @@ public class Bomba extends Elemento {
             fogo_down.setPotencia(this.potencia);
             fogo_down.setDirecao(Consts.DOWN);
             fogo_down.setPosicao(offset.getColuna(), offset.getLinha());
-            fogo_down.propaga(t);
+            fogo_down.addClock(1, 1, null, fogo_down::propaga, false);
+            t.addElemento(fogo_down);
         }
         elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
         for (Elemento e: elementos) {
@@ -93,7 +94,8 @@ public class Bomba extends Elemento {
             fogo_left.setPotencia(this.potencia);
             fogo_left.setDirecao(Consts.LEFT);
             fogo_left.setPosicao(offset.getColuna(), offset.getLinha());
-            fogo_left.propaga(t);
+            fogo_left.addClock(1, 1, null, fogo_left::propaga, false);
+            t.addElemento(fogo_left);
         }
         elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
         for (Elemento e: elementos) {
@@ -108,7 +110,8 @@ public class Bomba extends Elemento {
             fogo_right.setPotencia(this.potencia);
             fogo_right.setDirecao(Consts.RIGHT);
             fogo_right.setPosicao(offset.getColuna(), offset.getLinha());
-            fogo_right.propaga(t);
+            fogo_right.addClock(2, 1, null, fogo_right::propaga, false);
+            t.addElemento(fogo_right);
         }
         elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
         for (Elemento e: elementos) {

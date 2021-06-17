@@ -26,6 +26,7 @@ public abstract class Elemento implements Serializable {
     protected int hidden; // 0: nada escondido, 1: bomberup, 2: fireup, 3: fogo, 4: porta
     ArrayList<Clock> clocks; 
     int priority; // higher priority objects will be drawn over lower priority, defaults to 0
+    protected boolean defeats;
        
     protected Elemento(String sNomeImagePNG) {
         this(sNomeImagePNG, 1, 1, 1, 0, 0);
@@ -45,6 +46,7 @@ public abstract class Elemento implements Serializable {
         this.sprite = new Sprite(sNomeImagePNG, hSize, vSize, nFrames, hOffset, vOffset);
         
         this.priority = 0;
+        this.defeats = false;
     }
     
     public int getPriority() {
@@ -73,6 +75,14 @@ public abstract class Elemento implements Serializable {
         return bDestrutivel;
     }
     
+    public boolean isDefeats() {
+        return this.defeats;
+    }
+    
+    public boolean isbMortal() {
+        return this.bMortal;
+    }
+    
     public void setbDestrutivel(boolean pDest) {
         this.bDestrutivel = pDest;
     }
@@ -99,6 +109,12 @@ public abstract class Elemento implements Serializable {
         Desenhador.getTelaDoJogo().moveElemento(this);
         for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
             this.touchAnother(e);
+            if (e.isDefeats()) {
+                this.touchFire();
+            }
+            if (e.isbMortal()) {
+                this.touchEnemy();
+            }
         }
         return test;
     }
@@ -108,6 +124,12 @@ public abstract class Elemento implements Serializable {
         Desenhador.getTelaDoJogo().moveElemento(this);
         for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
             this.touchAnother(e);
+            if (e.isDefeats()) {
+                this.touchFire();
+            }
+            if (e.isbMortal()) {
+                this.touchEnemy();
+            }
         }
         return test;
     }
@@ -117,6 +139,12 @@ public abstract class Elemento implements Serializable {
         Desenhador.getTelaDoJogo().moveElemento(this);
         for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
             this.touchAnother(e);
+            if (e.isDefeats()) {
+                this.touchFire();
+            }
+            if (e.isbMortal()) {
+                this.touchEnemy();
+            }
         }
         return test;
     }
@@ -126,6 +154,12 @@ public abstract class Elemento implements Serializable {
         Desenhador.getTelaDoJogo().moveElemento(this);
         for (Elemento e: Desenhador.getTelaDoJogo().buscaElemento(this.getPosicao())) {
             this.touchAnother(e);
+            if (e.isDefeats()) {
+                this.touchFire();
+            }
+            if (e.isbMortal()) {
+                this.touchEnemy();
+            }
         }
         return test;
     }
@@ -152,5 +186,6 @@ public abstract class Elemento implements Serializable {
 
    protected void touchFire() {} // o que acontece quando o elemento toca o fogo
    protected void touchHero(Hero h) {} // o que acontece quando o elemento toca o heroi
+   protected void touchEnemy() {} // o que acontece quando toca um inimigo
    protected void touchAnother(Elemento e) {} // o que acontece com o elemento que esse objeto toca
 }

@@ -67,7 +67,7 @@ public class Sprite {
          g.drawImage(
             this.spriteSheet,
             0, 0, Consts.CELL_SIDE*this.hSize, Consts.CELL_SIDE*this.vSize,
-            this.frame*Consts.IMG_SIDE, 0, (this.frame+1)*Consts.IMG_SIDE, Consts.IMG_SIDE*this.vSize,
+            this.frame*Consts.IMG_SIDE*this.hSize, 0, (this.frame+1)*Consts.IMG_SIDE*this.hSize, Consts.IMG_SIDE*this.vSize,
             null
          );
          this.thisFrame.setImage(bi);

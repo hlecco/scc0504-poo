@@ -22,9 +22,12 @@ public class Fogo extends Elemento {
     private int direcao;
 
     public Fogo() {
-        super("explosao.png");
+        super("explosao.png", 1, 1, 6, 0, 0);
         this.potencia = 1;
         this.direcao = 0;
+        this.bMortal = true;
+        this.defeats = true;
+        this.vanish();
     }
     
     public void setPotencia(int p) {
@@ -37,9 +40,8 @@ public class Fogo extends Elemento {
         this.direcao = d;
     }
     
-    public void propaga(Tela t) {
-        Desenhador.getTelaDoJogo().addElemento(this);
-                
+    public void propaga() {
+        Tela t = Desenhador.getTelaDoJogo();
         if (potencia > 1) {
             Posicao offset = this.getPosicao().offset(0, 0);
             switch (this.direcao) {
@@ -62,23 +64,22 @@ public class Fogo extends Elemento {
                 fogo_filho.setPotencia(this.potencia - 1);
                 fogo_filho.setDirecao(this.direcao);
                 fogo_filho.setPosicao(offset.getColuna(), offset.getLinha());
-                fogo_filho.propaga(t);
+                this.addClock(1, 1, null, fogo_filho::propaga, false);
+                t.addElemento(fogo_filho);
             }
             
             ArrayList<Elemento> elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
             for (Elemento e: elementos) {
                 e.touchFire();
             }
-            
         }
-        vanish();
     }
     
     public void vanish() {
         clocks.add(new Clock(
-                10,
+                6,
                 1,
-                null,
+                this.sprite::cycle,
                 this::remove,
                 false
         ));

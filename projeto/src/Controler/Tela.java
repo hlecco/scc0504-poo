@@ -18,7 +18,7 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
     private ControleDeJogo cControle = new ControleDeJogo();
     private Graphics g2;
 
-    public Tela() throws IOException {
+    public Tela(String faseName) throws IOException {
         Desenhador.setCenario(this); /*Desenhador funciona no modo estatico*/
         initComponents();
  
@@ -40,7 +40,7 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
             }
         }
         FaseReader reader = new FaseReader();
-        reader.read("fase1.txt", this);
+        reader.read(faseName, this);
     }
 
 /*--------------------------------------------------*/
@@ -84,6 +84,15 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
             }
         }
         return true;
+    }
+    
+    public boolean isOnFire(Posicao p) {
+        for (Elemento e: this.buscaElemento(p)) {
+            if (e.isDefeats()) {
+                return true;
+            }
+        }
+        return false;
     }
     
     public boolean temElemento(Posicao p) {
