@@ -13,12 +13,14 @@ import Modelo.Fogo;
 public class ControleDeJogo {
     
     public void desenhaTudo(ArrayList<Elemento> e) {
-        for (Elemento elem : e) {
-            elem.autoDesenho();
+        for (Elemento elem : (ArrayList<Elemento>) e.clone()) {
+            elem.step();
         }
     }
     
     public void processaTudo(ArrayList<Elemento> e) {
-        
+        for (Elemento elem : (ArrayList<Elemento>) e.clone()) {
+            elem.autoDesenho();
+        }
     }
 }

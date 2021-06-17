@@ -49,6 +49,7 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         elementoMatrix.get(umElemento.getPosicao().getColuna())
                       .get(umElemento.getPosicao().getLinha())
                       .add(umElemento);
+        eElementos.sort(new ElementComparator());
     }
 
     public void removeElemento(Elemento umElemento) {
@@ -116,8 +117,8 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         
         /*Aqui podem ser inseridos novos processamentos de controle*/
         if (!this.eElementos.isEmpty()) {
-            this.cControle.desenhaTudo(eElementos);
             this.cControle.processaTudo(eElementos);
+            this.cControle.desenhaTudo(eElementos);
         }
 
         g.dispose();

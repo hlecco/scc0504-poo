@@ -8,18 +8,19 @@ import Controler.Tela;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Callable;
 
 
 public class Bomba extends Elemento {
 
     private int potencia;
-    private TimerTask timer;
+    private boolean blownUp;
 
     public Bomba() {
-        super("bomb.png");
+        super("bomb.png", 5);
         this.potencia = 1;
         this.bTransponivel = false;
-        
+        this.blownUp = false;
     }
     
     public void setPotencia(int p) {
@@ -29,19 +30,21 @@ public class Bomba extends Elemento {
     }
     
     public void setUp() {
-        Bomba bomb = this;
-        timer = new TimerTask() {
-            public void run() {
-                bomb.explode();
-            }
-        };
-        Timer bombtimer = new Timer();
-        bombtimer.schedule(timer, 30 * Consts.FRAME_INTERVAL);
+        clocks.add(new Clock(
+                Consts.BOMB_TIMER,
+                1,
+                this.sprite::cycle,
+                this::explode,
+                false
+        ));
     }
     
     public void explode() {
-        timer.cancel();
-        Desenhador.getTelaDoJogo().removeElemento(this);
+        if (this.blownUp) {
+            return;
+        }
+        this.blownUp = true;
+        this.remove();
         ArrayList<Elemento> elementos;
         
         boolean valido;

@@ -24,7 +24,8 @@ public class Hero extends Elemento implements Serializable {
     int bombermanPotencia = 2;
     
     public Hero() {
-        super("bomberman.png");
+        super("bomberman_down.png", 1, 2, 8, 0, -1);
+        this.priority = 1;
     }
 
     public void voltaAUltimaPosicao() {
@@ -59,21 +60,29 @@ public class Hero extends Elemento implements Serializable {
         
         switch (key) {
             case Consts.UP:
+                this.sprite.changeSheet("bomberman_up.png");
+                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(0, -1))) {
                     this.moveUp();
                 }
                 break;
             case Consts.DOWN:
+                this.sprite.changeSheet("bomberman_down.png");
+                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(0, 1))) {
                     this.moveDown();
                 }
                 break;
             case Consts.LEFT:
+                this.sprite.changeSheet("bomberman_left.png");
+                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(-1, 0))) {
                     this.moveLeft();
                 }
                 break;
             case Consts.RIGHT:
+                this.sprite.changeSheet("bomberman_right.png");
+                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(1, 0))) {
                     this.moveRight();
                 }

@@ -4,8 +4,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Timer;
-import java.util.TimerTask;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -76,19 +74,14 @@ public class Fogo extends Elemento {
         vanish();
     }
     
-    public void teste() {
-        Desenhador.getTelaDoJogo().removeElemento(this);
-    }
-    
     public void vanish() {
-        TimerTask undraw;
-        undraw = new TimerTask() {
-            public void run() {
-                teste();
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(undraw, 20 * Consts.FRAME_INTERVAL);
+        clocks.add(new Clock(
+                10,
+                1,
+                null,
+                this::remove,
+                false
+        ));
     }
     
     public void touchAnother(Elemento e) {
