@@ -1,78 +1,96 @@
 package Controler;
 
-import Modelo.*;
-import Auxiliar.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 import java.util.zip.*;
-/**
- *
- * @author junio
- */
-public class Tela extends javax.swing.JFrame implements MouseListener, KeyListener {
 
-    private Hero hHero;
+import Modelo.*;
+import Auxiliar.*;
+
+
+public class Tela extends javax.swing.JFrame implements KeyListener {
+
     private ArrayList<Elemento> eElementos;
+    private ArrayList<ArrayList<ArrayList<Elemento>>> elementoMatrix;
     private ControleDeJogo cControle = new ControleDeJogo();
     private Graphics g2;
-    /**
-     * Creates new form
-     */
-    public Tela() {
+
+    public Tela() throws IOException {
         Desenhador.setCenario(this); /*Desenhador funciona no modo estatico*/
         initComponents();
  
-        this.addMouseListener(this); /*mouse*/
         this.addKeyListener(this);   /*teclado*/
         
         /*Cria a janela do tamanho do cenario + insets (bordas) da janela*/
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
                 Consts.RES * Consts.CELL_SIDE + getInsets().top + getInsets().bottom);
 
-        /*Este array vai guardar os elementos graficos*/
-        eElementos = new ArrayList<Elemento>(100);
-
-    
+        
         /*Cria eElementos adiciona elementos*/
         /*O protagonista (heroi) necessariamente precisa estar na posicao 0 do array*/
-        hHero = new Hero("skooter_hero.png"); /* https://www.online-image-editor.com/ */
-        hHero.setPosicao(0, 7);
-        this.addElemento(hHero);
-        
-        CoronaVirus cTeste = new CoronaVirus("robo_azul.png");
-        cTeste.setPosicao(5, 5);
-        this.addElemento(cTeste);
-
-        CoronaVirus cCorona = new CoronaVirus("robo.png");
-        cCorona.setPosicao(3, 3);
-        this.addElemento(cCorona);
-
-        CoronaVirus cRobo = new CoronaVirus("robo_azul.png");
-        cCorona.setPosicao(10, 5);        
-        this.addElemento(cRobo);
-        
-        Caveira cCaveira = new Caveira("caveira.png");
-        cCaveira.setPosicao(10, 9);
-        this.addElemento(cCaveira);        
+        eElementos = new ArrayList<Elemento>(1089);
+        elementoMatrix = new ArrayList<ArrayList<ArrayList<Elemento>>>(Consts.RES);
+        for (int i=0; i<Consts.RES; i++) {
+            elementoMatrix.add(new ArrayList<ArrayList<Elemento>>(Consts.RES));            
+            for (int j=0; j<Consts.RES; j++) {
+                elementoMatrix.get(i).add(new ArrayList<Elemento>());
+            }
+        }
+        FaseReader reader = new FaseReader();
+        reader.read("fase1.txt", this);
     }
 
 /*--------------------------------------------------*/
     public void addElemento(Elemento umElemento) {
         eElementos.add(umElemento);
+        elementoMatrix.get(umElemento.getPosicao().getColuna())
+                      .get(umElemento.getPosicao().getLinha())
+                      .add(umElemento);
+        eElementos.sort(new ElementComparator());
     }
 
     public void removeElemento(Elemento umElemento) {
         eElementos.remove(umElemento);
+        elementoMatrix.get(umElemento.getPosicao().getColuna())
+                      .get(umElemento.getPosicao().getLinha())
+                      .remove(umElemento);
+    }
+    
+    public void moveElemento(Elemento umElemento) {
+        if (elementoMatrix.get(umElemento.getPosicao().getPosicaoAnterior().getColuna())
+                          .get(umElemento.getPosicao().getPosicaoAnterior().getLinha())
+                          .remove(umElemento)) {
+            elementoMatrix.get(umElemento.getPosicao().getColuna())
+                          .get(umElemento.getPosicao().getLinha())
+                          .add(umElemento);
+        }
     }
     
     public ArrayList<Elemento> getElementos() {
         return eElementos;
     }
+    
+    public ArrayList<Elemento> buscaElemento(Posicao p) {
+        return elementoMatrix.get(p.getColuna()).get(p.getLinha());
+    }
+    
+    public boolean ehPosicaoValida(Posicao p) {
+        for (Elemento e : this.buscaElemento(p)) {
+            if (!e.isbTransponivel()) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean temElemento(Posicao p) {
+        return (!this.buscaElemento(p).isEmpty());
+    }
 
-    public Graphics getGraphicsBuffer(){
+    public Graphics getGraphicsBuffer() {
         return g2;
     }
     
@@ -88,7 +106,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
                 try {
                     /*Linha para alterar o background*/
                     Image newImage = Toolkit.getDefaultToolkit().getImage(new java.io.File(".").getCanonicalPath() + Consts.PATH + "background.png");
-                    g2.drawImage(newImage,j*Consts.CELL_SIDE, i*Consts.CELL_SIDE, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
+                    g2.drawImage(newImage, j * Consts.CELL_SIDE,
+                            i * Consts.CELL_SIDE, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
 
                 } catch (IOException ex) {
                     Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
@@ -98,8 +117,8 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
         
         /*Aqui podem ser inseridos novos processamentos de controle*/
         if (!this.eElementos.isEmpty()) {
-            this.cControle.desenhaTudo(eElementos);
             this.cControle.processaTudo(eElementos);
+            this.cControle.desenhaTudo(eElementos);
         }
 
         g.dispose();
@@ -122,37 +141,9 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     }
 
     public void keyPressed(KeyEvent e) {
-        hHero.Event(e.getKeyCode(), cControle, this);
-        if (e.getKeyCode() == KeyEvent.VK_R) {
-            this.eElementos.clear();
-            hHero = new Hero("vacina.png");
-            hHero.setPosicao(0, 7);
-            this.addElemento(hHero);
-
-            CoronaVirus cTeste = new CoronaVirus("carro_azul.png");
-            cTeste.setPosicao(5, 5);
-            this.addElemento(cTeste);
+        for (Elemento el : (ArrayList<Elemento>) eElementos.clone()) {
+            el.Event(e.getKeyCode(), cControle, this);
         }
-
-        this.setTitle("-> Cell: " + (hHero.getPosicao().getColuna()) + ", " + (hHero.getPosicao().getLinha()));
-    }
-
-    public void mousePressed(MouseEvent e) {
-         //Movimento via mouse
-         int x = e.getX();
-         int y = e.getY();
-     
-         this.setTitle("X: "+ x + ", Y: " + y +
-         " -> Cell: " + (y/Consts.CELL_SIDE) + ", " + (x/Consts.CELL_SIDE));
-        
-         this.hHero.getPosicao().setPosicao(y/Consts.CELL_SIDE, x/Consts.CELL_SIDE);
-
-        /*Se o heroi for para uma posicao invalida, sobre um elemento intransponivel, volta para onde estava*/
-        if (!cControle.ehPosicaoValida(this.eElementos,hHero.getPosicao())) {
-            hHero.voltaAUltimaPosicao();
-        }         
-         
-        repaint();
     }
 
     /**
@@ -185,23 +176,6 @@ public class Tela extends javax.swing.JFrame implements MouseListener, KeyListen
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-    public void mouseMoved(MouseEvent e) {
-    }
-
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
-
-    public void mouseDragged(MouseEvent e) {
-    }
 
     public void keyTyped(KeyEvent e) {
     }

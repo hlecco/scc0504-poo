@@ -5,23 +5,22 @@ import Auxiliar.Desenhador;
 import Auxiliar.Posicao;
 import Controler.ControleDeJogo;
 import Controler.Tela;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.io.IOException;
-import java.io.Serializable;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.Callable;
 
 
 public class Bomba extends Elemento {
 
     private int potencia;
+    private boolean blownUp;
 
-    public Bomba(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Bomba() {
+        super("bomb.png", 5);
         this.potencia = 1;
         this.bTransponivel = false;
+        this.blownUp = false;
     }
     
     public void setPotencia(int p) {
@@ -30,37 +29,94 @@ public class Bomba extends Elemento {
         }
     }
     
+    public void setUp() {
+        clocks.add(new Clock(
+                Consts.BOMB_TIMER,
+                1,
+                this.sprite::cycle,
+                this::explode,
+                false
+        ));
+    }
+    
     public void explode() {
-        Fogo fogo_up = new Fogo("fogo.png");
-        Fogo fogo_down = new Fogo("fogo.png");
-        Fogo fogo_left = new Fogo("fogo.png");
-        Fogo fogo_right = new Fogo("fogo.png");
+        if (this.blownUp) {
+            return;
+        }
+        this.blownUp = true;
+        this.remove();
+        ArrayList<Elemento> elementos;
         
-        fogo_up.setPotencia(this.potencia-1);
-        fogo_down.setPotencia(this.potencia-1);
-        fogo_left.setPotencia(this.potencia-1);
-        fogo_right.setPotencia(this.potencia-1);
+        boolean valido;
+        Posicao offset = new Posicao(pPosicao.getColuna(), pPosicao.getLinha());
+        Fogo fogo = new Fogo();
         
-        fogo_up.setDirecao(Consts.UP);
-        fogo_down.setDirecao(Consts.DOWN);
-        fogo_left.setDirecao(Consts.LEFT);
-        fogo_right.setDirecao(Consts.RIGHT);
+        fogo.setPosicao(offset.getColuna(), offset.getLinha());
+        Tela t = Desenhador.getTelaDoJogo();
+        t.addElemento(fogo);
+        fogo.vanish();
         
-        fogo_up.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna()-1);
-        fogo_down.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna()+1);
-        fogo_left.setPosicao(this.pPosicao.getLinha()-1, this.pPosicao.getColuna());
-        fogo_right.setPosicao(this.pPosicao.getLinha()+1, this.pPosicao.getColuna());
+        offset.moveUp();
+        valido = t.ehPosicaoValida(offset);
+        if (valido) {
+            Fogo fogo_up = new Fogo();
+            fogo_up.setPotencia(this.potencia);
+            fogo_up.setDirecao(Consts.UP);
+            fogo_up.setPosicao(offset.getColuna(), offset.getLinha());
+            fogo_up.propaga(t);
+        }
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         
-        Desenhador.getTelaDoJogo().addElemento(fogo_up);
-        Desenhador.getTelaDoJogo().addElemento(fogo_left);
-        Desenhador.getTelaDoJogo().addElemento(fogo_right);
-        Desenhador.getTelaDoJogo().addElemento(fogo_down);
+        offset.volta();
+        offset.moveDown();
+        valido = t.ehPosicaoValida(offset);
+        if (valido) {
+            Fogo fogo_down = new Fogo();
+            fogo_down.setPotencia(this.potencia);
+            fogo_down.setDirecao(Consts.DOWN);
+            fogo_down.setPosicao(offset.getColuna(), offset.getLinha());
+            fogo_down.propaga(t);
+        }
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         
-        fogo_up.propaga();
-        fogo_left.propaga();
-        fogo_right.propaga();
-        fogo_down.propaga();
+        offset.volta();
+        offset.moveLeft();
+        valido = t.ehPosicaoValida(offset);
+        if (valido) {
+            Fogo fogo_left = new Fogo();
+            fogo_left.setPotencia(this.potencia);
+            fogo_left.setDirecao(Consts.LEFT);
+            fogo_left.setPosicao(offset.getColuna(), offset.getLinha());
+            fogo_left.propaga(t);
+        }
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         
-        Desenhador.getTelaDoJogo().removeElemento(this);
+        offset.volta();
+        offset.moveRight();
+        valido = t.ehPosicaoValida(offset);
+        if (valido) {
+            Fogo fogo_right = new Fogo();
+            fogo_right.setPotencia(this.potencia);
+            fogo_right.setDirecao(Consts.RIGHT);
+            fogo_right.setPosicao(offset.getColuna(), offset.getLinha());
+            fogo_right.propaga(t);
+        }
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
+    }
+    
+    public void touchFire() {
+        this.explode();
     }
 }

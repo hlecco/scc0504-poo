@@ -9,8 +9,8 @@ import java.io.Serializable;
 public class Caveira extends Elemento implements Serializable{
     private int iContaFrames;
     
-    public Caveira(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+    public Caveira() {
+        super("caveira.png");
         this.bTransponivel = true;
         this.iContaFrames = 0;
     }
@@ -23,7 +23,7 @@ public class Caveira extends Elemento implements Serializable{
         if(this.iContaFrames == Consts.TIMER_DISPARO){
             this.iContaFrames = 0;
             FakeNews f = new FakeNews("fakenews.png");
-            f.setPosicao(this.pPosicao.getLinha()-1,this.pPosicao.getColuna());
+            f.setPosicao(this.pPosicao.getColuna()-1,this.pPosicao.getLinha());
             Desenhador.getTelaDoJogo().addElemento(f);
         }
     }    

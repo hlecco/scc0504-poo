@@ -5,10 +5,6 @@ import Controler.Tela;
 import java.awt.Graphics;
 import java.io.Serializable;
 
-/**
- *
- * @author junio
- */
 public class FakeNews extends Elemento implements Serializable{
             
     public FakeNews(String sNomeImagePNG) {

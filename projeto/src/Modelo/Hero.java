@@ -1,70 +1,115 @@
 package Modelo;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import Auxiliar.Consts;
 import Auxiliar.Desenhador;
 import Auxiliar.Posicao;
 import Controler.ControleDeJogo;
 import Controler.Tela;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.io.IOException;
-import java.io.Serializable;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-/**
- *
- * @author Junio
- */
-public class Hero extends Elemento implements Serializable{
-    public Hero(String sNomeImagePNG) {
-        super(sNomeImagePNG);
+
+public class Hero extends Elemento implements Serializable {
+    
+    int nBombasPermitida = 1;
+    int nBombasColocada = 0;
+    int bombermanPotencia = 2;
+    
+    public Hero() {
+        super("bomberman_down.png", 1, 2, 8, 0, -1);
+        this.priority = 1;
     }
 
-    public void voltaAUltimaPosicao(){
+    public void voltaAUltimaPosicao() {
         this.pPosicao.volta();
     }
     
-    public void createBomb() {
-        Bomba bomb = new Bomba("bomb.png");
-        bomb.setPosicao(this.pPosicao.getLinha(), this.pPosicao.getColuna());
-        bomb.setPotencia(5);
+    public void createBomb(final ControleDeJogo c, final Tela t) {
+        if (!Desenhador.getTelaDoJogo().ehPosicaoValida(pPosicao)) return;
+        
+        final Bomba bomb = new Bomba();
+        nBombasColocada++;
+        
+        bomb.setPosicao(this.pPosicao.getColuna(), this.pPosicao.getLinha());
+        bomb.setPotencia(this.bombermanPotencia);
+        bomb.setUp();
         Desenhador.getTelaDoJogo().addElemento(bomb);
-        bomb.explode();
+        
+        TimerTask recharge = new TimerTask() {
+            public void run() {
+                nBombasColocada--;
+            }
+        };
+        
+        Timer timer = new Timer();
+        timer.schedule(recharge, 30 * Consts.FRAME_INTERVAL);
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {
         /*Movimento do heroi via teclado*/
-        Posicao offset = pPosicao.offset(0,0);
+        Posicao offset = pPosicao.offset(0, 0);
+        int valido;
+        
         switch (key) {
             case Consts.UP:
-                offset.moveUp();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                this.sprite.changeSheet("bomberman_up.png");
+                this.sprite.cycle();
+                if (t.ehPosicaoValida(this.getPosicao().offset(0, -1))) {
                     this.moveUp();
                 }
                 break;
             case Consts.DOWN:
-                offset.moveDown();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                this.sprite.changeSheet("bomberman_down.png");
+                this.sprite.cycle();
+                if (t.ehPosicaoValida(this.getPosicao().offset(0, 1))) {
                     this.moveDown();
                 }
                 break;
             case Consts.LEFT:
-                offset.moveLeft();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                this.sprite.changeSheet("bomberman_left.png");
+                this.sprite.cycle();
+                if (t.ehPosicaoValida(this.getPosicao().offset(-1, 0))) {
                     this.moveLeft();
                 }
                 break;
             case Consts.RIGHT:
-                offset.moveRight();
-                if (c.ehPosicaoValida(t.getElementos(), offset)) {
+                this.sprite.changeSheet("bomberman_right.png");
+                this.sprite.cycle();
+                if (t.ehPosicaoValida(this.getPosicao().offset(1, 0))) {
                     this.moveRight();
                 }
                 break;
             case Consts.BOMB:
-                this.createBomb();
-                break;
+                if (this.nBombasColocada == this.nBombasPermitida) {
+                    break;
+                } else {
+                    this.createBomb(c, t);
+                    break;
+                }
+            case Consts.DOOR:
+                break;             
         }
+    }
+    
+    public void powerUpBomba() {
+        if (nBombasPermitida < Consts.MAX_BOMBS) {
+            nBombasPermitida++;
+        }
+    }
+    public void powerUpPotencia() {
+        if (bombermanPotencia < Consts.MAX_POWER) {
+            bombermanPotencia++;
+        }
+    }
+    public void touchAnother(Elemento e) {
+        e.touchHero(this);
     }
 }

@@ -11,10 +11,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- *
- * @author Junio
- */
 public class CoronaVirus extends Elemento implements Serializable{
     private boolean bRight;
 
@@ -26,9 +22,9 @@ public class CoronaVirus extends Elemento implements Serializable{
     
     public void autoDesenho(){
         if(bRight)
-            this.setPosicao(pPosicao.getLinha(), pPosicao.getColuna()+1);
+            this.setPosicao(pPosicao.getColuna(), pPosicao.getLinha()+1);
         else
-            this.setPosicao(pPosicao.getLinha(), pPosicao.getColuna()-1);           
+            this.setPosicao(pPosicao.getColuna(), pPosicao.getLinha()-1);           
 
         super.autoDesenho();
         bRight = !bRight;

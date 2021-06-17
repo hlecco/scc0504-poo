@@ -9,11 +9,11 @@ public class Posicao implements Serializable {
     private int linhaAnterior;
     private int colunaAnterior;
 
-    public Posicao(int linha, int coluna){
-        this.setPosicao(linha,coluna);
+    public Posicao(int coluna, int linha){
+        this.setPosicao(coluna, linha);
     }
 
-    public boolean setPosicao(int linha, int coluna){       
+    public boolean setPosicao(int coluna, int linha) {       
         if(linha < 0 || linha >= Auxiliar.Consts.RES)
             return false;
         linhaAnterior = this.linha;
@@ -31,7 +31,11 @@ public class Posicao implements Serializable {
     }
    
     public boolean volta(){
-        return this.setPosicao(linhaAnterior,colunaAnterior);
+        return this.setPosicao(colunaAnterior, linhaAnterior);
+    }
+    
+    public Posicao getPosicaoAnterior() {
+        return new Posicao(colunaAnterior, linhaAnterior);
     }
 
     public int getColuna(){
@@ -48,23 +52,39 @@ public class Posicao implements Serializable {
     
     
     public boolean moveUp(){
-        return this.setPosicao(this.getLinha()-1, this.getColuna());
+        return this.setPosicao(this.getColuna(), this.getLinha()-1);
     }
     public boolean moveDown(){
-        return this.setPosicao(this.getLinha()+1, this.getColuna());
+        return this.setPosicao(this.getColuna(), this.getLinha()+1);
     }
     public boolean moveRight(){
-        return this.setPosicao(this.getLinha(), this.getColuna()+1);
+        return this.setPosicao(this.getColuna()+1, this.getLinha());
     }
     public boolean moveLeft(){
-        return this.setPosicao(this.getLinha(), this.getColuna()-1);        
+        return this.setPosicao(this.getColuna()-1, this.getLinha());        
     }
     
     public Posicao offset(int x, int y) {
         Posicao novaPosicao = new Posicao(
-                this.getLinha() + x,
-                this.getColuna() + y
+                this.getColuna() + x,
+                this.getLinha() + y
         );
         return novaPosicao;
+    }
+    
+    public boolean equals(Posicao p) {
+        if (this == p) {
+            return true;
+        }
+        
+        if (p == null || getClass() != p.getClass()) {
+            return false;
+        }
+        
+        if (p.getLinha() == this.getLinha() && p.getColuna() == this.getColuna()) {
+            return true;
+        }
+        
+        return false;
     }
 }
