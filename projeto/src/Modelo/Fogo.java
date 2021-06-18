@@ -78,14 +78,28 @@ public class Fogo extends Elemento {
     public void vanish() {
         clocks.add(new Clock(
                 6,
-                1,
+                2,
                 this.sprite::cycle,
                 this::remove,
                 false
         ));
+        clocks.add(new Clock(
+                3,
+                2,
+                null,
+                this::turnHarmless,
+                false
+        ));
+    }
+    
+    public void turnHarmless() {
+        this.bMortal = false;
     }
     
     public void touchAnother(Elemento e) {
         e.touchFire();
+        if (this.bMortal) {
+            e.touchEnemy();
+        }
     }
 }

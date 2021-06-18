@@ -15,10 +15,15 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
 
     private ArrayList<Elemento> eElementos;
     private ArrayList<ArrayList<ArrayList<Elemento>>> elementoMatrix;
+    private ArrayList<Elemento> removalElements;
     private ControleDeJogo cControle = new ControleDeJogo();
     private Graphics g2;
+    private Posicao heroPosition;
+    private int numFase;
 
-    public Tela(String faseName) throws IOException {
+    public Tela(int fase) throws IOException {
+        heroPosition = new Posicao(0,0);
+        removalElements = new ArrayList<Elemento>();
         Desenhador.setCenario(this); /*Desenhador funciona no modo estatico*/
         initComponents();
  
@@ -40,7 +45,7 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
             }
         }
         FaseReader reader = new FaseReader();
-        reader.read(faseName, this);
+        this.numFase = reader.read(fase, this);
     }
 
 /*--------------------------------------------------*/
@@ -52,11 +57,15 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         eElementos.sort(new ElementComparator());
     }
 
-    public void removeElemento(Elemento umElemento) {
+    public void trueRemoveElemento(Elemento umElemento) {
         eElementos.remove(umElemento);
         elementoMatrix.get(umElemento.getPosicao().getColuna())
                       .get(umElemento.getPosicao().getLinha())
                       .remove(umElemento);
+    }
+    
+    public void removeElemento(Elemento umElemento) {
+        removalElements.add(umElemento);
     }
     
     public void moveElemento(Elemento umElemento) {
@@ -126,8 +135,12 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         
         /*Aqui podem ser inseridos novos processamentos de controle*/
         if (!this.eElementos.isEmpty()) {
-            this.cControle.processaTudo(eElementos);
-            this.cControle.desenhaTudo(eElementos);
+            this.cControle.processaTudo((ArrayList<Elemento>) eElementos.clone());
+            this.cControle.desenhaTudo((ArrayList<Elemento>) eElementos.clone());
+            for (Elemento e: removalElements) {
+                this.trueRemoveElemento(e);
+            }
+            removalElements.clear();
         }
 
         g.dispose();
@@ -135,6 +148,38 @@ public class Tela extends javax.swing.JFrame implements KeyListener {
         if (!getBufferStrategy().contentsLost()) {
             getBufferStrategy().show();
         }
+    }
+    
+    public void stageClear() {
+        for (Elemento e: (ArrayList<Elemento>) this.eElementos.clone()) {
+            this.removeElemento(e);
+        }
+    }
+    
+    public void stageReset() {
+        this.stageClear();
+        FaseReader reader = new FaseReader();
+        try {
+            this.numFase = reader.read(this.numFase, this);
+        } catch (IOException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void nextStage() {
+        this.numFase++;
+        if (this.numFase > Consts.FASES) {
+            this.numFase = 1;
+        }
+        this.stageReset();
+    }
+    
+    public void setHeroPosition(Posicao p) {
+        this.heroPosition.setPosicao(p.getColuna(), p.getLinha());
+    }
+    
+    public Posicao getHeroPosition() {
+        return this.heroPosition;
     }
 
     public void go() {

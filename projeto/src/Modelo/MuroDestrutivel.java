@@ -9,6 +9,7 @@ import Controler.Tela;
 
 
 public class MuroDestrutivel extends Elemento implements Serializable {
+    private int hidden;
     
     public MuroDestrutivel(int pHidden) {
         super("splitwall.png");
@@ -36,6 +37,8 @@ public class MuroDestrutivel extends Elemento implements Serializable {
             case 3:
                 hidden_element = new Door();
                 break;
+            case 4:
+                hidden_element = new SpeedUp();
         }
         if (hidden_element != null) {
             hidden_element.setPosicao(this.getPosicao().getColuna(), this.getPosicao().getLinha());

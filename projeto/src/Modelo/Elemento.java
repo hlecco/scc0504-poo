@@ -23,7 +23,6 @@ public abstract class Elemento implements Serializable {
     protected boolean bTransponivel; // Pode passar por cima?
     protected boolean bMortal; // Se encostar, morre?
     protected boolean bDestrutivel; // Destrutível com fogo
-    protected int hidden; // 0: nada escondido, 1: bomberup, 2: fireup, 3: fogo, 4: porta
     ArrayList<Clock> clocks; 
     int priority; // higher priority objects will be drawn over lower priority, defaults to 0
     protected boolean defeats;
@@ -40,7 +39,6 @@ public abstract class Elemento implements Serializable {
         this.pPosicao = new Posicao(1, 1);
         this.bTransponivel = true;
         this.bMortal = false;
-        this.hidden = 0;
         this.clocks = new ArrayList<Clock>();
         
         this.sprite = new Sprite(sNomeImagePNG, hSize, vSize, nFrames, hOffset, vOffset);
@@ -94,14 +92,6 @@ public abstract class Elemento implements Serializable {
             this.touchAnother(e);
         }
         return test;
-    }
-    
-    public int getHiddenItem() {
-        return this.hidden;
-    }
-    
-    public void setHidden(int pHidden) {
-        this.hidden = pHidden;
     }
 
     public boolean moveUp() {
@@ -164,6 +154,62 @@ public abstract class Elemento implements Serializable {
         return test;
     }
     
+    public boolean moveUpCheck() {
+        if (Desenhador.getTelaDoJogo().ehPosicaoValida(this.getPosicao().offset(0, -1))) {
+            return this.moveUp();
+        }
+        return false;
+    }
+    
+    public boolean moveDownCheck() {
+        if (Desenhador.getTelaDoJogo().ehPosicaoValida(this.getPosicao().offset(0, 1))) {
+            return this.moveDown();
+        }
+        return false;
+    }
+    
+    public boolean moveLeftCheck() {
+        if (Desenhador.getTelaDoJogo().ehPosicaoValida(this.getPosicao().offset(-1, 0))) {
+            return this.moveLeft();
+        }
+        return false;
+    }
+    
+    public boolean moveRightCheck() {
+        if (Desenhador.getTelaDoJogo().ehPosicaoValida(this.getPosicao().offset(1, 0))) {
+            return this.moveRight();
+        }
+        return false;
+    }
+    
+    public boolean moveDirection(int direction) {
+        switch (direction) {
+            case Consts.UP:
+                return this.moveUp();
+            case Consts.DOWN:
+                return this.moveDown();
+            case Consts.LEFT:
+                return this.moveLeft();
+            case Consts.RIGHT:
+                return this.moveRight();
+        }
+        return false;
+    }
+    
+    public boolean moveDirectionCheck(int direction) {
+        switch (direction) {
+            case Consts.UP:
+                return this.moveUpCheck();
+            case Consts.DOWN:
+                return this.moveDownCheck();
+            case Consts.LEFT:
+                return this.moveLeftCheck();
+            case Consts.RIGHT:
+                return this.moveRightCheck();
+        }
+        return false;
+    }
+    
     public void addClock(int duration, int speed, Runnable onStep, Runnable onEnd, boolean restart) {
         clocks.add(new Clock(duration, speed, onStep, onEnd, restart));
     }
@@ -173,7 +219,7 @@ public abstract class Elemento implements Serializable {
     }
    
    public void step() {
-       for (Clock c: this.clocks) {
+       for (Clock c: (ArrayList<Clock>) this.clocks.clone()) {
            if (c.step()) {
                clocks.remove(c);
            }

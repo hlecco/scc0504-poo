@@ -1,12 +1,13 @@
 package Controler;
 
+import Auxiliar.Consts;
 import Modelo.Bat;
 import Modelo.BomberUp;
-import Modelo.Caveira;
 import Modelo.Elemento;
 import Modelo.Hero;
 import Modelo.MuroDestrutivel;
 import Modelo.MuroIndestrutivel;
+import Modelo.Radio;
 import Modelo.Transicao;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,15 +25,23 @@ import java.util.Map;
   - b: MuroDestrutivel com bomba+
   - f: MuroDestrutivel com fogo+
   - d: MuroDestrutivel com door
+  - s: MuroDestrutivel com speed+
   - B: Bat
+  - R: Radio
 */
 
 
 public class FaseReader {
     private Map<Character, Class> objDict;
     
-    public void read(String filename, Tela t) throws FileNotFoundException, IOException {
-        File file = new File(filename+".txt");
+    public int read(int numFase, Tela t) throws FileNotFoundException, IOException {
+        if (numFase < 1) {
+            numFase = 1;
+        }
+        else if (numFase > Consts.FASES) {
+            numFase = Consts.FASES;
+        }
+        File file = new File("fases/fase"+Integer.toString(numFase)+".txt");
         BufferedReader buffer = new BufferedReader(new FileReader(file));
         
         int x = 0;
@@ -41,13 +50,13 @@ public class FaseReader {
         String line = null;
         Elemento obj = null;
         
-        obj = new Transicao(filename+".png");
+        obj = new Transicao("fase"+Integer.toString(numFase)+".png");
         obj.setPosicao(x, y);
         t.addElemento(obj);
         
         
-        while ((line = buffer.readLine()) != null) {
-            for (x = 0; x < line.length(); x++) {
+        while ((y < Consts.RES) & (line = buffer.readLine()) != null) {
+            for (x = 0; (x < line.length()) & (x < Consts.RES); x++) {
                 obj = null;
                 switch (line.charAt(x)) {
                     case 'h':
@@ -68,8 +77,14 @@ public class FaseReader {
                     case 'd':
                         obj = new MuroDestrutivel(3);
                         break;
+                    case 's':
+                        obj = new MuroDestrutivel(4);
+                        break;
                     case 'B':
                         obj = new Bat();
+                        break;
+                     case 'R':
+                        obj = new Radio();
                         break;
                 }
                 if (obj != null) {
@@ -79,5 +94,6 @@ public class FaseReader {
             }
             y++;
         }
+        return numFase;
     }
 }

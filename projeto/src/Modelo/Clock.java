@@ -61,7 +61,7 @@ public class Clock {
     public void end() {
         timeLeft = 0;
         try {
-            onStep.run();
+            onEnd.run();
         } catch (Exception ex) {
             Logger.getLogger(Clock.class.getName()).log(Level.SEVERE, null, ex);
         }

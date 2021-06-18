@@ -1,6 +1,7 @@
 package Auxiliar;
 
 import java.io.Serializable;
+import static java.lang.Math.abs;
 
 public class Posicao implements Serializable {
     private int	linha;
@@ -70,6 +71,10 @@ public class Posicao implements Serializable {
                 this.getLinha() + y
         );
         return novaPosicao;
+    }
+    
+    public int distanceTo(Posicao p) {
+        return abs(this.getColuna() - p.getColuna()) + abs(this.getLinha() - p.getLinha());
     }
     
     public boolean equals(Posicao p) {

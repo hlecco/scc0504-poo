@@ -32,7 +32,7 @@ public class Bomba extends Elemento {
     public void setUp() {
         clocks.add(new Clock(
                 Consts.BOMB_TIMER,
-                1,
+                8,
                 this.sprite::cycle,
                 this::explode,
                 false
@@ -57,6 +57,10 @@ public class Bomba extends Elemento {
         
         offset.moveUp();
         valido = t.ehPosicaoValida(offset);
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         if (valido) {
             Fogo fogo_up = new Fogo();
             fogo_up.setPotencia(this.potencia);
@@ -65,14 +69,14 @@ public class Bomba extends Elemento {
             fogo_up.addClock(1, 1, null, fogo_up::propaga, false);
             t.addElemento(fogo_up);
         }
-        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
-        for (Elemento e: elementos) {
-            e.touchFire();
-        }
         
         offset.volta();
         offset.moveDown();
         valido = t.ehPosicaoValida(offset);
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         if (valido) {
             Fogo fogo_down = new Fogo();
             fogo_down.setPotencia(this.potencia);
@@ -81,14 +85,14 @@ public class Bomba extends Elemento {
             fogo_down.addClock(1, 1, null, fogo_down::propaga, false);
             t.addElemento(fogo_down);
         }
-        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
-        for (Elemento e: elementos) {
-            e.touchFire();
-        }
         
         offset.volta();
         offset.moveLeft();
         valido = t.ehPosicaoValida(offset);
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         if (valido) {
             Fogo fogo_left = new Fogo();
             fogo_left.setPotencia(this.potencia);
@@ -97,14 +101,15 @@ public class Bomba extends Elemento {
             fogo_left.addClock(1, 1, null, fogo_left::propaga, false);
             t.addElemento(fogo_left);
         }
-        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
-        for (Elemento e: elementos) {
-            e.touchFire();
-        }
+        
         
         offset.volta();
         offset.moveRight();
         valido = t.ehPosicaoValida(offset);
+        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
+        for (Elemento e: elementos) {
+            e.touchFire();
+        }
         if (valido) {
             Fogo fogo_right = new Fogo();
             fogo_right.setPotencia(this.potencia);
@@ -113,10 +118,7 @@ public class Bomba extends Elemento {
             fogo_right.addClock(2, 1, null, fogo_right::propaga, false);
             t.addElemento(fogo_right);
         }
-        elementos = (ArrayList<Elemento>) t.buscaElemento(offset).clone(); 
-        for (Elemento e: elementos) {
-            e.touchFire();
-        }
+        
     }
     
     public void touchFire() {

@@ -8,7 +8,6 @@ public class BomberUp extends Elemento {
         super("bomberup.png");
         this.bTransponivel = true;
         this.bDestrutivel = false;
-        this.hidden = 1;
     }
     
     public void touchHero(Hero h) {

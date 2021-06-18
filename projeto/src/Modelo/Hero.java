@@ -19,14 +19,40 @@ import Controler.Tela;
 
 public class Hero extends Elemento implements Serializable {
     
-    private int nBombasPermitida = 1;
-    private int nBombasColocada = 0;
-    private int bombermanPotencia = 2;
+    private int nBombasPermitida;
+    private int nBombasColocada;
+    private int bombermanPotencia;
+    private int delay;
+    private boolean allow_movement;
     private boolean isDead;
+    
+    private void update_location() {
+        Desenhador.getTelaDoJogo().setHeroPosition(this.pPosicao);
+    }
     
     public Hero() {
         super("bomberman_down.png", 1, 2, 8, 0, -1);
+        this.nBombasColocada = 0;
+        this.nBombasPermitida = 1;
+        this.bombermanPotencia = 1;
         this.priority = 2;
+        this.delay = 4;
+        this.allow_movement = true;
+        this.addClock(1,
+                      3,
+                      this::update_location,
+                      null,
+                      true
+                      );
+    }
+    
+    private void restrictMovement() {
+        this.allow_movement = false;
+        this.addClock(this.delay, 1, null, this::restoreMovement, false);
+    }
+    
+    private void restoreMovement() {
+        this.allow_movement = true;
     }
 
     public void voltaAUltimaPosicao() {
@@ -44,14 +70,11 @@ public class Hero extends Elemento implements Serializable {
         bomb.setUp();
         Desenhador.getTelaDoJogo().addElemento(bomb);
         
-        TimerTask recharge = new TimerTask() {
-            public void run() {
-                nBombasColocada--;
-            }
-        };
-        
-        Timer timer = new Timer();
-        timer.schedule(recharge, 30 * Consts.FRAME_INTERVAL);
+        this.addClock(Consts.BOMB_TIMER, 8, null, this::recharge, false);
+    }
+    
+    private void recharge() {
+        nBombasColocada--;
     }
     
     public void Event(int key, ControleDeJogo c, Tela t) {
@@ -65,30 +88,42 @@ public class Hero extends Elemento implements Serializable {
         switch (key) {
             case Consts.UP:
                 this.sprite.changeSheet("bomberman_up.png");
-                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(0, -1))) {
-                    this.moveUp();
+                    if (this.allow_movement) {
+                        this.moveUp();
+                        this.restrictMovement();
+                        this.sprite.cycle();
+                    }
                 }
                 break;
             case Consts.DOWN:
                 this.sprite.changeSheet("bomberman_down.png");
-                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(0, 1))) {
-                    this.moveDown();
+                    if (this.allow_movement) {
+                        this.moveDown();
+                        this.restrictMovement();
+                        this.sprite.cycle();
+                    }
                 }
                 break;
             case Consts.LEFT:
                 this.sprite.changeSheet("bomberman_left.png");
-                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(-1, 0))) {
-                    this.moveLeft();
+                    if (this.allow_movement) {
+                        this.moveLeft();
+                        this.restrictMovement();
+                        this.sprite.cycle();
+                    }
                 }
                 break;
             case Consts.RIGHT:
                 this.sprite.changeSheet("bomberman_right.png");
-                this.sprite.cycle();
                 if (t.ehPosicaoValida(this.getPosicao().offset(1, 0))) {
-                    this.moveRight();
+                    if (this.allow_movement) {
+                        this.moveRight();
+                        this.restrictMovement();
+                        this.sprite.cycle();
+                    }
                 }
                 break;
             case Consts.BOMB:
@@ -106,13 +141,13 @@ public class Hero extends Elemento implements Serializable {
     public void die() {
         if (!isDead) {
             isDead = true;
+            this.sprite.changeSheet("bomberman_dead.png");
+            this.addClock(30, 2, this.sprite::cycle, this::resetStage, false);
         }
-        this.sprite.changeSheet("bomberman_dead.png");
-        this.addClock(10, 2, this.sprite::cycle, null, true);
     }
     
-    public void touchFire() {
-        this.die();
+    private void resetStage() {
+        Desenhador.getTelaDoJogo().stageReset();
     }
     
     public void touchEnemy() {
@@ -128,6 +163,9 @@ public class Hero extends Elemento implements Serializable {
         if (bombermanPotencia < Consts.MAX_POWER) {
             bombermanPotencia++;
         }
+    }
+    public void speedUp() {
+        this.delay--;
     }
     public void touchAnother(Elemento e) {
         e.touchHero(this);

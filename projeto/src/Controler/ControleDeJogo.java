@@ -13,7 +13,7 @@ import Modelo.Fogo;
 public class ControleDeJogo {
     
     public void desenhaTudo(ArrayList<Elemento> e) {
-        for (Elemento elem : (ArrayList<Elemento>) e.clone()) {
+        for (Elemento elem : e) {
             elem.step();
         }
     }
