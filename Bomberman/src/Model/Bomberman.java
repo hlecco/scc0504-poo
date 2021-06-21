@@ -7,7 +7,6 @@ import Auxiliar.Draw;
 import Controler.GameControl;
 import Controler.Screen;
 
-
 public class Bomberman extends Element implements Serializable {
 
     private int numAllowedBombs;
@@ -18,7 +17,6 @@ public class Bomberman extends Element implements Serializable {
     private int numLife;
     private boolean allowMoviment;
     private boolean isDead;
-    
 
     public Bomberman(int pNumFase, int pNumLife, int bomberUp, int fireUp,
             int speedUp) {
@@ -36,11 +34,15 @@ public class Bomberman extends Element implements Serializable {
 
     /*
     Método usado para que os inimigos saibam a posição do Bomberman na tela.
-    */
+     */
     private void update_location() {
         Draw.getScreen().setBombermanPosition(this.position);
     }
 
+    /*
+    Ao andar, o movimento do Bomberman será restringido pelo tempo determinado
+    pelo atributo delay.
+     */
     private void restrictMovement() {
         this.allowMoviment = false;
         this.addClock(this.delay, 1, null, this::restoreMovement, false);
@@ -87,10 +89,15 @@ public class Bomberman extends Element implements Serializable {
         }
     }
 
+    @Override
+    public void touchEnemy() {
+        this.die();
+    }
+
     /*
     Os próximos dois métodos fazem o papel de Runnable e são chamados quando o
     Bomberman morre. Um reinicia a tela e o outro reinicia o jogo.
-    */
+     */
     private void resetFase() {
         Draw.getScreen().nextFase(numFase, numLife, numAllowedBombs,
                 bombermanPotency, delay);
@@ -98,11 +105,6 @@ public class Bomberman extends Element implements Serializable {
 
     private void resetGame() {
         Draw.getScreen().resetGame();
-    }
-
-    @Override
-    public void touchEnemy() {
-        this.die();
     }
 
     public void bomberUp() {
@@ -130,13 +132,13 @@ public class Bomberman extends Element implements Serializable {
     public void touchDoor() {
         this.addClock(1, 1, null, this::nextFase, false);
     }
-    
+
     public void nextFase() {
         this.setPosition(1, 1);
         Draw.getScreen().nextFase(++numFase, numLife, numAllowedBombs,
                 bombermanPotency, delay);
     }
-    
+
     @Override
     public void Event(int key, GameControl c, Screen t) {
         if (isDead) {
@@ -146,7 +148,7 @@ public class Bomberman extends Element implements Serializable {
         switch (key) {
             case Consts.UP:
                 this.sprite.changeSheet("bomberman_up.png");
-                if (t.isValidPosition(this.getPosicao().offset(0, -1))) {
+                if (t.isValidPosition(this.getPosition().offset(0, -1))) {
                     if (this.allowMoviment) {
                         this.moveUp();
                         this.restrictMovement();
@@ -156,7 +158,7 @@ public class Bomberman extends Element implements Serializable {
                 break;
             case Consts.DOWN:
                 this.sprite.changeSheet("bomberman_down.png");
-                if (t.isValidPosition(this.getPosicao().offset(0, 1))) {
+                if (t.isValidPosition(this.getPosition().offset(0, 1))) {
                     if (this.allowMoviment) {
                         this.moveDown();
                         this.restrictMovement();
@@ -166,7 +168,7 @@ public class Bomberman extends Element implements Serializable {
                 break;
             case Consts.LEFT:
                 this.sprite.changeSheet("bomberman_left.png");
-                if (t.isValidPosition(this.getPosicao().offset(-1, 0))) {
+                if (t.isValidPosition(this.getPosition().offset(-1, 0))) {
                     if (this.allowMoviment) {
                         this.moveLeft();
                         this.restrictMovement();
@@ -176,7 +178,7 @@ public class Bomberman extends Element implements Serializable {
                 break;
             case Consts.RIGHT:
                 this.sprite.changeSheet("bomberman_right.png");
-                if (t.isValidPosition(this.getPosicao().offset(1, 0))) {
+                if (t.isValidPosition(this.getPosition().offset(1, 0))) {
                     if (this.allowMoviment) {
                         this.moveRight();
                         this.restrictMovement();
@@ -191,9 +193,6 @@ public class Bomberman extends Element implements Serializable {
                     this.createBomb(c, t);
                     break;
                 }
-                // pode tirar, né?
-            case Consts.DOOR:
-                break;
         }
     }
 

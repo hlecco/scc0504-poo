@@ -10,7 +10,6 @@ import Auxiliar.*;
 import Model.Element;
 import Model.ElementComparator;
 
-
 public class Screen extends javax.swing.JFrame implements KeyListener {
 
     private ArrayList<Element> elements;
@@ -20,7 +19,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     private Graphics g2;
     private Position bombermanPosition;
 
-    
     public Screen() throws IOException {
         initComponents();
         bombermanPosition = new Position(1, 1);
@@ -42,7 +40,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     /*
     Função que iniciará o jogo criando a primeira fase.
-    */
+     */
     public void start() {
         Draw.setScene(this);
         this.addKeyListener(this);
@@ -59,29 +57,39 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     public void addElement(Element umElemento) {
         elements.add(umElemento);
-        elementsMatrix.get(umElemento.getPosicao().getCol())
-                .get(umElemento.getPosicao().getRow())
+        elementsMatrix.get(umElemento.getPosition().getCol())
+                .get(umElemento.getPosition().getRow())
                 .add(umElemento);
         elements.sort(new ElementComparator());
     }
 
+    /*
+    Remove os elementos de fato. Chamado no paint.
+    */
     public void trueRemoveElemento(Element umElemento) {
         elements.remove(umElemento);
-        elementsMatrix.get(umElemento.getPosicao().getCol())
-                .get(umElemento.getPosicao().getRow())
+        elementsMatrix.get(umElemento.getPosition().getCol())
+                .get(umElemento.getPosition().getRow())
                 .remove(umElemento);
     }
 
+    /*
+    Método que adiciona um elemento para remoção. A remoção em si será feita
+    no paint.
+     */
     public void removeElement(Element umElemento) {
         removedElements.add(umElemento);
     }
 
+    /*
+    Método que remove o elemento da posição anterior quando ele muda de posição.
+     */
     public void moveElement(Element pElement) {
-        if (elementsMatrix.get(pElement.getPosicao().getPreviousPosition().getCol())
-                .get(pElement.getPosicao().getPreviousPosition().getRow())
+        if (elementsMatrix.get(pElement.getPosition().getPreviousPosition().getCol())
+                .get(pElement.getPosition().getPreviousPosition().getRow())
                 .remove(pElement)) {
-            elementsMatrix.get(pElement.getPosicao().getCol())
-                    .get(pElement.getPosicao().getRow())
+            elementsMatrix.get(pElement.getPosition().getCol())
+                    .get(pElement.getPosition().getRow())
                     .add(pElement);
         }
     }
@@ -103,16 +111,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         return true;
     }
 
-    // tá sendo usado?
-    public boolean isOnFire(Position p) {
-        for (Element e : this.searchElement(p)) {
-            if (e.isDefeats()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean hasElement(Position p) {
         return (!this.searchElement(p).isEmpty());
     }
@@ -124,7 +122,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     /*
     Método executado a cada Consts.FRAME_INTERVAL milissegundos para
     redeenhar a tela inteira.
-    */
+     */
     @Override
     public void paint(Graphics gOld) {
         Graphics g = this.getBufferStrategy().getDrawGraphics();

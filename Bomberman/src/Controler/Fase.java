@@ -32,19 +32,18 @@ public class Fase {
 
     int numFase;
 
-    
     public Fase(int pNumFase) {
         this.numFase = pNumFase;
     }
-    
+
     /*
-    Função responsável por colocar a imagem de transição de fases e a imagem
-    final na tela, e em seguida chama a função que colocará os objetos na tela.
+    Coloca a imagem de transição de fases e a imagem final na tela. Em seguida
+    chama a função que colocará os objetos na tela.
     
     Parâmetros: número de vidas do Bomberman e a tela.
     A tela serve para colocar a imagem nela e o número de vidas é necessário
     para passar pra função read.
-    */
+     */
     public void print(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
             throws FileNotFoundException, IOException {
         if (numFase < 1) {
@@ -64,14 +63,13 @@ public class Fase {
     }
 
     /*
-    Função responsável por ler um arquivo que contém a fase e colocar os
-    elementos na tela. Os elementos da fase são colocados de acordo com a tabela
-    acima.
+    Lê um arquivo que contém a fase e coloca os elementos na tela. Os elementos
+    da fase são colocados de acordo com a tabela acima.
     
     Parâmetros: número de vidas do Bomberman e a tela.
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
-    */
+     */
     public void read(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
             throws FileNotFoundException, IOException {
         if (numFase < 1) {
@@ -93,7 +91,7 @@ public class Fase {
                 switch (line.charAt(x)) {
                     case 'h':
                         obj = new Bomberman(numFase, numLife, bomberUp,
-                        fireUp, speedUp);
+                                fireUp, speedUp);
                         break;
                     case 'W':
                         obj = new UndestroyableWall();

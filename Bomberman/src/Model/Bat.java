@@ -5,13 +5,11 @@ import java.util.Random;
 
 import Auxiliar.Consts;
 
-
 public class Bat extends Element implements Serializable {
-    
+
     private boolean isDead;
     private boolean isFlying;
-    
-    
+
     public Bat() {
         super("bat_down.png", 3, 2, 4, -1, -1);
         this.priority = 1;
@@ -19,19 +17,19 @@ public class Bat extends Element implements Serializable {
         this.bTransposable = true;
         this.stop();
     }
-    
+
     public void die() {
-        isDead = true;    
+        isDead = true;
         this.remove();
     }
-    
+
     @Override
     public void touchFire() {
-        if (!this.isFlying && this.isDead) {
+        if (!this.isFlying && !this.isDead) {
             this.die();
         }
     }
-    
+
     @Override
     public void touchAnother(Element e) {
         e.touchEnemy();
@@ -40,20 +38,20 @@ public class Bat extends Element implements Serializable {
     public void goBack() {
         this.position.goBack();
     }
-    
+
     /*
-    Método que faz com que o morcego fique parado por x segundos e em seguida
+    Método que faz com que o morcego fique parado por um tempo e em seguida
     voe (usando a função jump).
-    */
+     */
     private void stop() {
         this.sprite.changeSheet("bat_idle.png");
         this.isFlying = false;
         this.addClock(16, 6, this.sprite::cycle, this::jump, false);
     }
-    
+
     /*
     Método que faz com que o morcego voe para uma direção aleatória.
-    */
+     */
     private void jump() {
         Runnable movement = null;
         switch (this.randomDirection()) {
@@ -78,7 +76,7 @@ public class Bat extends Element implements Serializable {
         this.addClock(8, 6, this.sprite::cycle, this::stop, false);
         this.addClock(4, 12, movement, null, false);
     }
-    
+
     private int randomDirection() {
         Random ran = new Random();
         switch (ran.nextInt(4)) {
@@ -93,5 +91,5 @@ public class Bat extends Element implements Serializable {
         }
         return Consts.DOWN;
     }
-    
+
 }

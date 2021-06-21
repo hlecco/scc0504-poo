@@ -47,7 +47,7 @@ public class DestroyableWall extends Element implements Serializable {
         }
         
         if (hidden_element != null) {
-            hidden_element.setPosition(this.getPosicao().getCol(), this.getPosicao().getRow());
+            hidden_element.setPosition(this.getPosition().getCol(), this.getPosition().getRow());
             Draw.getScreen().addElement(hidden_element);
         }
     }

@@ -4,30 +4,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/UndestroyableWall.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Radio.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Transition.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/ElementComparator.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Clock.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Auxiliar/Consts.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomberman.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Life.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Door.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/DestroyableWall.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Screen.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Main.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Radio.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Element.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/BomberUp.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Fire.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Fase.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Auxiliar/Draw.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/FireUp.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/GameControl.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomb.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Auxiliar/Position.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Sprite.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Fase.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/ElementComparator.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomberman.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/SpeedUp.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bat.java</file>
         </group>
     </open-files>
 </project-private>
