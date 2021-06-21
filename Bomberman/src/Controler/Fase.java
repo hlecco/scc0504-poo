@@ -45,7 +45,7 @@ public class Fase {
     A tela serve para colocar a imagem nela e o número de vidas é necessário
     para passar pra função read.
     */
-    public void print(int pNumLife, Screen s)
+    public void print(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
             throws FileNotFoundException, IOException {
         if (numFase < 1) {
             numFase = 1;
@@ -60,7 +60,7 @@ public class Fase {
         obj.setPosition(0, 0);
         obj.addClock(15, 1, null, obj::remove, false);
         s.addElement(obj);
-        this.read(pNumLife, s);
+        this.read(numLife, bomberUp, fireUp, speedUp, s);
     }
 
     /*
@@ -72,7 +72,8 @@ public class Fase {
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
     */
-    public void read(int pNumLife, Screen s) throws FileNotFoundException, IOException {
+    public void read(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
+            throws FileNotFoundException, IOException {
         if (numFase < 1) {
             numFase = 1;
         } else if (numFase > Consts.FASES) {
@@ -91,7 +92,8 @@ public class Fase {
                 obj = null;
                 switch (line.charAt(x)) {
                     case 'h':
-                        obj = new Bomberman(numFase, pNumLife);
+                        obj = new Bomberman(numFase, numLife, bomberUp,
+                        fireUp, speedUp);
                         break;
                     case 'W':
                         obj = new UndestroyableWall();
@@ -126,7 +128,7 @@ public class Fase {
             y++;
         }
 
-        obj = new Life(pNumLife);
+        obj = new Life(numLife);
         obj.setPosition(x, y - 1);
         s.addElement(obj);
     }

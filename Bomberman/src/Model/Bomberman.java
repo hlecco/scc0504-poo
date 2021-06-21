@@ -20,13 +20,14 @@ public class Bomberman extends Element implements Serializable {
     private boolean isDead;
     
 
-    public Bomberman(int pNumFase, int pNumLife) {
+    public Bomberman(int pNumFase, int pNumLife, int bomberUp, int fireUp,
+            int speedUp) {
         super("bomberman_down.png", 1, 2, 8, 0, -1);
         this.numSettedBombs = 0;
-        this.numAllowedBombs = 1;
-        this.bombermanPotency = 1;
+        this.numAllowedBombs = bomberUp;
+        this.bombermanPotency = fireUp;
         this.priority = 2;
-        this.delay = 4;
+        this.delay = speedUp;
         this.numFase = pNumFase;
         this.numLife = pNumLife;
         this.allowMoviment = true;
@@ -91,7 +92,8 @@ public class Bomberman extends Element implements Serializable {
     Bomberman morre. Um reinicia a tela e o outro reinicia o jogo.
     */
     private void resetFase() {
-        Draw.getScreen().nextFase(numFase, numLife);
+        Draw.getScreen().nextFase(numFase, numLife, numAllowedBombs,
+                bombermanPotency, delay);
     }
 
     private void resetGame() {
@@ -131,7 +133,8 @@ public class Bomberman extends Element implements Serializable {
     
     public void nextFase() {
         this.setPosition(1, 1);
-        Draw.getScreen().nextFase(++numFase, numLife);
+        Draw.getScreen().nextFase(++numFase, numLife, numAllowedBombs,
+                bombermanPotency, delay);
     }
     
     @Override

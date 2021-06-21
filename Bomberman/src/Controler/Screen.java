@@ -49,7 +49,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
         try {
             Fase fase = new Fase(1);
-            fase.print(3, this);
+            fase.print(3, 1, 1, 4, this);
         } catch (FileNotFoundException f) {
             System.out.println(f.getMessage());
         } catch (IOException e) {
@@ -180,12 +180,13 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     print da Fase, que colocará a imagem de transição na tela e ao final chamará
     a função read.
      */
-    public void nextFase(int pNumFase, int pNumLife) {
+    public void nextFase(int numFase, int numLife, int bomberUp, int fireUp,
+            int speedUp) {
         this.clearStage();
 
         try {
-            Fase fase = new Fase(pNumFase);
-            fase.print(pNumLife, this);
+            Fase fase = new Fase(numFase);
+            fase.print(numLife, bomberUp, fireUp, speedUp, this);
         } catch (IOException ex) {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -196,7 +197,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
      */
     public void resetGame() {
         this.clearStage();
-        this.nextFase(1, 3);
+        this.nextFase(1, 3, 1, 1, 4);
     }
 
     public void setBombermanPosition(Position p) {
