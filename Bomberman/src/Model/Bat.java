@@ -5,34 +5,21 @@ import java.util.Random;
 
 import Auxiliar.Consts;
 
-public class Bat extends Element implements Serializable {
+public class Bat extends Enemy implements Serializable {
 
-    private boolean isDead;
     private boolean isFlying;
 
     public Bat() {
         super("bat_down.png", 3, 2, 4, -1, -1);
-        this.priority = 1;
-        this.bMortal = true;
-        this.bTransposable = true;
         this.stop();
     }
 
-    public void die() {
-        isDead = true;
-        this.remove();
-    }
-
+    
     @Override
     public void touchFire() {
-        if (!this.isFlying && !this.isDead) {
+        if (!this.isFlying) {
             this.die();
         }
-    }
-
-    @Override
-    public void touchAnother(Element e) {
-        e.touchEnemy();
     }
 
     public void goBack() {

@@ -10,13 +10,13 @@ determinado período de tempo, como por exemplo a bomba explodir e soltar fogo.
  */
 public class Clock {
 
-    private int duration;
-    private int speed;
-    private int tick;
-    private int timeLeft;
-    private Runnable onStep;
-    private Runnable onEnd;
-    private boolean restart;
+    private int duration; // ticks até o final do clock
+    private int speed; // frames por tick
+    private int tick; // frame atual no tick (começa em zero)
+    private int timeLeft; // ticks que faltam até o final
+    private Runnable onStep; // função a ser executada uma vez a cada tick
+    private Runnable onEnd; // função a ser executada a cada tick
+    private boolean restart; // começa de novo quando termina
 
     Clock(int duration, int speed, Runnable onStep, Runnable onEnd, boolean restart) {
         this.duration = max(1, duration);
@@ -29,8 +29,8 @@ public class Clock {
     }
 
     /*
-    Método que executará a função especificada durante o período de tempo
-    determinado. Usada para criar as "animações" dos personagens, por exemplo.
+    Método que será executado a cada frame. Retorna true se o clock tiver terminado
+    e false se ainda não houver terminado.
      */
     public boolean step() {
         if (this.tick > 0) {

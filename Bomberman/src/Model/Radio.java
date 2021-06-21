@@ -7,15 +7,12 @@ import Auxiliar.Draw;
 import Auxiliar.Position;
 import Controler.Screen;
 
-public class Radio extends Element {
+public class Radio extends Enemy {
 
     private int direction;
 
     public Radio() {
         super("radio_down.png", 1, 2, 6, 0, -1);
-        this.priority = 1;
-        this.bMortal = true;
-        this.bTransposable = true;
         this.check();
     }
 
@@ -113,15 +110,4 @@ public class Radio extends Element {
             this.addClock(40, 2, null, this::check, false);
         }
     }
-
-    @Override
-    public void touchFire() {
-        this.remove();
-    }
-
-    @Override
-    public void touchAnother(Element e) {
-        e.touchEnemy();
-    }
-
 }
