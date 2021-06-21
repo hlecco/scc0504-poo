@@ -5,15 +5,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/*
+Classe responsável por executar funções especificadas por outros objetos após
+determinado período de tempo, como por exemplo a bomba explodir e soltar fogo.
+*/
 public class Clock {
     
-    private int speed;
     private int duration;
+    private int speed;
+    private int tick;
+    private int timeLeft;
     private Runnable onStep;
     private Runnable onEnd;
     private boolean restart;
-    private int timeLeft;
-    private int tick;
     
     
     Clock(int duration, int speed, Runnable onStep, Runnable onEnd, boolean restart) {
@@ -26,6 +30,10 @@ public class Clock {
         this.tick = this.speed;
     }
     
+    /*
+    Método que executará a função especificada durante o período de tempo
+    determinado. Usada para criar as "animações" dos personagens, por exemplo.
+    */
     public boolean step() {
         if (this.tick > 0) {
             this.tick--;
@@ -60,7 +68,11 @@ public class Clock {
         
         return false;
     }
-        
+    
+    /*
+    Método que executa a função passada ao final do tempo decorrido. É usada
+    pelo Bomberman para (re)iniciar uma fase ou reiniciar o jogo, por exemplo.
+    */
     public void end() {
         timeLeft = 0;
         

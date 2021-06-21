@@ -3,6 +3,9 @@ package Model;
 import Auxiliar.Draw;
 
 
+/*
+Classe para o objeto SpeedUp, que faz com que a velocidade do Bomberman aumente.
+*/
 public class SpeedUp extends Element {
     
     public SpeedUp() {

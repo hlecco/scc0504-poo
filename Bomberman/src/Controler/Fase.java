@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import Auxiliar.Consts;
-import Auxiliar.Draw;
 import Model.Bat;
 import Model.Bomberman;
 import Model.DestroyableWall;
@@ -33,11 +32,21 @@ public class Fase {
 
     int numFase;
 
+    
     public Fase(int pNumFase) {
         this.numFase = pNumFase;
     }
-
-    public void print(int pNumLife, Screen s) throws FileNotFoundException, IOException {
+    
+    /*
+    Função responsável por colocar a imagem de transição de fases e a imagem
+    final na tela, e em seguida chama a função que colocará os objetos na tela.
+    
+    Parâmetros: número de vidas do Bomberman e a tela.
+    A tela serve para colocar a imagem nela e o número de vidas é necessário
+    para passar pra função read.
+    */
+    public void print(int pNumLife, Screen s)
+            throws FileNotFoundException, IOException {
         if (numFase < 1) {
             numFase = 1;
         } else if (numFase > Consts.FASES) {
@@ -51,9 +60,18 @@ public class Fase {
         obj.setPosition(0, 0);
         obj.addClock(15, 1, null, obj::remove, false);
         s.addElement(obj);
-        Draw.getScreen().setStage(this, numFase, pNumLife);
+        this.read(pNumLife, s);
     }
 
+    /*
+    Função responsável por ler um arquivo que contém a fase e colocar os
+    elementos na tela. Os elementos da fase são colocados de acordo com a tabela
+    acima.
+    
+    Parâmetros: número de vidas do Bomberman e a tela.
+    A tela serve para colocar os elementos nela e o número de vidas é necessário
+    para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
+    */
     public void read(int pNumLife, Screen s) throws FileNotFoundException, IOException {
         if (numFase < 1) {
             numFase = 1;

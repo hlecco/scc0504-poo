@@ -35,6 +35,7 @@ public class Fire extends Element {
     
     public void propagate() {
         Screen t = Draw.getScreen();
+        
         if (potency > 1) {
             Position offset = this.getPosicao().offset(0, 0);
             switch (this.direction) {
@@ -53,16 +54,16 @@ public class Fire extends Element {
             }
             
             if (t.isValidPosition(offset)) {
-                Fire fogo_filho = new Fire();
-                fogo_filho.setPotency(this.potency - 1);
-                fogo_filho.setDirection(this.direction);
-                fogo_filho.setPosition(offset.getCol(), offset.getRow());
-                this.addClock(1, 1, null, fogo_filho::propagate, false);
-                t.addElement(fogo_filho);
+                Fire newFire = new Fire();
+                newFire.setPotency(this.potency - 1);
+                newFire.setDirection(this.direction);
+                newFire.setPosition(offset.getCol(), offset.getRow());
+                this.addClock(1, 1, null, newFire::propagate, false);
+                t.addElement(newFire);
             }
             
-            ArrayList<Element> elementos = (ArrayList<Element>) t.searchElement(offset).clone(); 
-            for (Element e: elementos) {
+            ArrayList<Element> elements = (ArrayList<Element>) t.searchElement(offset).clone(); 
+            for (Element e: elements) {
                 e.touchFire();
             }
         }

@@ -11,6 +11,7 @@ public class Bat extends Element implements Serializable {
     private boolean isDead;
     private boolean isFlying;
     
+    
     public Bat() {
         super("bat_down.png", 3, 2, 4, -1, -1);
         this.priority = 1;
@@ -18,11 +19,41 @@ public class Bat extends Element implements Serializable {
         this.bTransposable = true;
         this.stop();
     }
+    
+    public void die() {
+        isDead = true;    
+        this.remove();
+    }
+    
+    @Override
+    public void touchFire() {
+        if (!this.isFlying && this.isDead) {
+            this.die();
+        }
+    }
+    
+    @Override
+    public void touchAnother(Element e) {
+        e.touchEnemy();
+    }
 
-    public void voltaAUltimaPosicao() {
+    public void goBack() {
         this.position.goBack();
     }
     
+    /*
+    Método que faz com que o morcego fique parado por x segundos e em seguida
+    voe (usando a função jump).
+    */
+    private void stop() {
+        this.sprite.changeSheet("bat_idle.png");
+        this.isFlying = false;
+        this.addClock(16, 6, this.sprite::cycle, this::jump, false);
+    }
+    
+    /*
+    Método que faz com que o morcego voe para uma direção aleatória.
+    */
     private void jump() {
         Runnable movement = null;
         switch (this.randomDirection()) {
@@ -46,28 +77,6 @@ public class Bat extends Element implements Serializable {
         this.isFlying = true;
         this.addClock(8, 6, this.sprite::cycle, this::stop, false);
         this.addClock(4, 12, movement, null, false);
-    }
-    
-    private void stop() {
-        this.sprite.changeSheet("bat_idle.png");
-        this.isFlying = false;
-        this.addClock(16, 6, this.sprite::cycle, this::jump, false);
-    }
-    
-    public void die() {
-        this.remove();
-    }
-    
-    @Override
-    public void touchFire() {
-        if (!this.isFlying) {
-            this.die();
-        }
-    }
-    
-    @Override
-    public void touchAnother(Element e) {
-        e.touchEnemy();
     }
     
     private int randomDirection() {

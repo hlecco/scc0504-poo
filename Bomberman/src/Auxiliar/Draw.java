@@ -25,7 +25,7 @@ public class Draw implements Serializable {
         return scenery;
     }
     
-    /* private, usaddo apenas aqui dentro */
+    /* private, usado apenas aqui dentro */
     private static Graphics getGraphics() {
         return scenery.getGraphicsBuffer();
     }

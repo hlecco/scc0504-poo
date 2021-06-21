@@ -22,6 +22,9 @@ public class DestroyableWall extends Element implements Serializable {
         super.selfDraw();
     }
     
+    /*
+    Método que destrói o muro ao tocar o fogo.
+    */
     @Override
     public void touchFire() {
         Draw.getScreen().removeElement(this);

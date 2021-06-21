@@ -1,8 +1,5 @@
 package Model;
 
-import Auxiliar.Draw;
-import Controler.Fase;
-
 
 public class Door extends Element {
     

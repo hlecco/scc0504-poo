@@ -27,11 +27,19 @@ public class Bomb extends Element {
         }
     }
     
+    /*
+    Método que faz com que a bomba exploda após x segundos.
+    */
     public void setUp() {
         clocks.add(new Clock(Consts.BOMB_TIMER, 8,
                 this.sprite::cycle, this::explode, false));
     }
     
+    /*
+    Método que faz a bomba explodir. Essencialmente tal método criará objetos
+    da classe Fire após verificar em qual direção é possível propagar o fogo
+    e em seguida faz o fogo propagar chamando o método propagate da classe Fire.
+    */
     public void explode() {
         if (this.blownUp) {
             return;
@@ -115,6 +123,9 @@ public class Bomb extends Element {
         
     }
     
+    /*
+    Método que explode a bomba caso o fogo de uma outra bomba toque ela.
+    */
     @Override
     public void touchFire() {
         this.explode();

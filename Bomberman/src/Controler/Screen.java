@@ -19,33 +19,34 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     private GameControl control = new GameControl();
     private Graphics g2;
     private Position bombermanPosition;
-    
 
+    
     public Screen() throws IOException {
         initComponents();
         bombermanPosition = new Position(1, 1);
         removedElements = new ArrayList<Element>();
         elements = new ArrayList<Element>(1089);
         elementsMatrix = new ArrayList<ArrayList<ArrayList<Element>>>(Consts.RES);
-        
+
         /* Cria a janela do tamanho do cenario + insets (bordas) da janela */
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
                 Consts.RES * Consts.CELL_SIDE + getInsets().top + getInsets().bottom);
-        
+
         for (int i = 0; i < Consts.RES; i++) {
-            elementsMatrix.add(new ArrayList<ArrayList<Element>>(Consts.RES));            
+            elementsMatrix.add(new ArrayList<ArrayList<Element>>(Consts.RES));
             for (int j = 0; j < Consts.RES; j++) {
                 elementsMatrix.get(i).add(new ArrayList<Element>());
             }
         }
     }
 
-/*--------------------------------------------------*/
-    
+    /*
+    Função que iniciará o jogo criando a primeira fase.
+    */
     public void start() {
         Draw.setScene(this);
         this.addKeyListener(this);
-        
+
         try {
             Fase fase = new Fase(1);
             fase.print(3, this);
@@ -55,44 +56,44 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
             System.out.println(e.getMessage());
         }
     }
-    
+
     public void addElement(Element umElemento) {
         elements.add(umElemento);
         elementsMatrix.get(umElemento.getPosicao().getCol())
-                      .get(umElemento.getPosicao().getRow())
-                      .add(umElemento);
+                .get(umElemento.getPosicao().getRow())
+                .add(umElemento);
         elements.sort(new ElementComparator());
     }
 
     public void trueRemoveElemento(Element umElemento) {
         elements.remove(umElemento);
         elementsMatrix.get(umElemento.getPosicao().getCol())
-                      .get(umElemento.getPosicao().getRow())
-                      .remove(umElemento);
+                .get(umElemento.getPosicao().getRow())
+                .remove(umElemento);
     }
-    
+
     public void removeElement(Element umElemento) {
         removedElements.add(umElemento);
     }
-    
-    public void moveElement(Element umElemento) {
-        if (elementsMatrix.get(umElemento.getPosicao().getPreviousPosition().getCol())
-                          .get(umElemento.getPosicao().getPreviousPosition().getRow())
-                          .remove(umElemento)) {
-            elementsMatrix.get(umElemento.getPosicao().getCol())
-                          .get(umElemento.getPosicao().getRow())
-                          .add(umElemento);
+
+    public void moveElement(Element pElement) {
+        if (elementsMatrix.get(pElement.getPosicao().getPreviousPosition().getCol())
+                .get(pElement.getPosicao().getPreviousPosition().getRow())
+                .remove(pElement)) {
+            elementsMatrix.get(pElement.getPosicao().getCol())
+                    .get(pElement.getPosicao().getRow())
+                    .add(pElement);
         }
     }
-    
+
     public ArrayList<Element> getElements() {
         return elements;
     }
-    
+
     public ArrayList<Element> searchElement(Position p) {
         return elementsMatrix.get(p.getCol()).get(p.getRow());
     }
-    
+
     public boolean isValidPosition(Position p) {
         for (Element e : this.searchElement(p)) {
             if (!e.isbTransposable()) {
@@ -101,16 +102,17 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         }
         return true;
     }
-    
+
+    // tá sendo usado?
     public boolean isOnFire(Position p) {
-        for (Element e: this.searchElement(p)) {
+        for (Element e : this.searchElement(p)) {
             if (e.isDefeats()) {
                 return true;
             }
         }
         return false;
     }
-    
+
     public boolean hasElement(Position p) {
         return (!this.searchElement(p).isEmpty());
     }
@@ -118,34 +120,40 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public Graphics getGraphicsBuffer() {
         return g2;
     }
-    
-    /*Este metodo eh executado a cada Consts.FRAME_INTERVAL milissegundos*/    
+
+    /*
+    Método executado a cada Consts.FRAME_INTERVAL milissegundos para
+    redeenhar a tela inteira.
+    */
     @Override
     public void paint(Graphics gOld) {
         Graphics g = this.getBufferStrategy().getDrawGraphics();
-        /*Criamos um contexto gráfico*/
-        g2 = g.create(getInsets().left, getInsets().top, getWidth() - getInsets().right, getHeight() - getInsets().top);
+        /* Cria o contexto gráfico */
+        g2 = g.create(getInsets().left, getInsets().top,
+                getWidth() - getInsets().right, getHeight() - getInsets().top);
 
-        /*Desenha cenário*/
+        /* Desenha cenário */
         for (int i = 0; i < Consts.RES; i++) {
             for (int j = 0; j < Consts.RES; j++) {
                 try {
-                    /*Linha para alterar o background*/
-                    Image newImage = Toolkit.getDefaultToolkit().getImage(new java.io.File(".").getCanonicalPath() + Consts.PATH + "background.png");
+                    Image newImage = Toolkit.getDefaultToolkit()
+                            .getImage(new java.io.File(".")
+                                    .getCanonicalPath()
+                                    + Consts.PATH + "background.png");
                     g2.drawImage(newImage, j * Consts.CELL_SIDE,
-                            i * Consts.CELL_SIDE, Consts.CELL_SIDE, Consts.CELL_SIDE, null);
-
+                            i * Consts.CELL_SIDE, Consts.CELL_SIDE,
+                            Consts.CELL_SIDE, null);
                 } catch (IOException ex) {
                     Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
-        
-        /*Aqui podem ser inseridos novos processamentos de controle*/
+
+        /* Aqui podem ser inseridos novos processamentos de controle */
         if (!this.elements.isEmpty()) {
             this.control.processAll((ArrayList<Element>) elements.clone());
             this.control.drawAll((ArrayList<Element>) elements.clone());
-            for (Element e: removedElements) {
+            for (Element e : removedElements) {
                 this.trueRemoveElemento(e);
             }
             removedElements.clear();
@@ -157,25 +165,24 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
             getBufferStrategy().show();
         }
     }
-    
+
+    /*
+    Função que limpa a tela, ie, remove todos os elementos do vetor elements.
+     */
     public void clearStage() {
         for (Element e : (ArrayList<Element>) this.elements.clone()) {
             this.removeElement(e);
         }
     }
-    
-    public void setStage(Fase fase, int pNumFase, int pNumLife) {        
-        try {
-            fase.read(pNumLife, this);
-        } catch (IOException ex) {
-            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    // tem que receber a vida porque o bomberman chama quando morre
-    public void nextStage(int pNumFase, int pNumLife) {
+
+    /*
+    Função que fará a mudança de fases. Limpa a tela atual e chama o método
+    print da Fase, que colocará a imagem de transição na tela e ao final chamará
+    a função read.
+     */
+    public void nextFase(int pNumFase, int pNumLife) {
         this.clearStage();
-        
+
         try {
             Fase fase = new Fase(pNumFase);
             fase.print(pNumLife, this);
@@ -183,16 +190,19 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /*
+    Reinicia o jogo (ocorrerá quando o número de vidas do Bomberman zerar).
+     */
     public void resetGame() {
         this.clearStage();
-        this.nextStage(1, 3);
+        this.nextFase(1, 3);
     }
-    
+
     public void setBombermanPosition(Position p) {
         this.bombermanPosition.setPosition(p.getCol(), p.getRow());
     }
-    
+
     public Position getBombermanPosition() {
         return this.bombermanPosition;
     }
@@ -201,11 +211,13 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         TimerTask redraw = new TimerTask() {
             @Override
             public void run() {
-                repaint(); /*(executa o metodo paint)*/
+                /* Executa o método paint */
+                repaint();
             }
-        };        
-        
-        /*Redesenha (executa o metodo paint) tudo a cada Consts.FRAME_INTERVAL milissegundos*/
+        };
+
+        /* Redesenha (executa o metodo paint) tudo a cada
+        Consts.FRAME_INTERVAL milissegundos */
         Timer timer = new Timer();
         timer.schedule(redraw, 0, Consts.FRAME_INTERVAL);
     }
@@ -247,15 +259,17 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
-
     public void close() {
+        this.clearStage();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {}
 
     @Override
-    public void keyReleased(KeyEvent e) {}
-    
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
 }

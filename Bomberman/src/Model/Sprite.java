@@ -41,7 +41,8 @@ public class Sprite {
         this(filename, hSize, vSize, 1, hOffset, vOffset);
     }
     
-    public Sprite(String filename, int hSize, int vSize, int nFrames, int hOffset, int vOffset) {
+    public Sprite(String filename, int hSize, int vSize, int nFrames,
+            int hOffset, int vOffset) {
         this.filename = "";
         this.thisFrame = new ImageIcon();
         this.hSize = hSize;

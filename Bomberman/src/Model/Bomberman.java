@@ -7,6 +7,7 @@ import Auxiliar.Draw;
 import Controler.GameControl;
 import Controler.Screen;
 
+
 public class Bomberman extends Element implements Serializable {
 
     private int numAllowedBombs;
@@ -17,6 +18,7 @@ public class Bomberman extends Element implements Serializable {
     private int numLife;
     private boolean allowMoviment;
     private boolean isDead;
+    
 
     public Bomberman(int pNumFase, int pNumLife) {
         super("bomberman_down.png", 1, 2, 8, 0, -1);
@@ -31,6 +33,9 @@ public class Bomberman extends Element implements Serializable {
         this.addClock(1, 3, this::update_location, null, true);
     }
 
+    /*
+    Método usado para que os inimigos saibam a posição do Bomberman na tela.
+    */
     private void update_location() {
         Draw.getScreen().setBombermanPosition(this.position);
     }
@@ -68,9 +73,69 @@ public class Bomberman extends Element implements Serializable {
         numSettedBombs--;
     }
 
+    public void die() {
+        if (!isDead) {
+            numLife--;
+            isDead = true;
+            this.sprite.changeSheet("bomberman_dead.png");
+            if (numLife > 0) {
+                this.addClock(30, 2, this.sprite::cycle, this::resetFase, false);
+            } else {
+                this.addClock(30, 2, this.sprite::cycle, this::resetGame, false);
+            }
+        }
+    }
+
+    /*
+    Os próximos dois métodos fazem o papel de Runnable e são chamados quando o
+    Bomberman morre. Um reinicia a tela e o outro reinicia o jogo.
+    */
+    private void resetFase() {
+        Draw.getScreen().nextFase(numFase, numLife);
+    }
+
+    private void resetGame() {
+        Draw.getScreen().resetGame();
+    }
+
+    @Override
+    public void touchEnemy() {
+        this.die();
+    }
+
+    public void bomberUp() {
+        if (numAllowedBombs < Consts.MAX_BOMBS) {
+            numAllowedBombs++;
+        }
+    }
+
+    public void fireUp() {
+        if (bombermanPotency < Consts.MAX_POWER) {
+            bombermanPotency++;
+        }
+    }
+
+    public void speedUp() {
+        this.delay--;
+    }
+
+    @Override
+    public void touchAnother(Element e) {
+        e.touchBomberman(this);
+    }
+
+    @Override
+    public void touchDoor() {
+        this.addClock(1, 1, null, this::nextFase, false);
+    }
+    
+    public void nextFase() {
+        this.setPosition(1, 1);
+        Draw.getScreen().nextFase(++numFase, numLife);
+    }
+    
     @Override
     public void Event(int key, GameControl c, Screen t) {
-        /*Movimento do heroi via teclado*/
         if (isDead) {
             return;
         }
@@ -123,66 +188,10 @@ public class Bomberman extends Element implements Serializable {
                     this.createBomb(c, t);
                     break;
                 }
+                // pode tirar, né?
             case Consts.DOOR:
                 break;
         }
-    }
-
-    public void die() {
-        if (!isDead) {
-            numLife--;
-            isDead = true;
-            this.sprite.changeSheet("bomberman_dead.png");
-            if (numLife > 0) {
-                this.addClock(30, 2, this.sprite::cycle, this::resetStage, false);
-            } else {
-                System.out.println("oi");
-                this.addClock(30, 2, this.sprite::cycle, this::resetGame, false);
-            }
-        }
-    }
-
-    private void resetStage() {
-        Draw.getScreen().nextStage(numFase, numLife);
-    }
-
-    private void resetGame() {
-        Draw.getScreen().resetGame();
-    }
-
-    @Override
-    public void touchEnemy() {
-        this.die();
-    }
-
-    public void bomberUp() {
-        if (numAllowedBombs < Consts.MAX_BOMBS) {
-            numAllowedBombs++;
-        }
-    }
-
-    public void fireUp() {
-        if (bombermanPotency < Consts.MAX_POWER) {
-            bombermanPotency++;
-        }
-    }
-
-    public void speedUp() {
-        this.delay--;
-    }
-
-    @Override
-    public void touchAnother(Element e) {
-        e.touchBomberman(this);
-    }
-    
-    @Override
-    public void touchDoor() {
-        this.addClock(1, 1, null, this::nextFase, false);
-    }
-    
-    public void nextFase() {
-        Draw.getScreen().nextStage(++numFase, numLife);
     }
 
 }

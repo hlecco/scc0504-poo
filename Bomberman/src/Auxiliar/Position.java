@@ -56,7 +56,6 @@ public class Position implements Serializable {
         return this.setPosition(posicao.getRow(), posicao.getCol());
     }
     
-    
     public boolean moveUp() {
         return this.setPosition(this.getCol(), this.getRow() - 1);
     }
@@ -73,11 +72,17 @@ public class Position implements Serializable {
         return this.setPosition(this.getCol() - 1, this.getRow());        
     }
     
+    /*
+    Realiza um deslocamento na posição do elemento de acordo com os parâmetros.
+    */
     public Position offset(int x, int y) {
         Position newPosition = new Position(this.getCol() + x, this.getRow() + y);
         return newPosition;
     }
     
+    /*
+    Calcula a distância entre dois elementos usando a geometria do táxi.
+    */
     public int distanceTo(Position p) {
         return abs(this.getCol() - p.getCol()) + abs(this.getRow() - p.getRow());
     }
