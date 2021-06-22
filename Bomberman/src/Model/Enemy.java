@@ -12,7 +12,7 @@ public class Enemy extends Element implements Serializable {
     public Enemy(String filename, int hSize, int vSize, int frames, int hOffset, int vOffset) {
         super(filename, hSize, vSize, frames, hOffset, vOffset);
         this.priority = 1;
-        this.isDead = true;
+        this.isDead = false;
         this.bMortal = true;
         this.bTransposable = true;
     }

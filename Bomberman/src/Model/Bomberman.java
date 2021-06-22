@@ -99,8 +99,8 @@ public class Bomberman extends Element implements Serializable {
     Bomberman morre. Um reinicia a tela e o outro reinicia o jogo.
      */
     private void resetFase() {
-        Draw.getScreen().nextFase(numFase, numLife, numAllowedBombs,
-                bombermanPotency, delay);
+        Draw.getScreen().nextFase(numFase, numLife, 1,
+                1, 4);
     }
 
     private void resetGame() {
