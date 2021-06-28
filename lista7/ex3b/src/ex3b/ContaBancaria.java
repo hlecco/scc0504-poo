@@ -6,41 +6,35 @@ import java.util.logging.Logger;
 public class ContaBancaria {
 
     private int saldo;
+    private int totalDepositado;
+    private int totalSacado;
 
     synchronized public void deposita(int valor) {
         saldo += valor;
+        totalDepositado += valor;
     }
 
     synchronized public int saca(int valor) {
-        if (saldo < valor) {
-            System.out.println("Saldo insuficiente.");
-            return 0;
-        } else {
-            saldo -= valor;
+        if (valor <= saldo) {
+            int temp = saldo - valor;
+            saldo = temp;
+            totalSacado += valor;
             return valor;
+        } else {
+            return -1;
         }
     }
-    
-    synchronized public void depositaCorreto(int valor) {
-        saldo += valor;
-        notify();
+
+    public int getSaldoFinal() {
+        return saldo;
     }
 
-    synchronized public int sacaCorreto(int valor) {
-        while (saldo < valor) {
-            try {
-                wait();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(ContaBancaria.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        saldo -= valor;
-        notify();
-        return valor;
+    public int getTotalSacado() {
+        return totalSacado;
     }
 
-    public void getSaldo() {
-        System.out.println("Saldo: " + saldo);
+    public int getTotalDepositado() {
+        return totalDepositado;
     }
 
 }

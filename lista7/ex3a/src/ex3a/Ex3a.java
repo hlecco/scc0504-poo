@@ -7,11 +7,10 @@ public class Ex3a {
 
     public static void main(String[] args) {
         /*
-        Ao final o saldo deveria ser 0, pois o usuário adiciona a mesma qtde
-        de dinheiro (12,497,500) que o banco saca, mas na maior parte
-        dos casos o saldo fica positivo e aparece a mensagem de saldo 
-        insuficiente, que significa que o banco tentou retirar mais dinheiro
-        do que havia na conta.
+        No final o saldo deveria ser igual ao total de dinheiro depositado menos
+        a quantidade de dinheiro sacada, mas, por conta da concorrência, isso
+        nem sempre ocorrerá, como pode ser conferido ao rodar o programa algumas
+        vezes. O problema é o usuário e o banco alterarem o saldo ao mesmo tempo.
          */
         ContaBancaria cb = new ContaBancaria();
         Thread ut = new Thread(new usuarioThread(cb));
@@ -27,8 +26,16 @@ public class Ex3a {
             Logger.getLogger(Ex3a.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        cb.getSaldo();
-
+        int saldoFinal = cb.getSaldoFinal();
+        int totalDepositado = cb.getTotalDepositado();
+        int totalSacado = cb.getTotalSacado();
+        
+        if (totalDepositado - totalSacado == saldoFinal) {
+            System.out.println("Funcionou.");
+        } else {
+            System.out.println("Não funcionou.");
+        }
+        
     }
 
 }
