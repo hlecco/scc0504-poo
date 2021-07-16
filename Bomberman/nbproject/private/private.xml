@@ -5,14 +5,9 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Screen.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Radio.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Element.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Fire.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Auxiliar/Draw.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Fase.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/ElementComparator.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Clock.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomberman.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/SpeedUp.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Sprite.java</file>
         </group>
     </open-files>
 </project-private>
