@@ -10,12 +10,13 @@ import javax.swing.ImageIcon;
 
 import Auxiliar.Consts;
 import Auxiliar.Draw;
+import java.io.Serializable;
 
 /*
 Classe para abstrair o desenho dos elementos na tela. Responsável por definir o
 tamanho e as "animações" dos elementos.
  */
-public class Sprite {
+public class Sprite implements Serializable {
 
     private String filename;
     private Image spriteSheet;

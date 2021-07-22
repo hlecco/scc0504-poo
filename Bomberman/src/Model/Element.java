@@ -12,12 +12,12 @@ import Controler.Screen;
 public abstract class Element implements Serializable {
 
     protected Screen screen;
-    protected Sprite sprite;
+    transient protected Sprite sprite;
     protected Position position;
     protected boolean bTransposable; // Pode passar por cima?
     protected boolean bMortal; // Se encostar, morre?
     protected boolean bDestroyable; // Destrutível com fogo
-    ArrayList<Clock> clocks;
+    transient ArrayList<Clock> clocks;
     int priority; // Objetos com maior prioridade são desenhados antes. Default = 0.
     protected boolean defeats; // Mata inimigos?
 

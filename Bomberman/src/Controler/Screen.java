@@ -9,15 +9,18 @@ import java.util.logging.*;
 import Auxiliar.*;
 import Model.Element;
 import Model.ElementComparator;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Screen extends javax.swing.JFrame implements KeyListener {
 
-    private ArrayList<Element> elements;
-    private ArrayList<ArrayList<ArrayList<Element>>> elementsMatrix;
-    private ArrayList<Element> removedElements;
-    private GameControl control = new GameControl();
+    private final ArrayList<Element> elements;
+    private final ArrayList<ArrayList<ArrayList<Element>>> elementsMatrix;
+    private final ArrayList<Element> removedElements;
+    private final GameControl control = new GameControl();
     private Graphics g2;
-    private Position bombermanPosition;
+    private final Position bombermanPosition;
+    private final int timerSave;
 
     public Screen() throws IOException {
         initComponents();
@@ -25,6 +28,8 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         removedElements = new ArrayList<Element>();
         elements = new ArrayList<Element>(1089);
         elementsMatrix = new ArrayList<ArrayList<ArrayList<Element>>>(Consts.RES);
+        timerSave = 30000; // ver como vai fazer pra salvar, esse
+        // 30000 significa que vai salvar a cada 30 segundos.
 
         /* Cria a janela do tamanho do cenario + insets (bordas) da janela */
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
@@ -44,15 +49,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public void start() {
         Draw.setScene(this);
         this.addKeyListener(this);
-
-        try {
-            Fase fase = new Fase(1);
-            fase.print(3, 1, 1, 4, this);
-        } catch (FileNotFoundException f) {
-            System.out.println(f.getMessage());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        this.nextStage(1, 3, 1, 1, 4);
     }
 
     public void addElement(Element umElemento) {
@@ -65,7 +62,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     /*
     Remove os elementos de fato. Chamado no paint.
-    */
+     */
     public void trueRemoveElemento(Element umElemento) {
         elements.remove(umElemento);
         elementsMatrix.get(umElemento.getPosition().getCol())
@@ -175,16 +172,17 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     /*
     Função que fará a mudança de fases. Limpa a tela atual e chama o método
-    print da Fase, que colocará a imagem de transição na tela e ao final chamará
+    print da Stage, que colocará a imagem de transição na tela e ao final chamará
     a função read.
      */
-    public void nextFase(int numFase, int numLife, int bomberUp, int fireUp,
+    public void nextStage(int numFase, int numLife, int bomberUp, int fireUp,
             int speedUp) {
         this.clearStage();
 
         try {
-            Fase fase = new Fase(numFase);
-            fase.print(numLife, bomberUp, fireUp, speedUp, this);
+            Stage stage = new Stage(numFase);
+            Autosave as = new Autosave(this, timerSave);
+            stage.print(numLife, bomberUp, fireUp, speedUp, this, as);
         } catch (IOException ex) {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -194,8 +192,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     Reinicia o jogo (ocorrerá quando o número de vidas do Bomberman zerar).
      */
     public void resetGame() {
-        this.clearStage();
-        this.nextFase(1, 3, 1, 1, 4);
+        this.nextStage(1, 3, 1, 1, 4);
     }
 
     public void setBombermanPosition(Position p) {
@@ -261,6 +258,30 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public void close() {
         this.clearStage();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
+    }
+
+    public void save() {
+        System.out.println("oi");
+        File zipfile = new File("./load/zipfile.zip");
+        try {
+            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipfile));
+            zos.putNextEntry(new ZipEntry("classes.txt"));
+            for (Element e : this.getElements()) {
+                String temp = e.getClass().toString() + "\n";
+                zos.write(temp.getBytes(), 0, temp.length());
+            }
+            zos.closeEntry();
+            zos.putNextEntry(new ZipEntry("objects.dat"));
+            ObjectOutputStream oos = new ObjectOutputStream(zos);
+            for (Element e : this.getElements()) {
+                oos.writeObject(e);
+            }
+            zos.closeEntry();
+            oos.close();
+            zos.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

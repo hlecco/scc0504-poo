@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 /*
 Classe para as imagens que contêm o número restante de vidas do Bomberman.
-*/
+ */
 public class Life extends Element implements Serializable {
 
     public Life(int pNumLife) {

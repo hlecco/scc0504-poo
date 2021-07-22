@@ -16,7 +16,7 @@ std::string FormattingOption::show() {
     std::string str_show;
     str_show.append(format_preffix);
     if (!str_show.empty()) {
-	str_show.append(" ");
+		str_show.append(" ");
     }
     str_show.append(format);
 

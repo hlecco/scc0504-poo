@@ -28,12 +28,12 @@ import Model.UndestroyableWall;
   - B: Bat
   - R: Radio
  */
-public class Fase {
+public class Stage {
 
-    int numFase;
+    private int numStage;
 
-    public Fase(int pNumFase) {
-        this.numFase = pNumFase;
+    public Stage(int pNumStage) {
+        this.numStage = pNumStage;
     }
 
     /*
@@ -44,22 +44,21 @@ public class Fase {
     A tela serve para colocar a imagem nela e o número de vidas é necessário
     para passar pra função read.
      */
-    public void print(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
-            throws FileNotFoundException, IOException {
-        if (numFase < 1) {
-            numFase = 1;
-        } else if (numFase > Consts.FASES) {
+    public void print(int numLife, int bomberUp, int fireUp, int speedUp,
+            Screen s, Autosave as) throws FileNotFoundException, IOException {
+        if (numStage < 1) {
+            numStage = 1;
+        } else if (numStage > Consts.FASES) {
             Transition obj = new Transition("theend.png");
             obj.setPosition(0, 0);
             obj.addClock(60, 1, null, obj::end, false);
             s.addElement(obj);
         }
 
-        Element obj = new Transition("fase" + Integer.toString(numFase) + ".png");
+        Element obj = new Transition("stage" + Integer.toString(numStage) + ".png");
         obj.setPosition(0, 0);
         obj.addClock(15, 1, null, obj::remove, false);
-        s.addElement(obj);
-        this.read(numLife, bomberUp, fireUp, speedUp, s);
+        this.read(numLife, bomberUp, fireUp, speedUp, s, as);
     }
 
     /*
@@ -70,15 +69,16 @@ public class Fase {
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
      */
-    public void read(int numLife, int bomberUp, int fireUp, int speedUp, Screen s)
+    public void read(int numLife, int bomberUp, int fireUp, int speedUp,
+            Screen s, Autosave as)
             throws FileNotFoundException, IOException {
-        if (numFase < 1) {
-            numFase = 1;
-        } else if (numFase > Consts.FASES) {
-            numFase = Consts.FASES;
+        if (numStage < 1) {
+            numStage = 1;
+        } else if (numStage > Consts.FASES) {
+            numStage = Consts.FASES;
         }
 
-        File file = new File("fases/fase" + Integer.toString(numFase) + ".txt");
+        File file = new File("stages/stage" + Integer.toString(numStage) + ".txt");
         BufferedReader buffer = new BufferedReader(new FileReader(file));
 
         int x = 0, y = 0;
@@ -90,7 +90,7 @@ public class Fase {
                 obj = null;
                 switch (line.charAt(x)) {
                     case 'h':
-                        obj = new Bomberman(numFase, numLife, bomberUp,
+                        obj = new Bomberman(numStage, numLife, bomberUp,
                                 fireUp, speedUp);
                         break;
                     case 'W':
@@ -129,6 +129,7 @@ public class Fase {
         obj = new Life(numLife);
         obj.setPosition(x, y - 1);
         s.addElement(obj);
+        as.start();
     }
 
 }

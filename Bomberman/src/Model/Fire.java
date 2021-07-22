@@ -6,8 +6,9 @@ import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
 import Controler.Screen;
+import java.io.Serializable;
 
-public class Fire extends Element {
+public class Fire extends Element implements Serializable {
 
     private int potency;
     private int direction;
