@@ -13,23 +13,33 @@ public class Bomberman extends Element implements Serializable {
     private int numSettedBombs;
     private int bombermanPotency;
     private int delay;
-    private int numFase;
     private int numLife;
     private boolean allowMoviment;
     private boolean isDead;
+    private static Bomberman instance;
 
-    public Bomberman(int pNumFase, int pNumLife, int bomberUp, int fireUp,
-            int speedUp) {
+    private Bomberman(int pNumLife) {
         super("bomberman_down.png", 1, 2, 8, 0, -1);
         this.numSettedBombs = 0;
-        this.numAllowedBombs = bomberUp;
-        this.bombermanPotency = fireUp;
+        this.numAllowedBombs = 1;
+        this.bombermanPotency = 1;
         this.priority = 2;
-        this.delay = speedUp;
-        this.numFase = pNumFase;
+        this.delay = 4;
         this.numLife = pNumLife;
         this.allowMoviment = true;
         this.addClock(1, 3, this::update_location, null, true);
+    }
+    
+    private Bomberman() {
+        this(3);
+    }
+    
+    
+    public static Bomberman getInstance() {
+        if (instance == null) {
+            instance = new Bomberman();
+        }
+        return instance;
     }
 
     /*
@@ -88,6 +98,16 @@ public class Bomberman extends Element implements Serializable {
             }
         }
     }
+    
+    private void restore() {
+        this.cleanClocks();
+        if (numLife > 0) {
+            Bomberman.instance = new Bomberman(numLife);
+        }
+        else {
+            Bomberman.instance = new Bomberman();
+        }
+    }
 
     @Override
     public void touchEnemy() {
@@ -99,11 +119,12 @@ public class Bomberman extends Element implements Serializable {
     Bomberman morre. Um reinicia a tela e o outro reinicia o jogo.
      */
     private void resetFase() {
-        Draw.getScreen().nextStage(numFase, numLife, 1,
-                1, 4);
+        this.restore();
+        Draw.getScreen().resetStage();
     }
 
     private void resetGame() {
+        this.restore();
         Draw.getScreen().resetGame();
     }
 
@@ -135,8 +156,7 @@ public class Bomberman extends Element implements Serializable {
 
     public void nextFase() {
         this.setPosition(1, 1);
-        Draw.getScreen().nextStage(++numFase, numLife, numAllowedBombs,
-                bombermanPotency, delay);
+        Draw.getScreen().nextStage();
     }
 
     @Override

@@ -15,7 +15,7 @@ public class Main {
             public void run() {
                 try {
                     Screen screen = new Screen();
-                    screen.start();
+                    screen.startGame();
                     screen.setVisible(true);
                     screen.createBufferStrategy(2);
                     screen.go();

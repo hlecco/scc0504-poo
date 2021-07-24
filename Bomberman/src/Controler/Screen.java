@@ -21,6 +21,8 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     private Graphics g2;
     private final Position bombermanPosition;
     private final int timerSave;
+    private Stage stage;
+    private String background;
 
     public Screen() throws IOException {
         initComponents();
@@ -41,15 +43,35 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
                 elementsMatrix.get(i).add(new ArrayList<Element>());
             }
         }
+        this.stage = new Stage();
+    }
+    
+    public void setBackgroundImage(String filename) {
+        this.background = filename;
     }
 
     /*
     Função que iniciará o jogo criando a primeira fase.
      */
-    public void start() {
+    public void startGame() {
         Draw.setScene(this);
         this.addKeyListener(this);
-        this.nextStage(1, 3, 1, 1, 4);
+        this.setBackgroundImage("blank.png");
+        stage.start(this);
+    }
+    
+    public void startFirstStage() {
+        this.setBackgroundImage("background.png");
+        this.clearStage();
+
+        try {
+            stage.setStage(1);
+            stage.print(this);
+        } catch (FileNotFoundException f) {
+            System.out.println(f.getMessage());
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void addElement(Element umElemento) {
@@ -134,7 +156,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
                     Image newImage = Toolkit.getDefaultToolkit()
                             .getImage(new java.io.File(".")
                                     .getCanonicalPath()
-                                    + Consts.PATH + "background.png");
+                                    + Consts.PATH + this.background);
                     g2.drawImage(newImage, j * Consts.CELL_SIDE,
                             i * Consts.CELL_SIDE, Consts.CELL_SIDE,
                             Consts.CELL_SIDE, null);
@@ -175,16 +197,23 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     print da Stage, que colocará a imagem de transição na tela e ao final chamará
     a função read.
      */
-    public void nextStage(int numFase, int numLife, int bomberUp, int fireUp,
-            int speedUp) {
+    public void nextStage() {
         this.clearStage();
 
         try {
-            Stage stage = new Stage(numFase);
-            Autosave as = new Autosave(this, timerSave);
-            stage.print(numLife, bomberUp, fireUp, speedUp, this, as);
+            stage.next();
+            stage.print(this);
         } catch (IOException ex) {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void resetStage() {
+        this.clearStage();
+        try {
+            stage.print(this);
+        } catch (IOException ex) {
+            stage.start(this);
         }
     }
 
@@ -192,7 +221,8 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     Reinicia o jogo (ocorrerá quando o número de vidas do Bomberman zerar).
      */
     public void resetGame() {
-        this.nextStage(1, 3, 1, 1, 4);
+        this.clearStage();
+        stage.start(this);
     }
 
     public void setBombermanPosition(Position p) {

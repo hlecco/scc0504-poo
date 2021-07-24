@@ -207,6 +207,12 @@ public abstract class Element implements Serializable {
             Runnable onEnd, boolean restart) {
         clocks.add(new Clock(duration, speed, onStep, onEnd, restart));
     }
+    
+    public void cleanClocks() {
+        for (Clock c : (ArrayList<Clock>) this.clocks.clone()) {
+                clocks.remove(c);
+        }
+    }
 
     public void selfDraw() {
         this.sprite.draw(position.getCol(), position.getRow());

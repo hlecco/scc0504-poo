@@ -9,10 +9,13 @@ import java.io.IOException;
 import Auxiliar.Consts;
 import Model.Bat;
 import Model.Bomberman;
+import Model.Continue;
 import Model.DestroyableWall;
 import Model.Element;
 import Model.Life;
+import Model.NewGame;
 import Model.Radio;
+import Model.SelectorController;
 import Model.Transition;
 import Model.UndestroyableWall;
 
@@ -32,8 +35,18 @@ public class Stage {
 
     private int numStage;
 
-    public Stage(int pNumStage) {
-        this.numStage = pNumStage;
+    public Stage() {
+        this.numStage = 0;
+    }
+    
+    public void setStage(int pNumFase) {
+        this.numStage = pNumFase;
+    }
+    
+    public void next() {
+        if (this.numStage + 1 < Consts.FASES) {
+            numStage++;
+        }
     }
 
     /*
@@ -44,8 +57,7 @@ public class Stage {
     A tela serve para colocar a imagem nela e o número de vidas é necessário
     para passar pra função read.
      */
-    public void print(int numLife, int bomberUp, int fireUp, int speedUp,
-            Screen s, Autosave as) throws FileNotFoundException, IOException {
+    public void print(Screen s) throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
         } else if (numStage > Consts.FASES) {
@@ -58,7 +70,7 @@ public class Stage {
         Element obj = new Transition("stage" + Integer.toString(numStage) + ".png");
         obj.setPosition(0, 0);
         obj.addClock(15, 1, null, obj::remove, false);
-        this.read(numLife, bomberUp, fireUp, speedUp, s, as);
+        this.read(s);
     }
 
     /*
@@ -69,8 +81,7 @@ public class Stage {
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
      */
-    public void read(int numLife, int bomberUp, int fireUp, int speedUp,
-            Screen s, Autosave as)
+    public void read(Screen s)
             throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
@@ -90,8 +101,7 @@ public class Stage {
                 obj = null;
                 switch (line.charAt(x)) {
                     case 'h':
-                        obj = new Bomberman(numStage, numLife, bomberUp,
-                                fireUp, speedUp);
+                        obj = Bomberman.getInstance();
                         break;
                     case 'W':
                         obj = new UndestroyableWall();
@@ -125,11 +135,12 @@ public class Stage {
             }
             y++;
         }
-
-        obj = new Life(numLife);
-        obj.setPosition(x, y - 1);
-        s.addElement(obj);
-        as.start();
     }
-
+    
+    static void start(Screen s) {
+        SelectorController controller = new SelectorController();
+        s.addElement(controller);
+        controller.addSelector(new NewGame(true));
+        controller.addSelector(new Continue(false));
+    }
 }

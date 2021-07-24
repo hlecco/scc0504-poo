@@ -13,7 +13,7 @@ public class Transition extends Element implements Serializable {
 
     public Transition(String filename) {
         super(filename, Consts.RES, Consts.RES, 1, 0, 0);
-        this.priority = 20;
+        this.priority = 1000;
     }
 
     /*
