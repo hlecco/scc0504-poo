@@ -68,8 +68,8 @@ public class Fire extends Element {
                 newFire.setPotency(this.potency - 1);
                 newFire.setDirection(this.direction);
                 newFire.setPosition(offset.getCol(), offset.getRow());
-                this.addClock(1, 1, null, p::run, false);
                 t.addElement(newFire);
+                this.addClock(1, 1, p::run, null, false);
             }
 
             ArrayList<Element> elements = (ArrayList<Element>) t.searchElement(offset).clone();

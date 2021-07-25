@@ -9,6 +9,7 @@ public class Propagate implements SerializableRunnable {
     
     public Propagate(Fire f) {
         this.fire = f;
+        System.out.println(this.fire.getPotency());
     }
 
     @Override

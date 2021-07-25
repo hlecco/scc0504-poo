@@ -58,11 +58,9 @@ public class Bomb extends Element {
         boolean valid;
         Position offset = new Position(position.getCol(), position.getRow());
         Fire fire = new Fire();
-
         fire.setPosition(offset.getCol(), offset.getRow());
         Screen t = Draw.getScreen();
         t.addElement(fire);
-
         offset.moveUp();
         valid = t.isValidPosition(offset);
         elements = (ArrayList<Element>) t.searchElement(offset).clone();

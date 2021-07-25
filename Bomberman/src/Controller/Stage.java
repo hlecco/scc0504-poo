@@ -48,6 +48,10 @@ public class Stage {
         this.numStage = pNumFase;
     }
 
+    public int getStage() {
+        return this.numStage;
+    }
+    
     public void next() {
         if (this.numStage < Consts.FASES + 2) {
             numStage++;
@@ -77,10 +81,7 @@ public class Stage {
         obj.setPosition(0, 0);
         Remove r = new Remove(obj);
         obj.addClock(15, 1, null, r::run, false);
-        //SaveAndLoad.getInstance().terminate();
         s.addElement(obj);
-        //Thread.sleep(3000);
-        //Draw.getScreen().removeElement(obj);
         this.read(s);
     }
 

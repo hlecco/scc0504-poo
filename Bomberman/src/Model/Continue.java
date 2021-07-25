@@ -9,7 +9,6 @@ public class Continue extends Selector {
     }
 
     public void run() {
-        SaveAndLoad.getInstance().setActive(true);
         SaveAndLoad.getInstance().load();
         return;
     }

@@ -4,12 +4,17 @@ import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Model.Bat;
 import Model.Bomb;
+import Model.BomberUp;
 import Model.Bomberman;
 import Model.DestroyableWall;
+import Model.Door;
 import Model.Element;
 import Model.Fire;
+import Model.FireUp;
 import Model.Life;
+import Model.PowerUp;
 import Model.Radio;
+import Model.SpeedUp;
 import Model.Transition;
 import Model.UndestroyableWall;
 import java.io.BufferedReader;
@@ -38,21 +43,25 @@ public class SaveAndLoad extends Thread {
     private SaveAndLoad() {
         this.timer = Consts.TIMER;
         this.exit = false;
-        this.active = true;
+        this.active = false;
     }
 
     @Override
     public void run() {
         while (!exit) {
-            if (this.active) this.save();
+            if (this.active) {
+                System.out.println("roi");
+                this.save();
+            }
             try {
                 Thread.sleep(this.timer);
             } catch (InterruptedException ex) {
                 Logger.getLogger(SaveAndLoad.class.getName()).log(Level.SEVERE, null, ex);
+
             }
         }
     }
-    
+
     public void setActive(Boolean state) {
         this.active = state;
     }
@@ -72,14 +81,16 @@ public class SaveAndLoad extends Thread {
         this.timer = pTimer;
     }
 
-    public void save() {
+    public synchronized void save() {
         File zipfile = new File("load/saved.zip");
         ArrayList<Element> copyElements = (ArrayList<Element>) Draw.getScreen().getElements().clone();
         try {
             ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipfile));
             zos.putNextEntry(new ZipEntry("classes.txt"));
+            String temp = Draw.getScreen().getNumStage() + "\n";
+            zos.write(temp.getBytes(), 0, temp.length());
             for (Element e : copyElements) {
-                String temp = e.getClass().toString() + "\n";
+                temp = e.getClass().toString() + "\n";
                 zos.write(temp.getBytes(), 0, temp.length());
                 temp = e.getStrSprite() + "\n";
                 zos.write(temp.getBytes(), 0, temp.length());
@@ -98,7 +109,7 @@ public class SaveAndLoad extends Thread {
         }
     }
 
-    public void load() {
+    public synchronized void load() {
         Screen screen = Draw.getScreen();
         screen.clearStage();
         screen.setBackgroundImage("background.png");
@@ -116,6 +127,9 @@ public class SaveAndLoad extends Thread {
             Fire fire;
             Bat bat;
             String sprite;
+            if ((line = buffertxt.readLine()) != null) {
+                Draw.getScreen().getStage().setStage(Integer.parseInt(line));
+            }
             while ((line = buffertxt.readLine()) != null) {
                 try {
                     obj = (Element) deserializer.readObject();
@@ -126,8 +140,18 @@ public class SaveAndLoad extends Thread {
                     obj = (UndestroyableWall) obj;
                 } else if (line.contains("DestroyableWall")) {
                     obj = (DestroyableWall) obj;
+                } else if (line.contains("SpeedUp")) {
+                    obj = (SpeedUp) obj;
+                } else if (line.contains("PowerUp")) {
+                    obj = (PowerUp) obj;
+                } else if (line.contains("FireUp")) {
+                    obj = (FireUp) obj;
+                } else if (line.contains("BomberUp")) {
+                    obj = (BomberUp) obj;
                 } else if (line.contains("Radio")) {
                     obj = (Radio) obj;
+                } else if (line.contains("Door")) {
+                    obj = (Door) obj;
                 } else if (line.contains("Bomberman")) {
                     Bomberman temp = (Bomberman) obj;
                     Bomberman.load(temp);
@@ -152,7 +176,14 @@ public class SaveAndLoad extends Thread {
                     buffertxt.readLine();
                     obj = null;
                 } else if (line.contains("Fire")) {
-                    obj = (Fire) obj;
+                    Fire aux = (Fire) obj;
+                    fire = new Fire();
+                    screen.addElement(fire);
+                    fire.setPotency(aux.getPotency());
+                    fire.setPosition(aux.getPosition().getCol(),
+                            aux.getPosition().getRow());
+                    buffertxt.readLine();
+                    obj = null;
                 } else {
                     buffertxt.readLine();
                     continue;
@@ -169,7 +200,7 @@ public class SaveAndLoad extends Thread {
                 }
             }
             exit = false;
-            this.start();
+            this.active = true;
         } catch (IOException ex) {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
         }

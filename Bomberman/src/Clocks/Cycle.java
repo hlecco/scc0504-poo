@@ -13,10 +13,12 @@ public class Cycle implements SerializableRunnable {
 
     @Override
     public void run() {
-        if (s.getFrame() == s.getNFrames() - 1) {
-            s.setFrame(0);
-        } else {
-            s.setFrame(s.getFrame() + 1);
+        if (s != null) {
+            if (s.getFrame() == s.getNFrames() - 1) {
+                s.setFrame(0);
+            } else {
+                s.setFrame(s.getFrame() + 1);
+            }
         }
     }
 

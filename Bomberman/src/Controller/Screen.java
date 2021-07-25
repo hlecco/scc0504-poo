@@ -24,6 +24,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     public Screen() throws IOException {
         initComponents();
+        SaveAndLoad.getInstance().start();
         bombermanPosition = new Position(1, 1);
         removedElements = new ArrayList<Element>();
         elements = new ArrayList<Element>(1089);
@@ -60,7 +61,8 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public synchronized void startFirstStage() {
         this.setBackgroundImage("background.png");
         this.clearStage();
-
+        SaveAndLoad.getInstance().setActive(false);
+        
         try {
             stage.setStage(1);
             stage.print(this);
@@ -70,37 +72,53 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
             System.out.println(e.getMessage());
         }
     }
+    
+    public Stage getStage() {
+        return this.stage;
+    }
+    
+    public String getNumStage() {
+        return String.valueOf(this.stage.getStage());
+    }
+    
+    public void setNumStage(int numStage) {
+        this.stage.setStage(numStage);
+    }
 
-    public void addElement(Element umElemento) {
-        elements.add(umElemento);
-        elementsMatrix.get(umElemento.getPosition().getCol())
-                .get(umElemento.getPosition().getRow())
-                .add(umElemento);
+    public synchronized void addElement(Element anElement) {
+        SaveAndLoad.getInstance().setActive(false);
+        elements.add(anElement);
+        elementsMatrix.get(anElement.getPosition().getCol())
+                .get(anElement.getPosition().getRow())
+                .add(anElement);
         elements.sort(new ElementComparator());
     }
 
     /*
     Remove os elementos de fato. Chamado no paint.
      */
-    public void trueRemoveElemento(Element umElemento) {
-        elements.remove(umElemento);
-        elementsMatrix.get(umElemento.getPosition().getCol())
-                .get(umElemento.getPosition().getRow())
-                .remove(umElemento);
+    public synchronized void trueRemoveElemento(Element anElement) {
+        SaveAndLoad.getInstance().setActive(false);
+        elements.remove(anElement);
+        elementsMatrix.get(anElement.getPosition().getCol())
+                .get(anElement.getPosition().getRow())
+                .remove(anElement);
     }
 
     /*
     Método que adiciona um elemento para remoção. A remoção em si será feita
     no paint.
      */
-    public void removeElement(Element umElemento) {
-        removedElements.add(umElemento);
+    public synchronized void removeElement(Element anElement) {
+        SaveAndLoad.getInstance().setActive(false);
+        removedElements.add(anElement);
     }
 
     /*
     Método que remove o elemento da posição anterior quando ele muda de posição.
      */
     public void moveElement(Element pElement) {
+        SaveAndLoad.getInstance().setActive(false);
         if (elementsMatrix.get(pElement.getPosition().getPreviousPosition().getCol())
                 .get(pElement.getPosition().getPreviousPosition().getRow())
                 .remove(pElement)) {
@@ -140,7 +158,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     redeenhar a tela inteira.
      */
     @Override
-    public void paint(Graphics gOld) {
+    public synchronized void paint(Graphics gOld) {
         Graphics g = this.getBufferStrategy().getDrawGraphics();
         /* Cria o contexto gráfico */
         g2 = g.create(getInsets().left, getInsets().top,
@@ -287,6 +305,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     public void close() {
         this.clearStage();
+        SaveAndLoad.getInstance().terminate();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
 
