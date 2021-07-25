@@ -84,6 +84,15 @@ public class Sprite implements Serializable {
         return this.frame;
     }
 
+    public String getStrSprite() {
+        return this.filename + " "
+                + Integer.toString(this.hSize) + " "
+                + Integer.toString(this.vSize) + " "
+                + Integer.toString(this.nFrames) + " "
+                + Integer.toString(this.hOffset) + " "
+                + Integer.toString(this.vOffset);
+    }
+
     /*
     Troca a imagem do elemento.
      */
@@ -110,6 +119,10 @@ public class Sprite implements Serializable {
         } else {
             this.setFrame(this.frame + 1);
         }
+    }
+
+    public int getNFrames() {
+        return this.nFrames;
     }
 
     public void draw(int x, int y) {

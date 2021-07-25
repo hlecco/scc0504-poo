@@ -1,4 +1,4 @@
-package Controler;
+package Controller;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,6 +7,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import Auxiliar.Consts;
+import Auxiliar.Draw;
+import Clocks.Close;
+import Clocks.Remove;
 import Model.Bat;
 import Model.Bomberman;
 import Model.Continue;
@@ -18,6 +21,8 @@ import Model.Radio;
 import Model.SelectorController;
 import Model.Transition;
 import Model.UndestroyableWall;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /*
@@ -38,13 +43,13 @@ public class Stage {
     public Stage() {
         this.numStage = 0;
     }
-    
+
     public void setStage(int pNumFase) {
         this.numStage = pNumFase;
     }
-    
+
     public void next() {
-        if (this.numStage + 1 < Consts.FASES) {
+        if (this.numStage < Consts.FASES + 1) {
             numStage++;
         }
     }
@@ -60,16 +65,22 @@ public class Stage {
     public void print(Screen s) throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
-        } else if (numStage > Consts.FASES) {
+        } else if (numStage >= Consts.FASES) {
             Transition obj = new Transition("theend.png");
+            Close c = new Close();
             obj.setPosition(0, 0);
-            obj.addClock(60, 1, null, obj::end, false);
+            obj.addClock(60, 1, null, c::run, false);
             s.addElement(obj);
         }
 
-        Element obj = new Transition("stage" + Integer.toString(numStage) + ".png");
+        Transition obj = new Transition("stage" + Integer.toString(numStage) + ".png");
         obj.setPosition(0, 0);
-        obj.addClock(15, 1, null, obj::remove, false);
+        Remove r = new Remove(obj);
+        obj.addClock(15, 1, null, r::run, false);
+        //SaveAndLoad.getInstance().terminate();
+        s.addElement(obj);
+        //Thread.sleep(3000);
+        //Draw.getScreen().removeElement(obj);
         this.read(s);
     }
 
@@ -81,8 +92,7 @@ public class Stage {
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
      */
-    public void read(Screen s)
-            throws FileNotFoundException, IOException {
+    public void read(Screen s) throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
         } else if (numStage > Consts.FASES) {
@@ -135,8 +145,12 @@ public class Stage {
             }
             y++;
         }
+        obj = new Life(Bomberman.getInstance().getNumLife());
+        obj.setPosition(x, y - 1);
+        s.addElement(obj);
+        SaveAndLoad.getInstance().start();
     }
-    
+
     static void start(Screen s) {
         SelectorController controller = new SelectorController();
         s.addElement(controller);

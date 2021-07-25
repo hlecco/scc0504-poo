@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.Random;
 
 import Auxiliar.Consts;
+import Clocks.Cycle;
+import Clocks.Jump;
+import Clocks.Stop;
 
 public class Bat extends Enemy implements Serializable {
 
@@ -30,41 +33,45 @@ public class Bat extends Enemy implements Serializable {
     Método que faz com que o morcego fique parado por um tempo e em seguida
     voe (usando a função jump).
      */
-    private void stop() {
+    public void stop() {
         this.sprite.changeSheet("bat_idle.png");
         this.isFlying = false;
-        this.addClock(16, 6, this.sprite::cycle, this::jump, false);
+        Cycle c = new Cycle(this.sprite);
+        Jump j = new Jump(this);
+        this.addClock(16, 6, c::run, j::run, false);
     }
 
     /*
     Método que faz com que o morcego voe para uma direção aleatória.
      */
-    private void jump() {
-        Runnable movement = null;
+    public void jump() {
+        SerializableRunnable movement = null;
         switch (this.randomDirection()) {
             case Consts.DOWN:
                 movement = this::moveDown;
-                this.sprite.changeSheet("bat_down.png");
+                this.getSprite().changeSheet("bat_down.png");
                 break;
             case Consts.UP:
                 movement = this::moveUp;
-                this.sprite.changeSheet("bat_up.png");
+                this.getSprite().changeSheet("bat_up.png");
                 break;
             case Consts.LEFT:
                 movement = this::moveLeft;
-                this.sprite.changeSheet("bat_left.png");
+                this.getSprite().changeSheet("bat_left.png");
                 break;
             case Consts.RIGHT:
                 movement = this::moveRight;
-                this.sprite.changeSheet("bat_right.png");
+                this.getSprite().changeSheet("bat_right.png");
                 break;
         }
         this.isFlying = true;
-        this.addClock(8, 6, this.sprite::cycle, this::stop, false);
+        Cycle c = new Cycle(this.sprite);
+        Stop s = new Stop(this);
+        this.addClock(8, 6, c::run, s::run, false);
         this.addClock(4, 12, movement, null, false);
     }
 
-    private int randomDirection() {
+    public int randomDirection() {
         Random ran = new Random();
         switch (ran.nextInt(4)) {
             case 0:

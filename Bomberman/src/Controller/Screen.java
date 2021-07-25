@@ -1,4 +1,4 @@
-package Controler;
+package Controller;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,10 +7,9 @@ import java.util.*;
 import java.util.logging.*;
 
 import Auxiliar.*;
+import Model.Bomberman;
 import Model.Element;
 import Model.ElementComparator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 public class Screen extends javax.swing.JFrame implements KeyListener {
 
@@ -20,8 +19,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     private final GameControl control = new GameControl();
     private Graphics g2;
     private final Position bombermanPosition;
-    private final int timerSave;
-    private Stage stage;
+    private final Stage stage;
     private String background;
 
     public Screen() throws IOException {
@@ -30,8 +28,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         removedElements = new ArrayList<Element>();
         elements = new ArrayList<Element>(1089);
         elementsMatrix = new ArrayList<ArrayList<ArrayList<Element>>>(Consts.RES);
-        timerSave = 30000; // ver como vai fazer pra salvar, esse
-        // 30000 significa que vai salvar a cada 30 segundos.
 
         /* Cria a janela do tamanho do cenario + insets (bordas) da janela */
         this.setSize(Consts.RES * Consts.CELL_SIDE + getInsets().left + getInsets().right,
@@ -43,9 +39,10 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
                 elementsMatrix.get(i).add(new ArrayList<Element>());
             }
         }
+
         this.stage = new Stage();
     }
-    
+
     public void setBackgroundImage(String filename) {
         this.background = filename;
     }
@@ -57,9 +54,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         Draw.setScene(this);
         this.addKeyListener(this);
         this.setBackgroundImage("blank.png");
-        stage.start(this);
+        Stage.start(this);
     }
-    
+
     public void startFirstStage() {
         this.setBackgroundImage("background.png");
         this.clearStage();
@@ -199,7 +196,12 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
      */
     public void nextStage() {
         this.clearStage();
-
+        SaveAndLoad.getInstance().terminate();
+        try {
+            Thread.sleep(3100);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             stage.next();
             stage.print(this);
@@ -207,9 +209,15 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
             Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void resetStage() {
         this.clearStage();
+        SaveAndLoad.getInstance().terminate();
+        try {
+            Thread.sleep(3100);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             stage.print(this);
         } catch (IOException ex) {
@@ -222,6 +230,13 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
      */
     public void resetGame() {
         this.clearStage();
+        SaveAndLoad.getInstance().terminate();
+        try {
+            Thread.sleep(3100);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        this.setBackgroundImage("blank.png");
         stage.start(this);
     }
 
@@ -288,30 +303,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public void close() {
         this.clearStage();
         this.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-    }
-
-    public void save() {
-        System.out.println("oi");
-        File zipfile = new File("./load/zipfile.zip");
-        try {
-            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipfile));
-            zos.putNextEntry(new ZipEntry("classes.txt"));
-            for (Element e : this.getElements()) {
-                String temp = e.getClass().toString() + "\n";
-                zos.write(temp.getBytes(), 0, temp.length());
-            }
-            zos.closeEntry();
-            zos.putNextEntry(new ZipEntry("objects.dat"));
-            ObjectOutputStream oos = new ObjectOutputStream(zos);
-            for (Element e : this.getElements()) {
-                oos.writeObject(e);
-            }
-            zos.closeEntry();
-            oos.close();
-            zos.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @Override

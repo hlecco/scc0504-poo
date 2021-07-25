@@ -16,11 +16,4 @@ public class Transition extends Element implements Serializable {
         this.priority = 1000;
     }
 
-    /*
-    Método que fechará a tela ao chegar na imagem final.
-     */
-    public void end() {
-        Draw.getScreen().close();
-    }
-
 }

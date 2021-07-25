@@ -1,10 +1,10 @@
-package Model;
+package Controller;
 
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import Controler.Screen;
+import Controller.Screen;
 
 
 public class Main {

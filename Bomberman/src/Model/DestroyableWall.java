@@ -4,12 +4,10 @@ import java.io.Serializable;
 
 import Auxiliar.Draw;
 
-
 public class DestroyableWall extends Element implements Serializable {
-    
+
     private int hidden;
-    
-    
+
     public DestroyableWall(int pHidden) {
         super("splitwall.png");
         this.bTransposable = false;
@@ -21,15 +19,15 @@ public class DestroyableWall extends Element implements Serializable {
     public void selfDraw() {
         super.selfDraw();
     }
-    
+
     /*
     Método que destrói o muro ao tocar o fogo.
-    */
+     */
     @Override
     public void touchFire() {
         Draw.getScreen().removeElement(this);
         Element hidden_element = null;
-        
+
         switch (hidden) {
             case 0:
                 break;
@@ -45,11 +43,11 @@ public class DestroyableWall extends Element implements Serializable {
             case 4:
                 hidden_element = new SpeedUp();
         }
-        
+
         if (hidden_element != null) {
             hidden_element.setPosition(this.getPosition().getCol(), this.getPosition().getRow());
             Draw.getScreen().addElement(hidden_element);
         }
     }
-    
+
 }

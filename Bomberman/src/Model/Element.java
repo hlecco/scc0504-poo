@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Controler.GameControl;
-import Controler.Screen;
+import Controller.GameControl;
+import Controller.Screen;
 
 public abstract class Element implements Serializable {
 
@@ -17,27 +17,40 @@ public abstract class Element implements Serializable {
     protected boolean bTransposable; // Pode passar por cima?
     protected boolean bMortal; // Se encostar, morre?
     protected boolean bDestroyable; // Destrutível com fogo
-    transient ArrayList<Clock> clocks;
-    int priority; // Objetos com maior prioridade são desenhados antes. Default = 0.
+    protected ArrayList<Clock> clocks;
+    protected int priority; // Objetos com maior prioridade são desenhados antes. Default = 0.
     protected boolean defeats; // Mata inimigos?
 
-    protected Element(String sNomeImagePNG) {
-        this(sNomeImagePNG, 1, 1, 1, 0, 0);
+    protected Element(String filenamePNG) {
+        this(filenamePNG, 1, 1, 1, 0, 0);
     }
 
-    protected Element(String sNomeImagePNG, int nFrames) {
-        this(sNomeImagePNG, 1, 1, nFrames, 0, 0);
+    protected Element(String filenamePNG, int nFrames) {
+        this(filenamePNG, 1, 1, nFrames, 0, 0);
     }
 
-    protected Element(String sNomeImagePNG, int hSize, int vSize, int nFrames,
+    protected Element(String filenamePNG, int hSize, int vSize, int nFrames,
             int hOffset, int vOffset) {
         this.position = new Position(1, 1);
         this.bTransposable = true;
         this.bMortal = false;
         this.clocks = new ArrayList<Clock>();
-        this.sprite = new Sprite(sNomeImagePNG, hSize, vSize, nFrames, hOffset, vOffset);
+        this.sprite = new Sprite(filenamePNG, hSize, vSize, nFrames, hOffset, vOffset);
         this.priority = 0;
         this.defeats = false;
+    }
+
+    public void setSprite(String filenamePNG, int hSize, int vSize, int nFrames,
+            int hOffset, int vOffset) {
+        this.sprite = new Sprite(filenamePNG, hSize, vSize, nFrames, hOffset, vOffset);
+    }
+
+    public String getStrSprite() {
+        return this.sprite.getStrSprite();
+    }
+
+    public Sprite getSprite() {
+        return this.sprite;
     }
 
     public int getPriority() {
@@ -203,14 +216,14 @@ public abstract class Element implements Serializable {
         return false;
     }
 
-    public void addClock(int duration, int speed, Runnable onStep,
-            Runnable onEnd, boolean restart) {
+    public void addClock(int duration, int speed, SerializableRunnable onStep,
+            SerializableRunnable onEnd, boolean restart) {
         clocks.add(new Clock(duration, speed, onStep, onEnd, restart));
     }
-    
+
     public void cleanClocks() {
         for (Clock c : (ArrayList<Clock>) this.clocks.clone()) {
-                clocks.remove(c);
+            clocks.remove(c);
         }
     }
 

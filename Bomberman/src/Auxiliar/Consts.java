@@ -22,5 +22,6 @@ public class Consts {
     public static final int BOMB_TIMER = 8;
     public static final String PATH = File.separator + "imgs" + File.separator;
     public static final int FASES = 5;
+    public static final int TIMER = 3000;
 
 }

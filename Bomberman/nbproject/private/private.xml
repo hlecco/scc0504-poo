@@ -4,12 +4,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Screen.java</file>
             <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Element.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controler/Stage.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Fire.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomb.java</file>
-            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Clock.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/SelectorController.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controller/Screen.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controller/SaveAndLoad.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Clocks/RestoreMovement.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Model/Bomberman.java</file>
+            <file>file:/home/caio/coding/scc0504-poo/Bomberman/src/Controller/Stage.java</file>
         </group>
     </open-files>
 </project-private>

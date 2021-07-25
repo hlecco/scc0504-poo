@@ -1,9 +1,10 @@
 package Model;
 
+import Clocks.SetFrame;
 import java.io.Serializable;
 
-
 public abstract class Selector extends Element implements Serializable, Runnable {
+
     private boolean state;
 
     public Selector(String filename, boolean state) {
@@ -12,24 +13,16 @@ public abstract class Selector extends Element implements Serializable, Runnable
         this.bMortal = true;
         this.bTransposable = true;
         this.state = state;
-        this.addClock(10, 1, this::setFrame, null, true);
-    }
-    
-    public void setFrame() {
-        if (this.state) {
-            this.sprite.setFrame(1);
-        }
-        else {
-            this.sprite.setFrame(0);
-        }
+        SetFrame sF = new SetFrame(this);
+        this.addClock(10, 1, sF::run, null, true);
     }
 
     public void cycle() {
-        state = state ? false : true;
+        state = !state;
     }
-    
+
     public boolean isSelected() {
         return state;
-    }    
-    
+    }
+
 }

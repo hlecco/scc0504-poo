@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Controler.Screen;
-import java.io.Serializable;
+import Clocks.Cycle;
+import Clocks.Propagate;
+import Clocks.Remove;
+import Clocks.TurnHarmless;
+import Controller.Screen;
 
-public class Fire extends Element implements Serializable {
+public class Fire extends Element {
 
     private int potency;
     private int direction;
@@ -26,6 +29,10 @@ public class Fire extends Element implements Serializable {
         if (p > -1) {
             this.potency = p;
         }
+    }
+    
+    public int getPotency() {
+        return this.potency;
     }
 
     public void setDirection(int d) {
@@ -57,10 +64,11 @@ public class Fire extends Element implements Serializable {
 
             if (t.isValidPosition(offset)) {
                 Fire newFire = new Fire();
+                Propagate p = new Propagate(this);
                 newFire.setPotency(this.potency - 1);
                 newFire.setDirection(this.direction);
                 newFire.setPosition(offset.getCol(), offset.getRow());
-                this.addClock(1, 1, null, newFire::propagate, false);
+                this.addClock(1, 1, null, p::run, false);
                 t.addElement(newFire);
             }
 
@@ -72,8 +80,11 @@ public class Fire extends Element implements Serializable {
     }
 
     public void vanish() {
-        clocks.add(new Clock(6, 2, this.sprite::cycle, this::remove, false));
-        clocks.add(new Clock(3, 2, null, this::turnHarmless, false));
+        Remove r = new Remove(this);
+        Cycle c = new Cycle(this.sprite);
+        TurnHarmless th = new TurnHarmless(this);
+        clocks.add(new Clock(6, 2, c::run, r::run, false));
+        clocks.add(new Clock(3, 2, null, th::run, false));
     }
 
     /*

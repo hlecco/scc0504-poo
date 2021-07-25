@@ -15,11 +15,11 @@ public class Clock implements Serializable {
     private final int speed; // frames por tick
     private int tick; // frame atual no tick (começa em zero)
     private int timeLeft; // ticks que faltam até o final
-    private final Runnable onStep; // função a ser executada uma vez a cada tick
-    private final Runnable onEnd; // função a ser executada a cada tick
+    private final SerializableRunnable onStep; // função a ser executada uma vez a cada tick
+    private final SerializableRunnable onEnd; // função a ser executada a cada tick
     private final boolean restart; // começa de novo quando termina
 
-    Clock(int duration, int speed, Runnable onStep, Runnable onEnd, boolean restart) {
+    Clock(int duration, int speed, SerializableRunnable onStep, SerializableRunnable onEnd, boolean restart) {
         this.duration = max(1, duration);
         this.speed = max(1, speed);
         this.onStep = onStep;

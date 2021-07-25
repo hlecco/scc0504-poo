@@ -5,7 +5,11 @@ import java.util.Random;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Controler.Screen;
+import Clocks.Check;
+import Clocks.Move;
+import Clocks.SetDirectionRandom;
+import Clocks.SetDirectionTowardsBomberman;
+import Controller.Screen;
 import java.io.Serializable;
 
 public class Radio extends Enemy implements Serializable {
@@ -49,7 +53,7 @@ public class Radio extends Enemy implements Serializable {
         this.setSpriteSheet();
     }
 
-    private void setDirectionRandom() {
+    public void setDirectionRandom() {
         Random ran = new Random();
         int random_int = ran.nextInt(4);
 
@@ -96,19 +100,21 @@ public class Radio extends Enemy implements Serializable {
     /*
     Persegue o Bomberman caso a distância até ele seja "pequena".
      */
-    private void check() {
+    public void check() {
         int distance = this.position.distanceTo(Draw.getScreen().getBombermanPosition());
+        Move m = new Move(this);
+        Check c = new Check(this);
 
         if (distance < 8) {
-            this.addClock(20, 8, this::move, this::move, false);
-            this.addClock(80, 2, this::setDirectionTowardsBomberman,
-                    this::setDirectionTowardsBomberman, false);
-            this.addClock(80, 2, null, this::check, false);
+            SetDirectionTowardsBomberman sdtb = new SetDirectionTowardsBomberman(this);
+            this.addClock(20, 8, m::run, m::run, false);
+            this.addClock(80, 2, sdtb::run, sdtb::run, false);
+            this.addClock(80, 2, null, c::run, false);
         } else {
-            this.addClock(5, 16, this::move, this::move, false);
-            this.addClock(2, 40, this::setDirectionRandom,
-                    this::setDirectionRandom, false);
-            this.addClock(40, 2, null, this::check, false);
+            SetDirectionRandom sdr = new SetDirectionRandom(this);
+            this.addClock(5, 16, m::run, m::run, false);
+            this.addClock(2, 40, sdr::run, sdr::run, false);
+            this.addClock(40, 2, null, c::run, false);
         }
     }
 
