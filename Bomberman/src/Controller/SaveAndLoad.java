@@ -33,31 +33,32 @@ public class SaveAndLoad extends Thread {
     private static SaveAndLoad instance;
     private int timer;
     private boolean exit;
-    private boolean running;
+    private boolean active;
 
     private SaveAndLoad() {
         this.timer = Consts.TIMER;
         this.exit = false;
-        this.running = false;
+        this.active = true;
     }
 
     @Override
     public void run() {
-        this.running = true;
         while (!exit) {
-            this.save();
+            if (this.active) this.save();
             try {
                 Thread.sleep(this.timer);
             } catch (InterruptedException ex) {
                 Logger.getLogger(SaveAndLoad.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        this.running = false;
+    }
+    
+    public void setActive(Boolean state) {
+        this.active = state;
     }
 
     public void terminate() {
         exit = true;
-        SaveAndLoad.instance = null;
     }
 
     public static SaveAndLoad getInstance() {

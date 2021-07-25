@@ -49,7 +49,7 @@ public class Stage {
     }
 
     public void next() {
-        if (this.numStage < Consts.FASES + 1) {
+        if (this.numStage < Consts.FASES + 2) {
             numStage++;
         }
     }
@@ -65,7 +65,7 @@ public class Stage {
     public void print(Screen s) throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
-        } else if (numStage >= Consts.FASES) {
+        } else if (numStage > Consts.FASES) {
             Transition obj = new Transition("theend.png");
             Close c = new Close();
             obj.setPosition(0, 0);
@@ -92,7 +92,7 @@ public class Stage {
     A tela serve para colocar os elementos nela e o número de vidas é necessário
     para colocar a imagem com o número de vidas restantes do Bomberman corretamente.
      */
-    public void read(Screen s) throws FileNotFoundException, IOException {
+    public synchronized void read(Screen s) throws FileNotFoundException, IOException {
         if (numStage < 1) {
             numStage = 1;
         } else if (numStage > Consts.FASES) {
@@ -148,7 +148,7 @@ public class Stage {
         obj = new Life(Bomberman.getInstance().getNumLife());
         obj.setPosition(x, y - 1);
         s.addElement(obj);
-        SaveAndLoad.getInstance().start();
+        SaveAndLoad.getInstance().setActive(true);
     }
 
     static void start(Screen s) {

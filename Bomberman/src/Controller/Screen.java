@@ -50,14 +50,14 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     /*
     Função que iniciará o jogo criando a primeira fase.
      */
-    public void startGame() {
+    public synchronized void startGame() {
         Draw.setScene(this);
         this.addKeyListener(this);
         this.setBackgroundImage("blank.png");
         Stage.start(this);
     }
 
-    public void startFirstStage() {
+    public synchronized void startFirstStage() {
         this.setBackgroundImage("background.png");
         this.clearStage();
 
@@ -194,14 +194,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     print da Stage, que colocará a imagem de transição na tela e ao final chamará
     a função read.
      */
-    public void nextStage() {
+    public synchronized void nextStage() {
+        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
-        SaveAndLoad.getInstance().terminate();
-        try {
-            Thread.sleep(3100);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-        }
         try {
             stage.next();
             stage.print(this);
@@ -210,14 +205,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         }
     }
 
-    public void resetStage() {
+    public synchronized void resetStage() {
+        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
-        SaveAndLoad.getInstance().terminate();
-        try {
-            Thread.sleep(3100);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-        }
         try {
             stage.print(this);
         } catch (IOException ex) {
@@ -228,14 +218,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     /*
     Reinicia o jogo (ocorrerá quando o número de vidas do Bomberman zerar).
      */
-    public void resetGame() {
+    public synchronized void resetGame() {
+        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
-        SaveAndLoad.getInstance().terminate();
-        try {
-            Thread.sleep(3100);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
-        }
         this.setBackgroundImage("blank.png");
         stage.start(this);
     }

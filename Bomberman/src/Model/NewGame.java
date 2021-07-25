@@ -10,7 +10,7 @@ public class NewGame extends Selector {
     }
 
     public void run() {
-        //SaveAndLoad.getInstance().start();
+        SaveAndLoad.getInstance().setActive(true);
         Draw.getScreen().startFirstStage();
     }
 }
