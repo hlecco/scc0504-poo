@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 
 import Auxiliar.Consts;
 import Auxiliar.Draw;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 
 /*
@@ -19,7 +20,7 @@ tamanho e as "animações" dos elementos.
 public class Sprite implements Serializable {
 
     private String filename;
-    private Image spriteSheet;
+    transient private Image spriteSheet;
     private ImageIcon thisFrame;
     private int frame;
     private int nFrames;
@@ -46,7 +47,7 @@ public class Sprite implements Serializable {
 
     public Sprite(String filename, int hSize, int vSize, int nFrames,
             int hOffset, int vOffset) {
-        this.filename = "";
+        this.filename = filename;
         this.thisFrame = new ImageIcon();
         this.hSize = hSize;
         this.vSize = vSize;
@@ -97,9 +98,7 @@ public class Sprite implements Serializable {
     Troca a imagem do elemento.
      */
     public void changeSheet(String filename) {
-        if (filename.equals(this.filename)) {
-            return;
-        }
+        this.filename = filename;
 
         try {
             spriteSheet = new ImageIcon(new java.io.File(".").getCanonicalPath()
@@ -108,6 +107,7 @@ public class Sprite implements Serializable {
         } catch (IOException ex) {
             Logger.getLogger(Sprite.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.setFrame(this.frame);
     }
 
     /*
@@ -128,5 +128,9 @@ public class Sprite implements Serializable {
     public void draw(int x, int y) {
         Draw.Draw(this.thisFrame, x + this.hOffset, y + this.vOffset);
     }
-
+    
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        this.changeSheet(this.filename);
+    }
 }

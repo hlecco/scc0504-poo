@@ -4,22 +4,17 @@ import java.io.Serializable;
 
 import Auxiliar.Consts;
 import Auxiliar.Draw;
-import Clocks.Cycle;
-import Clocks.Recharge;
-import Clocks.ResetGame;
-import Clocks.NextStage;
-import Clocks.ResetStage;
-import Clocks.RestoreMovement;
-import Clocks.UpdateLocation;
 import Controller.GameControl;
 import Controller.Screen;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 public class Bomberman extends Element implements Serializable {
 
     private int numAllowedBombs;
     private int numSettedBombs;
     private int bombermanPotency;
-    private int delay;
+    private int speed;
     private int numLife;
     private boolean allowMovement;
     private boolean isDead;
@@ -31,19 +26,14 @@ public class Bomberman extends Element implements Serializable {
         this.numAllowedBombs = 1;
         this.bombermanPotency = 1;
         this.priority = 2;
-        this.delay = 4;
+        this.speed = 1;
         this.numLife = pNumLife;
         this.allowMovement = true;
-        UpdateLocation ul = new UpdateLocation();
-        this.addClock(1, 3, ul::run, null, true);
+        this.setObservable();
     }
 
     private Bomberman() {
         this(3);
-    }
-
-    public int getNumLife() {
-        return this.numLife;
     }
 
     public static Bomberman getInstance() {
@@ -59,8 +49,7 @@ public class Bomberman extends Element implements Serializable {
      */
     private void restrictMovement() {
         this.allowMovement = false;
-        RestoreMovement rm = new RestoreMovement();
-        this.addClock(this.delay, 1, null, rm::run, false);
+        this.addClock(5-this.speed, 1, null, this::allowMovement, false);
     }
 
     public void allowMovement() {
@@ -84,12 +73,26 @@ public class Bomberman extends Element implements Serializable {
         bomb.setUp();
         Draw.getScreen().addElement(bomb);
 
-        Recharge r = new Recharge();
-        this.addClock(Consts.BOMB_TIMER, 8, null, r::run, false);
+        this.addClock(Consts.BOMB_TIMER, 8, null, this::recharge, false);
+        this.setChanged();
     }
 
     public void recharge() {
         numSettedBombs--;
+        this.setChanged();
+    }
+    
+    public int getBombs() {
+        return (this.numAllowedBombs - this.numSettedBombs);
+    }
+    public int getSpeed() {
+        return this.speed;
+    }
+    public int getLife() {
+        return this.numLife;
+    }
+    public int getFire() {
+        return this.bombermanPotency;
     }
     
     public static void load(Bomberman b) {
@@ -101,17 +104,22 @@ public class Bomberman extends Element implements Serializable {
             numLife--;
             isDead = true;
             this.sprite.changeSheet("bomberman_dead.png");
-            Cycle c = new Cycle(this.sprite);
             if (numLife > 0) {
-                this.restore();
-                ResetStage rs = new ResetStage();
-                this.addClock(30, 2, c::run, rs::run, false);
+                this.addClock(30, 2, this::spriteCycle, this::resetStage, false);
             } else {
-                this.restore();
-                ResetGame rg = new ResetGame();
-                this.addClock(30, 2, c::run, rg::run, false);
+                this.addClock(30, 2, this::spriteCycle, this::resetGame, false);
             }
         }
+    }
+    
+    private void resetStage() {
+        this.restore();
+        Draw.getScreen().resetStage();
+    }
+    
+    private void resetGame() {
+        this.restore();
+        Draw.getScreen().resetGame();
     }
 
     private void restore() {
@@ -121,6 +129,7 @@ public class Bomberman extends Element implements Serializable {
         } else {
             Bomberman.instance = new Bomberman();
         }
+        this.setChanged();
     }
 
     @Override
@@ -132,16 +141,19 @@ public class Bomberman extends Element implements Serializable {
         if (numAllowedBombs < Consts.MAX_BOMBS) {
             numAllowedBombs++;
         }
+        this.setChanged();
     }
 
     public void fireUp() {
         if (bombermanPotency < Consts.MAX_POWER) {
             bombermanPotency++;
         }
+        this.setChanged();
     }
 
     public void speedUp() {
-        this.delay--;
+        this.speed++;
+        this.setChanged();
     }
 
     @Override
@@ -151,8 +163,7 @@ public class Bomberman extends Element implements Serializable {
 
     @Override
     public void touchDoor() {
-        NextStage ns = new NextStage();
-        this.addClock(1, 1, null, ns::run, false);
+        this.addClock(1, 1, null, this::nextStage, false);
     }
 
     public void nextStage() {
@@ -173,7 +184,7 @@ public class Bomberman extends Element implements Serializable {
                     if (this.allowMovement) {
                         this.moveUp();
                         this.restrictMovement();
-                        this.sprite.cycle();
+                        this.spriteCycle();
                     }
                 }
                 break;
@@ -183,7 +194,7 @@ public class Bomberman extends Element implements Serializable {
                     if (this.allowMovement) {
                         this.moveDown();
                         this.restrictMovement();
-                        this.sprite.cycle();
+                        this.spriteCycle();
                     }
                 }
                 break;
@@ -193,7 +204,7 @@ public class Bomberman extends Element implements Serializable {
                     if (this.allowMovement) {
                         this.moveLeft();
                         this.restrictMovement();
-                        this.sprite.cycle();
+                        this.spriteCycle();
                     }
                 }
                 break;
@@ -203,7 +214,7 @@ public class Bomberman extends Element implements Serializable {
                     if (this.allowMovement) {
                         this.moveRight();
                         this.restrictMovement();
-                        this.sprite.cycle();
+                        this.spriteCycle();
                     }
                 }
                 break;
@@ -215,6 +226,11 @@ public class Bomberman extends Element implements Serializable {
                     break;
                 }
         }
+    }
+    
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        Bomberman.instance = this;
     }
 
 }

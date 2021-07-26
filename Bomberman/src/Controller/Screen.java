@@ -7,25 +7,24 @@ import java.util.*;
 import java.util.logging.*;
 
 import Auxiliar.*;
-import Model.Bomberman;
 import Model.Element;
 import Model.ElementComparator;
+import javax.swing.JFileChooser;
+import static javax.swing.SwingUtilities.isRightMouseButton;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class Screen extends javax.swing.JFrame implements KeyListener {
+public class Screen extends javax.swing.JFrame implements KeyListener, MouseListener {
 
     private final ArrayList<Element> elements;
     private final ArrayList<ArrayList<ArrayList<Element>>> elementsMatrix;
     private final ArrayList<Element> removedElements;
     private final GameControl control = new GameControl();
     private Graphics g2;
-    private final Position bombermanPosition;
     private final Stage stage;
     private String background;
 
     public Screen() throws IOException {
         initComponents();
-        SaveAndLoad.getInstance().start();
-        bombermanPosition = new Position(1, 1);
         removedElements = new ArrayList<Element>();
         elements = new ArrayList<Element>(1089);
         elementsMatrix = new ArrayList<ArrayList<ArrayList<Element>>>(Consts.RES);
@@ -54,6 +53,7 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public synchronized void startGame() {
         Draw.setScene(this);
         this.addKeyListener(this);
+        this.addMouseListener(this);
         this.setBackgroundImage("blank.png");
         Stage.start(this);
     }
@@ -61,11 +61,13 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     public synchronized void startFirstStage() {
         this.setBackgroundImage("background.png");
         this.clearStage();
-        SaveAndLoad.getInstance().setActive(false);
         
         try {
             stage.setStage(1);
             stage.print(this);
+            if (!SaveAndLoad.getInstance().isAlive()) {
+                SaveAndLoad.getInstance().start();
+            }
         } catch (FileNotFoundException f) {
             System.out.println(f.getMessage());
         } catch (IOException e) {
@@ -86,7 +88,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     }
 
     public synchronized void addElement(Element anElement) {
-        SaveAndLoad.getInstance().setActive(false);
         elements.add(anElement);
         elementsMatrix.get(anElement.getPosition().getCol())
                 .get(anElement.getPosition().getRow())
@@ -98,7 +99,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     Remove os elementos de fato. Chamado no paint.
      */
     public synchronized void trueRemoveElemento(Element anElement) {
-        SaveAndLoad.getInstance().setActive(false);
         elements.remove(anElement);
         elementsMatrix.get(anElement.getPosition().getCol())
                 .get(anElement.getPosition().getRow())
@@ -110,7 +110,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     no paint.
      */
     public synchronized void removeElement(Element anElement) {
-        SaveAndLoad.getInstance().setActive(false);
         removedElements.add(anElement);
     }
 
@@ -118,7 +117,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     Método que remove o elemento da posição anterior quando ele muda de posição.
      */
     public void moveElement(Element pElement) {
-        SaveAndLoad.getInstance().setActive(false);
         if (elementsMatrix.get(pElement.getPosition().getPreviousPosition().getCol())
                 .get(pElement.getPosition().getPreviousPosition().getRow())
                 .remove(pElement)) {
@@ -133,6 +131,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     }
 
     public ArrayList<Element> searchElement(Position p) {
+        if (p.getCol() >= Consts.RES & p.getRow() >= Consts.RES) {
+            return null;
+        }
         return elementsMatrix.get(p.getCol()).get(p.getRow());
     }
 
@@ -158,7 +159,9 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     redeenhar a tela inteira.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public synchronized void paint(Graphics gOld) {
+        SaveAndLoad.getInstance().setActive(false);
         Graphics g = this.getBufferStrategy().getDrawGraphics();
         /* Cria o contexto gráfico */
         g2 = g.create(getInsets().left, getInsets().top,
@@ -196,11 +199,13 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
         if (!getBufferStrategy().contentsLost()) {
             getBufferStrategy().show();
         }
+        SaveAndLoad.getInstance().setActive(true);
     }
 
     /*
     Função que limpa a tela, ie, remove todos os elementos do vetor elements.
      */
+    @SuppressWarnings("unchecked")
     public void clearStage() {
         for (Element e : (ArrayList<Element>) this.elements.clone()) {
             this.removeElement(e);
@@ -213,7 +218,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     a função read.
      */
     public synchronized void nextStage() {
-        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
         try {
             stage.next();
@@ -224,7 +228,6 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     }
 
     public synchronized void resetStage() {
-        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
         try {
             stage.print(this);
@@ -237,19 +240,11 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     Reinicia o jogo (ocorrerá quando o número de vidas do Bomberman zerar).
      */
     public synchronized void resetGame() {
-        SaveAndLoad.getInstance().setActive(false);
         this.clearStage();
         this.setBackgroundImage("blank.png");
         stage.start(this);
     }
 
-    public void setBombermanPosition(Position p) {
-        this.bombermanPosition.setPosition(p.getCol(), p.getRow());
-    }
-
-    public Position getBombermanPosition() {
-        return this.bombermanPosition;
-    }
 
     public void go() {
         TimerTask redraw = new TimerTask() {
@@ -267,9 +262,49 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void keyPressed(KeyEvent e) {
         for (Element el : (ArrayList<Element>) elements.clone()) {
             el.Event(e.getKeyCode(), control, this);
+        }
+    }
+    
+    public void mousePressed(MouseEvent e) {
+        if (!isRightMouseButton(e)) {
+            return;
+        }
+        int x = e.getX()/Consts.CELL_SIDE;
+        int y = e.getY()/Consts.CELL_SIDE;
+        ArrayList<Element> elementsInPosition = this.searchElement(new Position(x, y));
+        if (!elementsInPosition.isEmpty()) {
+            try {
+                this.swapElement(elementsInPosition.get(0));
+            } catch (IOException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Screen.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    private void swapElement(Element e) throws FileNotFoundException, IOException, ClassNotFoundException {
+        JFileChooser chooser = new JFileChooser();
+        File workingDirectory = new File(System.getProperty("user.dir"));
+        chooser.setCurrentDirectory(workingDirectory);
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Serialized elements", "dat");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if(returnVal == JFileChooser.APPROVE_OPTION) {
+            FileInputStream file = new FileInputStream(chooser.getSelectedFile());
+            ObjectInputStream in = new ObjectInputStream(file);
+            Element newElement = (Element) in.readObject();
+            Position oldPosition = e.getPosition();
+            e.remove();
+            this.addElement(newElement);
+            newElement.setPosition(oldPosition.getCol(), oldPosition.getRow());
+        }
+        else {
+            return;
         }
     }
 
@@ -315,6 +350,22 @@ public class Screen extends javax.swing.JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
     }
 
 }

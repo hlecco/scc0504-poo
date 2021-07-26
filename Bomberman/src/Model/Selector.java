@@ -1,28 +1,34 @@
 package Model;
 
-import Clocks.SetFrame;
 import java.io.Serializable;
 
-public abstract class Selector extends Element implements Serializable, Runnable {
+public abstract class Selector extends Text implements Serializable, Runnable {
+    // Class for menus and settings
+    // Override run method to do something when pressed
 
     private boolean state;
+    protected String selectorText;
 
-    public Selector(String filename, boolean state) {
-        super(filename, 4, 1, 2, -2, 0);
+    public Selector(String text, boolean state) {
         this.priority = 10;
-        this.bMortal = true;
-        this.bTransposable = true;
         this.state = state;
-        SetFrame sF = new SetFrame(this);
-        this.addClock(10, 1, sF::run, null, true);
+        this.selectorText = text;
     }
 
     public void cycle() {
         state = !state;
+        this.showText();
     }
 
     public boolean isSelected() {
         return state;
     }
 
+    public void showText() {
+        if (this.isSelected()) {
+            this.write(">" + this.selectorText);
+        } else {
+            this.write(this.selectorText);
+        }
+    }
 }

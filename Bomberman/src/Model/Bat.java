@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Random;
 
 import Auxiliar.Consts;
-import Clocks.Cycle;
-import Clocks.Jump;
-import Clocks.Stop;
+import Auxiliar.RunnableSerializable;
 
 public class Bat extends Enemy implements Serializable {
 
@@ -36,16 +34,14 @@ public class Bat extends Enemy implements Serializable {
     public void stop() {
         this.sprite.changeSheet("bat_idle.png");
         this.isFlying = false;
-        Cycle c = new Cycle(this.sprite);
-        Jump j = new Jump(this);
-        this.addClock(16, 6, c::run, j::run, false);
+        this.addClock(16, 6, this::spriteCycle, this::jump, false);
     }
 
     /*
     Método que faz com que o morcego voe para uma direção aleatória.
      */
     public void jump() {
-        SerializableRunnable movement = null;
+        RunnableSerializable movement = null;
         switch (this.randomDirection()) {
             case Consts.DOWN:
                 movement = this::moveDown;
@@ -65,10 +61,8 @@ public class Bat extends Enemy implements Serializable {
                 break;
         }
         this.isFlying = true;
-        Cycle c = new Cycle(this.sprite);
-        Stop s = new Stop(this);
-        this.addClock(8, 6, c::run, s::run, false);
-        this.addClock(4, 12, movement, null, false);
+        this.addClock(8, 6, this::spriteCycle, this::stop, false);
+        this.addClock(4, 12, (RunnableSerializable) movement, null, false);
     }
 
     public int randomDirection() {

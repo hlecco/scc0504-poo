@@ -6,13 +6,15 @@ import java.util.ArrayList;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
+import Auxiliar.RunnableSerializable;
 import Controller.GameControl;
 import Controller.Screen;
+import java.util.Observable;
 
-public abstract class Element implements Serializable {
+public abstract class Element extends Observable implements Serializable {
 
     protected Screen screen;
-    transient protected Sprite sprite;
+    protected Sprite sprite;
     protected Position position;
     protected boolean bTransposable; // Pode passar por cima?
     protected boolean bMortal; // Se encostar, morre?
@@ -38,6 +40,11 @@ public abstract class Element implements Serializable {
         this.sprite = new Sprite(filenamePNG, hSize, vSize, nFrames, hOffset, vOffset);
         this.priority = 0;
         this.defeats = false;
+        this.setChanged();
+    }
+    
+    protected void setObservable() {
+        this.addClock(1, 5, (RunnableSerializable)() -> this.notifyObservers(this), null, true);
     }
 
     public void setSprite(String filenamePNG, int hSize, int vSize, int nFrames,
@@ -51,6 +58,10 @@ public abstract class Element implements Serializable {
 
     public Sprite getSprite() {
         return this.sprite;
+    }
+    
+    public void spriteCycle() {
+        this.getSprite().cycle();
     }
 
     public int getPriority() {
@@ -216,11 +227,12 @@ public abstract class Element implements Serializable {
         return false;
     }
 
-    public void addClock(int duration, int speed, SerializableRunnable onStep,
-            SerializableRunnable onEnd, boolean restart) {
+    public void addClock(int duration, int speed, RunnableSerializable onStep,
+            RunnableSerializable onEnd, boolean restart) {
         clocks.add(new Clock(duration, speed, onStep, onEnd, restart));
     }
 
+    @SuppressWarnings("unchecked")
     public void cleanClocks() {
         for (Clock c : (ArrayList<Clock>) this.clocks.clone()) {
             clocks.remove(c);
@@ -234,6 +246,7 @@ public abstract class Element implements Serializable {
     /*
     Método que chama o método step de todos os clocks do elemento.
      */
+    @SuppressWarnings("unchecked")
     public void step() {
         for (Clock c : (ArrayList<Clock>) this.clocks.clone()) {
             if (c.step()) {

@@ -7,6 +7,8 @@ import Controller.Screen;
 import java.util.ArrayList;
 
 public class SelectorController extends Element {
+    // Controls selectors.
+    // Use method addSelector to include a menu option
 
     private ArrayList<Selector> selectors;
 
@@ -17,8 +19,9 @@ public class SelectorController extends Element {
 
     public void addSelector(Selector s) {
         this.selectors.add(s);
-        this.setSelectorPositions();
+        s.setPosition(this.getPosition().getCol(), this.getPosition().getRow()+this.selectors.size());
         Draw.getScreen().addElement(s);
+        s.showText();
     }
 
     private void cycle(boolean reverse) {
@@ -37,12 +40,6 @@ public class SelectorController extends Element {
         }
     }
 
-    private void setSelectorPositions() {
-        int pos = (Consts.RES / 2) - (this.selectors.size() / 2);
-        for (Selector s : this.selectors) {
-            s.setPosition(Consts.RES / 2, pos++);
-        }
-    }
 
     @Override
     public void Event(int key, GameControl c, Screen t) {

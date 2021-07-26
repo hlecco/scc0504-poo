@@ -5,10 +5,6 @@ import java.util.Random;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Clocks.Check;
-import Clocks.Move;
-import Clocks.SetDirectionRandom;
-import Clocks.SetDirectionTowardsBomberman;
 import Controller.Screen;
 import java.io.Serializable;
 
@@ -26,7 +22,7 @@ public class Radio extends Enemy implements Serializable {
      */
     public void setDirectionTowardsBomberman() {
         Screen t = Draw.getScreen();
-        Position bombermanPosition = t.getBombermanPosition();
+        Position bombermanPosition = Bomberman.getInstance().getPosition();
 
         if ((bombermanPosition.getCol() < this.position.getCol())
                 & (t.isValidPosition(this.position.offset(-1, 0)))) {
@@ -77,7 +73,7 @@ public class Radio extends Enemy implements Serializable {
 
     public void move() {
         this.moveDirectionCheck(this.direction);
-        this.sprite.cycle();
+        this.spriteCycle();
     }
 
     public void setSpriteSheet() {
@@ -101,20 +97,16 @@ public class Radio extends Enemy implements Serializable {
     Persegue o Bomberman caso a distância até ele seja "pequena".
      */
     public void check() {
-        int distance = this.position.distanceTo(Draw.getScreen().getBombermanPosition());
-        Move m = new Move(this);
-        Check c = new Check(this);
+        int distance = this.position.distanceTo(Bomberman.getInstance().getPosition());
 
         if (distance < 8) {
-            SetDirectionTowardsBomberman sdtb = new SetDirectionTowardsBomberman(this);
-            this.addClock(20, 8, m::run, m::run, false);
-            this.addClock(80, 2, sdtb::run, sdtb::run, false);
-            this.addClock(80, 2, null, c::run, false);
+            this.addClock(20, 8, this::move, this::move, false);
+            this.addClock(80, 2, this::setDirectionTowardsBomberman, this::setDirectionTowardsBomberman, false);
+            this.addClock(80, 2, null, this::check, false);
         } else {
-            SetDirectionRandom sdr = new SetDirectionRandom(this);
-            this.addClock(5, 16, m::run, m::run, false);
-            this.addClock(2, 40, sdr::run, sdr::run, false);
-            this.addClock(40, 2, null, c::run, false);
+            this.addClock(5, 16, this::move, this::move, false);
+            this.addClock(2, 40, this::setDirectionRandom, this::setDirectionRandom, false);
+            this.addClock(40, 2, null, this::check, false);
         }
     }
 

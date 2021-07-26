@@ -7,38 +7,18 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import Auxiliar.Consts;
-import Auxiliar.Draw;
-import Clocks.Close;
-import Clocks.Remove;
-import Model.Bat;
+import Model.AutosaveInterval;
 import Model.Bomberman;
 import Model.Continue;
-import Model.DestroyableWall;
-import Model.Element;
-import Model.Life;
+import Model.Display;
 import Model.NewGame;
-import Model.Radio;
 import Model.SelectorController;
-import Model.Transition;
-import Model.UndestroyableWall;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import Model.Text;
 
 
-/*
-  - h: Bomberman
-  - w: DestroyableWall
-  - W: UndestroyableWall
-  - b: DestroyableWall com bomba+
-  - f: DestroyableWall com fogo+
-  - d: DestroyableWall com door
-  - s: DestroyableWall com speed+
-  - B: Bat
-  - R: Radio
- */
 public class Stage {
 
-    private int numStage;
+    private static int numStage;
 
     public Stage() {
         this.numStage = 0;
@@ -70,19 +50,21 @@ public class Stage {
         if (numStage < 1) {
             numStage = 1;
         } else if (numStage > Consts.FASES) {
-            Transition obj = new Transition("theend.png");
-            Close c = new Close();
-            obj.setPosition(0, 0);
-            obj.addClock(60, 1, null, c::run, false);
-            s.addElement(obj);
+            this.end(s);
+            return;
         }
 
-        Transition obj = new Transition("stage" + Integer.toString(numStage) + ".png");
-        obj.setPosition(0, 0);
-        Remove r = new Remove(obj);
-        obj.addClock(15, 1, null, r::run, false);
-        s.addElement(obj);
+        Text transition = new Text();
+        transition.setPosition(Consts.RES/2-3, Consts.RES/2);
+        transition.addClock(30, 1, null, transition::remove, false);
+        s.addElement(transition);
+        transition.write("stage" + Integer.toString(this.numStage));
         this.read(s);
+        
+        Display life_count = new Display();
+        Bomberman.getInstance().addObserver(life_count);
+        s.addElement(life_count);
+        life_count.setPosition(0, Consts.RES-1);
     }
 
     /*
@@ -105,51 +87,14 @@ public class Stage {
 
         int x = 0, y = 0;
         String line = null;
-        Element obj;
+        ObjectCreator creator = new ObjectCreator(s);
 
         while ((y < Consts.RES) && (line = buffer.readLine()) != null) {
             for (x = 0; (x < line.length()) && (x < Consts.RES); x++) {
-                obj = null;
-                switch (line.charAt(x)) {
-                    case 'h':
-                        obj = Bomberman.getInstance();
-                        break;
-                    case 'W':
-                        obj = new UndestroyableWall();
-                        break;
-                    case 'w':
-                        obj = new DestroyableWall(0);
-                        break;
-                    case 'b':
-                        obj = new DestroyableWall(1);
-                        break;
-                    case 'f':
-                        obj = new DestroyableWall(2);
-                        break;
-                    case 'd':
-                        obj = new DestroyableWall(3);
-                        break;
-                    case 's':
-                        obj = new DestroyableWall(4);
-                        break;
-                    case 'B':
-                        obj = new Bat();
-                        break;
-                    case 'R':
-                        obj = new Radio();
-                        break;
-                }
-                if (obj != null) {
-                    obj.setPosition(x, y);
-                    s.addElement(obj);
-                }
+                creator.putObject(line.charAt(x), x, y);
             }
             y++;
         }
-        obj = new Life(Bomberman.getInstance().getNumLife());
-        obj.setPosition(x, y - 1);
-        s.addElement(obj);
-        SaveAndLoad.getInstance().setActive(true);
     }
 
     static void start(Screen s) {
@@ -157,5 +102,28 @@ public class Stage {
         s.addElement(controller);
         controller.addSelector(new NewGame(true));
         controller.addSelector(new Continue(false));
+        controller.addSelector(new AutosaveInterval(false));
+    }
+    
+    static void end(Screen s) {
+        SaveAndLoad.getInstance().setActive(false);
+        
+        s.setBackgroundImage("blank.png");
+        
+        Text text1 = new Text();
+        Text text2 = new Text();
+        Text text3 = new Text();
+        
+        text1.setPosition(1, 1);
+        text2.setPosition(1, 3);
+        text3.setPosition(1, 4);
+        
+        s.addElement(text1);
+        s.addElement(text3);
+        s.addElement(text2);
+        
+        text1.write("the end");
+        text2.write("caio 9390301");
+        text3.write("lecco 10295822");
     }
 }

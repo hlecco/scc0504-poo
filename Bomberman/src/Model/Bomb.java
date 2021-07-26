@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Clocks.Cycle;
-import Clocks.Explode;
-import Clocks.Propagate;
 import Controller.Screen;
 
 public class Bomb extends Element {
@@ -36,9 +33,7 @@ public class Bomb extends Element {
     Método que faz com que a bomba exploda após x segundos.
      */
     public void setUp() {
-        Cycle c = new Cycle(this.sprite);
-        Explode e = new Explode(this);
-        clocks.add(new Clock(Consts.BOMB_TIMER, 8, c::run, e::run, false));
+        clocks.add(new Clock(Consts.BOMB_TIMER, 8, this::spriteCycle, this::explode, false));
     }
 
     /*
@@ -46,6 +41,7 @@ public class Bomb extends Element {
     da classe Fire após verificar em qual direção é possível propagar o fogo
     e em seguida faz o fogo propagar chamando o método propagate da classe Fire.
      */
+    @SuppressWarnings("unchecked")
     public void explode() {
         if (this.blownUp) {
             return;
@@ -69,11 +65,10 @@ public class Bomb extends Element {
         }
         if (valid) {
             Fire fireUp = new Fire();
-            Propagate pUp = new Propagate(fireUp);
             fireUp.setPotency(this.potency);
             fireUp.setDirection(Consts.UP);
             fireUp.setPosition(offset.getCol(), offset.getRow());
-            fireUp.addClock(1, 1, null, pUp::run, false);
+            fireUp.addClock(1, 1, null, fireUp::propagate, false);
             t.addElement(fireUp);
         }
 
@@ -86,11 +81,10 @@ public class Bomb extends Element {
         }
         if (valid) {
             Fire fireDown = new Fire();
-            Propagate pDown = new Propagate(fireDown);
             fireDown.setPotency(this.potency);
             fireDown.setDirection(Consts.DOWN);
             fireDown.setPosition(offset.getCol(), offset.getRow());
-            fireDown.addClock(1, 1, null, pDown::run, false);
+            fireDown.addClock(1, 1, null, fireDown::propagate, false);
             t.addElement(fireDown);
         }
 
@@ -103,11 +97,10 @@ public class Bomb extends Element {
         }
         if (valid) {
             Fire fireLeft = new Fire();
-            Propagate pLeft = new Propagate(fireLeft);
             fireLeft.setPotency(this.potency);
             fireLeft.setDirection(Consts.LEFT);
             fireLeft.setPosition(offset.getCol(), offset.getRow());
-            fireLeft.addClock(1, 1, null, pLeft::run, false);
+            fireLeft.addClock(1, 1, null, fireLeft::propagate, false);
             t.addElement(fireLeft);
         }
 
@@ -120,11 +113,10 @@ public class Bomb extends Element {
         }
         if (valid) {
             Fire fireRight = new Fire();
-            Propagate pRight = new Propagate(fireRight);
             fireRight.setPotency(this.potency);
             fireRight.setDirection(Consts.RIGHT);
             fireRight.setPosition(offset.getCol(), offset.getRow());
-            fireRight.addClock(2, 1, null, pRight::run, false);
+            fireRight.addClock(2, 1, null, fireRight::propagate, false);
             t.addElement(fireRight);
         }
 

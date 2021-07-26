@@ -13,6 +13,7 @@ public class GameControl {
         }
     }
     
+    @SuppressWarnings("unchecked")
     public void drawAll(ArrayList<Element> Elements) {
         for (Element e : (ArrayList<Element>) Elements.clone()) {
             e.selfDraw();

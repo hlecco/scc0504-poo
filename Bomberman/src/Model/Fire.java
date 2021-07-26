@@ -5,10 +5,6 @@ import java.util.ArrayList;
 import Auxiliar.Consts;
 import Auxiliar.Draw;
 import Auxiliar.Position;
-import Clocks.Cycle;
-import Clocks.Propagate;
-import Clocks.Remove;
-import Clocks.TurnHarmless;
 import Controller.Screen;
 
 public class Fire extends Element {
@@ -64,14 +60,14 @@ public class Fire extends Element {
 
             if (t.isValidPosition(offset)) {
                 Fire newFire = new Fire();
-                Propagate p = new Propagate(this);
                 newFire.setPotency(this.potency - 1);
                 newFire.setDirection(this.direction);
                 newFire.setPosition(offset.getCol(), offset.getRow());
                 t.addElement(newFire);
-                this.addClock(1, 1, p::run, null, false);
+                newFire.addClock(1, 1, null, newFire::propagate, false);
             }
 
+            @SuppressWarnings("unchecked")
             ArrayList<Element> elements = (ArrayList<Element>) t.searchElement(offset).clone();
             for (Element e : elements) {
                 e.touchFire();
@@ -80,11 +76,8 @@ public class Fire extends Element {
     }
 
     public void vanish() {
-        Remove r = new Remove(this);
-        Cycle c = new Cycle(this.sprite);
-        TurnHarmless th = new TurnHarmless(this);
-        clocks.add(new Clock(6, 2, c::run, r::run, false));
-        clocks.add(new Clock(3, 2, null, th::run, false));
+        clocks.add(new Clock(5, 2, this::spriteCycle, this::remove, false));
+        clocks.add(new Clock(3, 2, null, this::turnHarmless, false));
     }
 
     /*
