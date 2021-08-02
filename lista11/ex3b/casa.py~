@@ -1,0 +1,5 @@
+from predio import Predio
+
+class Casa(Predio):
+
+    def __init__(self, )
